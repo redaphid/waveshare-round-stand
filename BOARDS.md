@@ -101,6 +101,7 @@ Common to both:
 | feature | value |
 |---|---|
 | mounting | 3 × **M2** holes |
+| header | 2×10, on the back; if populated the pins protrude rearward and constrain how you seat the board — see `PRINTING.md` |
 | USB-C | bottom edge, **inserts downward** — see the orientation note in `PRINTING.md` |
 | hole spacing | 23.54 mm between the two lower holes |
 | other datums | 8.32, 10.41, 31.17, 32.70, 41.33, 42.58 |

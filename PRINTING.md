@@ -86,6 +86,37 @@ Because the board is unsupported across the notch it sinks about 1.2 mm lower
 than it otherwise would, which is accounted for in the numbers above and
 actually *increases* groove engagement slightly.
 
+## If your board has header pins fitted
+
+Waveshare's drawing shows a bare board, but these commonly ship with (or get
+fitted with) a 2×10 header whose pins protrude several mm out of the **back**.
+Those pins stick out perpendicular to the board, straight at the stand.
+
+Where the header sits when you seat the board decides whether it fits. Measured
+against the cover-glass stand, clearance by header position — angle measured
+from bottom-dead-centre, where the USB-C sits:
+
+| header at | 5 mm pins | 8 mm pins | 11 mm pins |
+|---|---|---|---|
+| 0° (bottom, over the notch) | 7.8 mm | 6.8 mm | 5.8 mm |
+| 20° | **clash** | **clash** | 0.5 mm |
+| 40° | **clash** | **clash** | 0.2 mm |
+| 50° | **clash** | 0.2 mm | 2.2 mm |
+| 60° | 1.0 mm | 3.0 mm | 4.8 mm |
+| 75° | 5.5 mm | 7.5 mm | 9.5 mm |
+| 90° (side) | 11.5 mm | 13.5 mm | 19.7 mm |
+| 180° (top) | 29.2 mm | 30.0 mm | 29.0 mm |
+
+**Keep the header out of the 20°–50° band either side of bottom.** That arc is
+where the groove and its shoulders are, and pins there have nowhere to go.
+Bottom-dead-centre is fine because the notch removes the ridge; past about 60°
+the board has risen clear of the stand entirely.
+
+In the board's natural orientation — USB-C at the bottom — the header lands
+around 75–90°, which clears comfortably. The trap is a *partial* rotation: turn
+the board 30° or so to angle the USB-C and you walk the header straight into
+the shoulder.
+
 ## If the fit is wrong
 
 `fit` — the slop added to the board's thickness — is 0.8 mm on all three, and is
