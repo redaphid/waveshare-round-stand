@@ -40,6 +40,15 @@ Print flat on the base. No supports, no overhangs. Masses are PETG.
 
 **Printable files live in [`stl/`](stl/).**
 
+## The pod — where this is heading
+
+The stands were the warm-up. The goal is an **instrument cluster clipped to the
+side of a monitor** with the look of a 2G DSM A-pillar gauge pod: cups, trim
+rings, gauges canted toward you. That lives in [`pod/`](pod/) — its own README,
+STLs, and renders. The stands and docks above stay as they are.
+
+![pod](pod/renders/01-pod-gap26-front-quarter.png)
+
 ## Start here
 
 - **[`PRINTING.md`](PRINTING.md)** — which file to print, slicer presets, plate
@@ -95,6 +104,7 @@ the mesh comes out watertight without needing a general polygon boolean.
 | `preview.py` → `preview-stands.png`, `preview-docks.png` | side sections and front elevations per family, board drawn in place |
 | `stand.scad` | same model, parametric, for tweaking in OpenSCAD; set `variant` at the top |
 | `flatten_presets.py` | resolves an ElegooSlicer preset's `inherits` chain into one flat preset — see the automation note in `PRINTING.md` |
+| `pod/` | the gauge pod + adjustable monitor clip — see [`pod/README.md`](pod/README.md) |
 | `archive/` | superseded files, kept rather than deleted; see `archive/NOTE.md` |
 
 ## Regenerating
