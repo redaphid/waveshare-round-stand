@@ -4,9 +4,9 @@
 
 | board | file |
 |---|---|
-| ESP32-S3-LCD-1.28 (SKU 26541) | `esp32-s3-lcd-128-stand.stl` |
-| ESP32-S3-Touch-LCD-1.46, **with** cover glass | `esp32-s3-touch-lcd-146-stand-coverglass.stl` |
-| ESP32-S3-Touch-LCD-1.46, **no** cover glass | `esp32-s3-touch-lcd-146-stand-bare.stl` |
+| ESP32-S3-LCD-1.28 (SKU 26541) | [`stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl`](stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl) |
+| ESP32-S3-Touch-LCD-1.46, **with** cover glass | [`stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl) |
+| ESP32-S3-Touch-LCD-1.46, **no** cover glass | [`stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl) |
 
 If you're unsure which 1.46 you have, see the "telling them apart" note in
 [`BOARDS.md`](BOARDS.md). Printing the wrong one gives you a groove 1.65 mm out
@@ -127,7 +127,7 @@ Edit the relevant entry in `build_stands.py` (`gap = <thickness> + <fit>`), then
 
 ```
 python3 build_stands.py
-python3 check_stl.py esp32-s3-touch-lcd-146-stand-coverglass.stl
+python3 check_stl.py stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl
 ```
 
 - rattles → drop to 0.5

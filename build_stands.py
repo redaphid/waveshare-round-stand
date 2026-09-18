@@ -142,7 +142,7 @@ BOARDS = {
         base_d = 27.0, base_h = 12.0, front_h = 3.0, back_h = 4.0,
         ridge_half = 2.0, width = 26.0, slot_y = 12.0,
         notch_w = 13.0, notch_floor = 2.0,
-        stl = "esp32-s3-lcd-128-stand.stl",
+        stl = "stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl",
     ),
     # The 1.46 ships in two cover-glass options and they are NOT the same part.
     # With glass: a round Ø44.77 glass disc overhangs the PCB, 12.30 stack.
@@ -155,7 +155,7 @@ BOARDS = {
         base_d = 36.0, base_h = 16.0, front_h = 4.0, back_h = 5.0,
         ridge_half = 2.5, width = 30.0, slot_y = 16.0,
         notch_w = 14.0, notch_floor = 2.0,
-        stl = "esp32-s3-touch-lcd-146-stand-coverglass.stl",
+        stl = "stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl",
     ),
     "1.46-bare": dict(
         label   = "ESP32-S3-Touch-LCD-1.46, no cover glass",
@@ -164,7 +164,7 @@ BOARDS = {
         base_d = 35.0, base_h = 16.0, front_h = 4.0, back_h = 5.0,
         ridge_half = 2.5, width = 29.0, slot_y = 15.5,
         notch_w = 14.0, notch_floor = 2.0,
-        stl = "esp32-s3-touch-lcd-146-stand-bare.stl",
+        stl = "stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl",
     ),
 }
 
