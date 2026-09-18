@@ -136,6 +136,7 @@ PETG = 1.27  # g/cm^3
 
 BOARDS = {
     "1.28": dict(
+        group = "stand",
         label   = "ESP32-S3-LCD-1.28 (SKU 26541)",
         board_d = 36.5, thick = 1.6, screen_d = 32.4,
         gap = 1.6+0.8, lean = 20, depth = 5.0,
@@ -149,6 +150,7 @@ BOARDS = {
     # Without:    a 39.36 x 41.53 panel on a Ø42.58 PCB -- the PCB rim is then
     #             the widest thing -- 10.65 stack.
     "1.46-glass": dict(
+        group = "stand",
         label   = "ESP32-S3-Touch-LCD-1.46, with cover glass",
         board_d = 44.77, thick = 12.30, screen_d = 36.96,
         gap = 12.30+0.8, lean = 20, depth = 8.0,
@@ -158,6 +160,7 @@ BOARDS = {
         stl = "stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl",
     ),
     "1.46-bare": dict(
+        group = "stand",
         label   = "ESP32-S3-Touch-LCD-1.46, no cover glass",
         board_d = 42.58, thick = 10.65, screen_d = 36.96,
         gap = 10.65+0.8, lean = 20, depth = 8.0,
@@ -165,6 +168,30 @@ BOARDS = {
         ridge_half = 2.5, width = 29.0, slot_y = 15.5,
         notch_w = 14.0, notch_floor = 2.0,
         stl = "stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl",
+    ),
+    # DOCKS. A straight USB-C plug in the 1.46's bottom port points radially
+    # down. The low stands leave ~5 mm under the rim; a plug body is ~20-25 mm.
+    # These lift the board so the plug hangs straight down through the notch
+    # and the cable turns out the back at desk level.
+    "1.46-glass-dock": dict(
+        group = "dock",
+        label   = "ESP32-S3-Touch-LCD-1.46, with cover glass -- DOCK",
+        board_d = 44.77, thick = 12.30, screen_d = 36.96,
+        gap = 12.30+0.8, lean = 20, depth = 8.0,
+        base_d = 38.0, base_h = 38.0, front_h = 5.0, back_h = 6.0,
+        ridge_half = 2.5, width = 30.0, slot_y = 19.0,
+        notch_w = 16.0, notch_floor = 2.0, plug_len = 24.0,
+        stl = "stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_DOCK-straight-plug.stl",
+    ),
+    "1.46-bare-dock": dict(
+        group = "dock",
+        label   = "ESP32-S3-Touch-LCD-1.46, no cover glass -- DOCK",
+        board_d = 42.58, thick = 10.65, screen_d = 36.96,
+        gap = 10.65+0.8, lean = 20, depth = 8.0,
+        base_d = 37.0, base_h = 38.0, front_h = 5.0, back_h = 6.0,
+        ridge_half = 2.5, width = 29.0, slot_y = 18.5,
+        notch_w = 16.0, notch_floor = 2.0, plug_len = 24.0,
+        stl = "stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_DOCK-straight-plug.stl",
     ),
 }
 
@@ -194,6 +221,13 @@ if __name__ == "__main__":
         print(f"  disc sag      {sag:.2f} mm over the notch "
               f"(engagement {p['depth']+sag:.1f} mm)")
         print(f"  cable clear   {clear:.2f} mm between the board rim and the notch floor")
+        if p.get("plug_len"):
+            print(f"  straight plug {p['plug_len']:.0f} mm body -> "
+                  f"{clear - p['plug_len']:.1f} mm spare for the cable to turn")
+            run = (bc[1] - sag - p["notch_floor"]) / axis[1]      # along the plug axis
+            tip_y = bc[0] - axis[0] * run
+            print(f"  plug tip lands y={tip_y:.1f} of base 0..{p['base_d']:.0f} "
+                  f"-> {tip_y:.0f} mm to the front edge, {p['base_d']-tip_y:.0f} mm to the back")
         print(f"  footprint     {p['width']:.0f} x {p['base_d']:.0f}, ridge {p['base_h']:.0f} tall")
         print(f"  screen top    {top[1]:.1f} mm above the desk")
         print(f"  material      {vol:.2f} cm^3  ~= {vol*PETG:.1f} g PETG")
@@ -206,6 +240,9 @@ if __name__ == "__main__":
         assert p["notch_floor"] < min(p["front_h"], p["back_h"]), \
             f"{key}: notch floor above the front/back lip -- profile C would not be simple"
         assert shoulder >= 4.0, f"{key}: shoulders only {shoulder:.1f} mm"
+        if p.get("plug_len"):
+            assert clear >= p["plug_len"] + 2.0, \
+                f"{key}: {clear:.1f} mm under the rim will not take a {p['plug_len']} mm plug"
         assert clear >= 3.5, \
             f"{key}: only {clear:.2f} mm under the rim -- a cable will not pass"
         assert p["width"] < p["board_d"], f"{key}: stand wider than the board"

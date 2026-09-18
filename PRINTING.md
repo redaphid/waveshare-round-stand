@@ -2,11 +2,18 @@
 
 ## Pick the right file
 
-| board | file |
+First: **how will you power it?** That decides stand vs. dock.
+
+| powering the 1.46 by… | print |
 |---|---|
-| ESP32-S3-LCD-1.28 (SKU 26541) | [`stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl`](stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl) |
-| ESP32-S3-Touch-LCD-1.46, **with** cover glass | [`stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl) |
-| ESP32-S3-Touch-LCD-1.46, **no** cover glass | [`stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl) |
+| straight USB-C cable in the bottom port | the **DOCK** |
+| right-angle USB-C cable, battery, or port turned to the side | the low **stand** |
+
+| board | low stand | dock |
+|---|---|---|
+| ESP32-S3-LCD-1.28 (SKU 26541) | [`…1.28_board-36.5mm_stand.stl`](stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl) | — (port is on the top chord) |
+| ESP32-S3-Touch-LCD-1.46, **with** cover glass | [`…coverglass_board-44.77mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl) | [`…coverglass_board-44.77mm_DOCK-straight-plug.stl`](stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_DOCK-straight-plug.stl) |
+| ESP32-S3-Touch-LCD-1.46, **no** cover glass | [`…bare_board-42.58mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl) | [`…bare_board-42.58mm_DOCK-straight-plug.stl`](stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_DOCK-straight-plug.stl) |
 
 If you're unsure which 1.46 you have, see the "telling them apart" note in
 [`BOARDS.md`](BOARDS.md). Printing the wrong one gives you a groove 1.65 mm out
@@ -40,8 +47,10 @@ anywhere, and the groove is a top-down cut. Do not stand them on end.
 | 1.28 | 26 × 27 mm | 12 mm | 3.6 cm³ ≈ **4.6 g** |
 | 1.46 cover glass | 30 × 36 mm | 16 mm | 7.0 cm³ ≈ **8.9 g** |
 | 1.46 bare | 29 × 35 mm | 16 mm | 6.5 cm³ ≈ **8.2 g** |
+| 1.46 cover glass **dock** | 30 × 38 mm | 38 mm | 15.6 cm³ ≈ **19.8 g** |
+| 1.46 bare **dock** | 29 × 37 mm | 38 mm | 14.1 cm³ ≈ **17.9 g** |
 
-All three fit on the plate together with room to spare.
+All five fit on the plate together with room to spare.
 
 ## The cable notch — what it does and doesn't do
 
@@ -49,20 +58,34 @@ Every stand has a notch cut straight through the middle of the ridge, front to
 back, so a USB-C lead can run through the stand instead of draping over it. It
 also sheds roughly a third of the material.
 
+**On the low stands** the clearance under the rim is:
+
 | stand | notch width | clear space under the board rim |
 |---|---|---|
 | 1.28 | 13 mm | **4.10 mm** |
 | 1.46 cover glass | 14 mm | **5.36 mm** |
 | 1.46 bare | 14 mm | **5.30 mm** |
 
-**It is a cable route, not a plug socket.** That clearance takes a bare lead or a
-right-angle USB-C plug. It will *not* take a straight plug pushed in at
-bottom-dead-centre, and no notch can: the connector fires radially outward, so
-at the bottom of a board leaning 20° a straight plug needs about 20 mm of run
-before it clears — and the desk is in the way. Making that work would mean a
-stand roughly twice as tall, which defeats the point.
+**On the low stands that is a cable route, not a plug socket.** It takes a bare
+lead or a right-angle USB-C plug. It will *not* take a straight plug pushed in
+at bottom-dead-centre: the connector fires radially outward, so a straight plug
+needs ~20–25 mm of run below the rim before the cable can turn — and there's
+5 mm. That's exactly the failure you see when the board ends up lying across
+the stand with a cable in it.
 
-So, three ways to power these:
+**The docks fix this by lifting the board.** Ridge 38 mm instead of 16, notch
+widened to 16 mm for plug bodies, leaving **27 mm** under the rim — a 24 mm plug
+body plus 3 mm for the cable to start its turn. The plug hangs down through
+the notch — leaning forward as it goes, since the board leans back — and its
+tip lands about 6 mm in from the front edge. The notch is open both ends: run
+the cable out the front, or 32 mm back along the floor to exit behind. Cost:
+roughly twice the material, and the screen sits ~72 mm off the desk instead
+of ~50.
+
+So, four ways to power these:
+
+0. **Straight USB-C lead in the bottom port → print the dock.** Nothing to
+   rotate, nothing to buy.
 
 1. **Right-angle USB-C lead**, connector at the bottom, head sitting in the
    notch and the cable running out the back. Tidiest option.
@@ -116,6 +139,11 @@ In the board's natural orientation — USB-C at the bottom — the header lands
 around 75–90°, which clears comfortably. The trap is a *partial* rotation: turn
 the board 30° or so to angle the USB-C and you walk the header straight into
 the shoulder.
+
+**The docks are far more forgiving here.** Their rear ramp drops 32 mm over
+~10 mm of depth, so it falls away from the pins fast; measured against the
+cover-glass dock, nothing clashes at any angle — worst case is 0.8 mm at 40°
+with 5 mm pins, and 8 mm pins clear by 8 mm+ everywhere.
 
 ## If the fit is wrong
 

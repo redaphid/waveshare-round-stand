@@ -6,13 +6,35 @@ cable notch cut straight through the middle so a USB-C lead runs *through* the
 stand rather than over it. The board drops in rim-first — nothing clips, nothing
 flexes, no fasteners.
 
-![side sections and front elevations](preview-all.png)
+![low stands](preview-stands.png)
 
 | board | stand | groove | notch | screen top | material |
 |---|---|---|---|---|---|
 | ESP32-S3-LCD-1.28 (SKU 26541) | [`stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl`](stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl) | 2.4 × 5 mm | 13 mm | 41.6 mm | 4.6 g |
 | ESP32-S3-Touch-LCD-1.46, cover glass | [`stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl) | 13.1 × 8 mm | 14 mm | 50.6 mm | 8.9 g |
 | ESP32-S3-Touch-LCD-1.46, bare | [`stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl) | 11.5 × 8 mm | 14 mm | 48.5 mm | 8.2 g |
+
+### Docks — for a straight USB-C cable in the bottom port
+
+The low stands leave ~5 mm under the board rim. A straight USB-C plug body is
+~20–25 mm, so with the 1.46's bottom port in use the board can't seat — it ends
+up lying across the stand. The docks lift the board so the plug hangs straight
+down through the notch and the cable turns out the back at desk level.
+
+![docks](preview-docks.png)
+
+| board | dock | clear under rim | screen top | material |
+|---|---|---|---|---|
+| ESP32-S3-Touch-LCD-1.46, cover glass | `esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_DOCK-straight-plug.stl` | **27.0 mm** | 72.6 mm | 19.8 g |
+| ESP32-S3-Touch-LCD-1.46, bare | `esp32-s3-touch-lcd-1.46-bare_board-42.58mm_DOCK-straight-plug.stl` | **26.9 mm** | 70.5 mm | 17.9 g |
+
+Same groove, same notch (widened to 16 mm for plug bodies), ridge raised from
+16 mm to 38 mm and the groove moved 3 mm back. Sized for a 24 mm plug body with
+3 mm spare for the cable to turn. Because the board leans back, the plug leans
+*forward* as it descends and lands about 6 mm in from the front edge; the notch
+is open at both ends, so the cable runs out the front or 32 mm back along the
+floor to exit behind. Twice the material of the low stand — the cost of holding
+the board 27 mm off the desk.
 
 Print flat on the base. No supports, no overhangs. Masses are PETG.
 
@@ -33,10 +55,10 @@ Print flat on the base. No supports, no overhangs. Masses are PETG.
 1. **The 1.46 ships in two cover-glass options and they are different parts** —
    Ø44.77 / 12.30 mm thick with glass, Ø42.58 / 10.65 mm without. The grooves
    differ by 1.65 mm. Check yours before printing; see `BOARDS.md`.
-2. **The notch is a cable route, not a plug socket.** It leaves 4.1–5.4 mm of
-   clear space under the board rim — fine for a bare lead or a right-angle
-   plug, not enough for a straight plug inserted at bottom-dead-centre. See
-   `PRINTING.md`.
+2. **On the low stands the notch is a cable route, not a plug socket.** It
+   leaves 4.1–5.4 mm under the board rim — fine for a bare lead or a
+   right-angle plug, not a straight plug in the bottom port. **For a straight
+   plug, print the dock.** See `PRINTING.md`.
 3. **The two boards are closer in size than they look.** The 1.46's PCB is only
    6.1 mm wider than the 1.28's. What differs enormously is thickness — 1.6 mm
    of bare PCB rim versus a 12.3 mm stack.
@@ -68,9 +90,9 @@ the mesh comes out watertight without needing a general polygon boolean.
 
 | file | what it is |
 |---|---|
-| `build_stands.py` | generates all three STLs from one parameter table; prints a geometry report and asserts the board fits the base, the centre of mass stays centred, the notch floor clears the groove floor, and a cable actually fits under the rim |
+| `build_stands.py` | generates all five STLs from one parameter table; prints a geometry report and asserts the board fits the base, the centre of mass stays centred, the notch floor clears the groove floor, a cable actually fits under the rim, and — for docks — that a straight plug does |
 | `check_stl.py <f.stl>` | verifies watertightness, outward normals, no degenerate facets; exits non-zero on a problem |
-| `preview.py` → `preview-all.png` | side sections and front elevations, all three at one scale, board drawn in place |
+| `preview.py` → `preview-stands.png`, `preview-docks.png` | side sections and front elevations per family, board drawn in place |
 | `stand.scad` | same model, parametric, for tweaking in OpenSCAD; set `variant` at the top |
 | `flatten_presets.py` | resolves an ElegooSlicer preset's `inherits` chain into one flat preset — see the automation note in `PRINTING.md` |
 | `archive/` | superseded files, kept rather than deleted; see `archive/NOTE.md` |

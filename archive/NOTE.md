@@ -7,4 +7,7 @@ Superseded files, kept rather than deleted.
   unqualified "146-stand" is easy to print by mistake.
 - `gen_stand.py` — 1.28-only generator, superseded by `build_stands.py`, which
   reproduces its output exactly.
-- `preview-side.png` — 1.28-only preview, superseded by `preview-all.png`.
+- `preview-side.png` — 1.28-only preview, superseded first by `preview-all.png`
+  and now by `preview-stands.png`.
+- `preview-all_pre-docks.png` — combined preview of the three low stands before
+  the dock family existed. Superseded by `preview-stands.png` + `preview-docks.png`.
