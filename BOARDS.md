@@ -73,6 +73,20 @@ all the groove ever grips; its assembled height with headers and USB-C is far
 more than that. The 1.46's 12.30 mm, by contrast, is the whole stack, because
 its glass and PCB are laminated into one puck.
 
+### Switch positions (measured)
+
+Not dimensioned on Waveshare's drawing. Measured by fitting the disc to R 18.25
+and locating the two switch caps by colour — overlay in
+`reference/esp32-s3-lcd-1.28-switch-positions.png`. Accuracy ~±0.5 mm.
+
+| switch | back view (+x right, +y up) | front view | r | from bottom |
+|---|---|---|---|---|
+| **BOOT** (GPIO0) | (−9.0, −8.3) | (**+9.0**, −8.3) — lower **right** as you look at it | 12.2 | 47° |
+| **RESET** | (+9.7, −8.3) | (−9.7, −8.3) — lower **left** | 12.8 | 49° |
+
+With the USB-C chord at the top. Cap ≈ Ø1.9, switch body ~3.5 mm square,
+~2 mm tall off the PCB.
+
 ## ESP32-S3-Touch-LCD-1.46
 
 Capacitive touch, 412 × 412, ESP32-S3R8. Adds a QMI8658 IMU, PCF85063 RTC, TF

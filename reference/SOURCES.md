@@ -12,6 +12,8 @@ page states its outline in text.
 | `esp32-s3-touch-lcd-1.46-outline-bare.jpg` | [`/w/upload/b/b8/600px-...-introduction-03_1.jpg`](https://www.waveshare.com/w/upload/b/b8/600px-ESP32-S3-Touch-LCD-1.46-introduction-03_1.jpg) | panel 39.36 × 41.53, stack 10.65, PCB 42.58/41.33 |
 | `esp32-s3-touch-lcd-1.46-pinout.jpg` | [`/w/upload/7/72/600px-...-introduction-02_1.jpg`](https://www.waveshare.com/w/upload/7/72/600px-ESP32-S3-Touch-LCD-1.46-introduction-02_1.jpg) | 20-pin header map |
 
+| `esp32-s3-lcd-1.28-switch-positions.png` | derived — disc fit + colour detection over the outline drawing | BOOT / RESET cap positions, ±0.5 mm |
+
 Wiki pages: [ESP32-S3-LCD-1.28](https://www.waveshare.com/wiki/ESP32-S3-LCD-1.28) ·
 [ESP32-S3-Touch-LCD-1.46B](https://www.waveshare.com/wiki/ESP32-S3-Touch-LCD-1.46B)
 (one wiki page covers both 1.46 cover-glass options; there is no

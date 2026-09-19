@@ -107,6 +107,7 @@ the mesh comes out watertight without needing a general polygon boolean.
 |---|---|
 | `build_stands.py` | generates all five STLs from one parameter table; prints a geometry report and asserts the board fits the base, the centre of mass stays centred, the notch floor clears the groove floor, a cable actually fits under the rim, and — for docks — that a straight plug does |
 | `build_stand_button.py [BOOT\|RESET]` | the 1.28 stand with a switch post; manifold3d, in the `~/.venvs/cad` venv |
+| `build_all.sh` | everything below, plus a docs link-check; run before any commit |
 | `check_stl.py <f.stl>` | verifies watertightness, outward normals, no degenerate facets; exits non-zero on a problem |
 | `preview.py` → `preview-stands.png`, `preview-docks.png` | side sections and front elevations per family, board drawn in place |
 | `stand.scad` | same model, parametric, for tweaking in OpenSCAD; set `variant` at the top |
@@ -114,7 +115,22 @@ the mesh comes out watertight without needing a general polygon boolean.
 | `pod/` | the gauge pod + adjustable monitor clip — see [`pod/README.md`](pod/README.md) |
 | `archive/` | superseded files, kept rather than deleted; see `archive/NOTE.md` |
 
+## For whoever works on this next
+
+- **[`CLAUDE.md`](CLAUDE.md)** — the agent brief: what's verified, conventions, how to work here
+- **[`docs/DESIGN.md`](docs/DESIGN.md)** — every design decision and what it replaced
+- **[`docs/TOOLCHAIN.md`](docs/TOOLCHAIN.md)** — the two pipelines, venv setup, renderer limits, the slicer-CLI post-mortem
+- **[`docs/PRINT-LOG.md`](docs/PRINT-LOG.md)** — what has actually been printed
+- **`.claude/skills/`** — `rebuild-and-ship`, `add-board`, `measure-drawing`, `after-a-print`, `pod-iterate`
+- **`./build_all.sh`** — rebuild, validate, render, link-check, in one go
+
 ## Regenerating
+
+```
+./build_all.sh
+```
+
+Or piecemeal:
 
 ```
 python3 build_stands.py
