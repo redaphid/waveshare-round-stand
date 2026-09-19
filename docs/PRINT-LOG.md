@@ -15,9 +15,22 @@ Template:
 
 ---
 
+## 2026-09-18 — fit gauge (`fit-gauge_groove-3.0-to-6.5mm.stl`)
+- material / presets: presumed the usual (PETG, ECC2 0.6 / 0.30 mm)
+- result: **printed.** Photo from behind: the 1.28 stands seated in the **5th
+  slot from the narrow end = 5.0 mm** (read by counting walls; the dots weren't
+  visible). The back of the board is bare — **no case**. The thickness at the
+  rim is the round display module on the front of the PCB, which reaches
+  almost to the PCB edge. The earlier "case" reading was wrong.
+- fit numbers to change: 1.28 `gap` 2.7 → **5.0**, `thick` 1.6 → **4.7**
+  (PCB + module, estimated between the 4.5 slot and the 5.0 slot; sets where
+  the button post lands).
+- photo: sent in chat 2026-09-18 (blue gauge on the bamboo desk, board seen from behind).
+
 ## 2026-09-18 — 1.28 button-post stand, second report (photo)
 - result: **still too narrow.** Photo: the badge rests *on top of* the groove,
-  it does not enter it. The photo shows why — his 1.28 is **in a case**: black
+  it does not enter it. *(Read at the time as a case — wrong, see the gauge
+  entry above: it is the display module.)* Seen in the photo: black
   glass, white serrated gasket, a dark bezel ring, a dark back plate, and white
   button nubs sticking out of the rim. The rim is several mm thick, not the
   1.6 mm bare PCB the stand was designed for. The 2.4 → 2.7 widening was

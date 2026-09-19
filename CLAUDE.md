@@ -25,7 +25,8 @@ link-checks the docs. Run it before any commit that touches geometry.
 
 Full tables in `BOARDS.md`. The ones that change designs:
 
-- **1.28** (SKU 26541, non-touch): round PCB **Ø36.5**, 1.6 thick. USB-C on the
+- **1.28** (SKU 26541, non-touch): round PCB **Ø36.5**, 1.6 PCB but **~4.7 thick at the rim**
+  with the display module (fit gauge, 09-18) — the groove is 5.0. USB-C on the
   flat top chord. BOOT lower-left / RESET lower-right *seen from the back*, at
   r ≈ 12.5 mm — positions measured, overlay in `reference/`.
 - **1.46 Touch** ships in two parts: **cover glass Ø44.77 / 12.30 thick** or

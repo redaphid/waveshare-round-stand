@@ -67,6 +67,11 @@ was slightly too small. Fit 0.8 → 1.1; shared with the plain 1.28 stand.
 rim is several mm thick, not 1.6. Fit gauge printed to measure it; the groove
 gets the gauge's number, not another guess.
 
+**1.28 groove 5.0, thick 4.7** (09-18). Gauge photo: no case — the display
+module itself reaches the rim. Drops into the 5.0 slot. `thick` 4.7 moves the
+button post back to meet the switch. **Open:** `pod/build_pod.py` still seats
+the 1.28 as a 1.6 stack (`seat_t`, `stack`) — fix before printing the pod.
+
 ## Pod
 
 **Cups on a spine, not a box with holes** (09-18, v2). v1 was a rectangular block

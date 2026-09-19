@@ -13,6 +13,7 @@ Non-touch, GC9A01 driver. This is the board from Waveshare order
 |---|---|
 | PCB outline | **round, R 18.25 → Ø 36.5 mm** |
 | PCB thickness | 1.6 mm (standard 2-layer; not stated on the drawing) |
+| **thickness at the rim** | **~4.7 mm** — the display module on the front reaches almost to the PCB edge. Measured with the fit gauge 09-18: drops into the 5.0 slot. |
 | flat chord | 18.37 mm wide, at the top |
 | USB-C | 12.81 mm wide, sits on the chord, **inserts sideways/upward** |
 | active display | **Ø 32.4 mm**, 240 × 240 |
@@ -68,8 +69,8 @@ The screen ratio 36.96 / 32.40 = 1.141 matches the name ratio 1.46 / 1.28 =
 1.141 exactly, which is a useful cross-check that both drawings were read right.
 
 So the 1.46 is a **17 % wider PCB** — noticeable, not dramatic. The real
-difference is depth. And note the 1.28's 1.6 mm is the *bare PCB rim*, which is
-all the groove ever grips; its assembled height with headers and USB-C is far
+difference is depth. And note the 1.28's 1.6 mm is the *bare PCB* — **wrong for the groove**: the
+display module sits on the rim too, ~4.7 mm total (09-18 fit gauge); its assembled height with headers and USB-C is far
 more than that. The 1.46's 12.30 mm, by contrast, is the whole stack, because
 its glass and PCB are laminated into one puck.
 

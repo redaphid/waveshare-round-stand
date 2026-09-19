@@ -138,8 +138,8 @@ BOARDS = {
     "1.28": dict(
         group = "stand",
         label   = "ESP32-S3-LCD-1.28 (SKU 26541)",
-        board_d = 36.5, thick = 1.6, screen_d = 32.4,
-        gap = 1.6+1.1, lean = 20, depth = 5.0,   # +0.8 printed too tight (09-18)
+        board_d = 36.5, thick = 4.7, screen_d = 32.4,   # PCB + display module at the rim (gauge, 09-18)
+        gap = 5.0, lean = 20, depth = 5.0,             # the fit-gauge slot it drops into; fit already in it
         base_d = 27.0, base_h = 12.0, front_h = 3.0, back_h = 4.0,
         ridge_half = 2.0, width = 26.0, slot_y = 12.0,
         notch_w = 13.0, notch_floor = 2.0,
