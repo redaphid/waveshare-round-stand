@@ -49,3 +49,9 @@ Print flat on the base, no supports. Slicer settings and seating guidance are in
 
 Regenerate these from source with `python3 ../build_stands.py` (run from the
 repo root). Masses are PETG at 1.27 g/cm³.
+
+## Fit gauge
+
+| file | does |
+|---|---|
+| `fit-gauge_groove-3.0-to-6.5mm.stl` | eight slots, 3.0 → 6.5 mm in 0.5 steps. Slot N has N dots under it; slot 1 is at the chamfered end. Slide the badge rim in; the narrowest slot it drops into freely is the groove width to use. ~6 g, prints flat. |

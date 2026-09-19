@@ -14,6 +14,9 @@ python3 preview.py
 echo "== button-post stands (venv) =="
 for b in BOOT RESET; do "$CAD" build_stand_button.py "$b" | grep -E "stl/|assert|Error"; done
 
+echo "== fit gauge (venv) =="
+"$CAD" build_fit_gauge.py | grep -E "stl/"
+
 echo "== pod (venv) =="
 "$CAD" pod/build_pod.py    | grep -vE "^wrote"
 "$CAD" pod/build_pod.py 26 | grep -E "^pod"

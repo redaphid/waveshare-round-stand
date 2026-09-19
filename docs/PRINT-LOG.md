@@ -15,6 +15,19 @@ Template:
 
 ---
 
+## 2026-09-18 — 1.28 button-post stand, second report (photo)
+- result: **still too narrow.** Photo: the badge rests *on top of* the groove,
+  it does not enter it. The photo shows why — his 1.28 is **in a case**: black
+  glass, white serrated gasket, a dark bezel ring, a dark back plate, and white
+  button nubs sticking out of the rim. The rim is several mm thick, not the
+  1.6 mm bare PCB the stand was designed for. The 2.4 → 2.7 widening was
+  solving the wrong problem.
+- fit numbers to change: unknown until measured. Printed
+  `stl/fit-gauge_groove-3.0-to-6.5mm.stl` requested to get the real width.
+- also: the case changes where BOOT/RESET are reached from — the post may be
+  landing on a button nub rather than behind the switch. Not redesigned yet.
+- photo: sent in chat 2026-09-18 (blue print, badge held above it, seen edge-on).
+
 ## 2026-09-18 — 1.28 button-post stand (`…1.28_board-36.5mm_stand_*-post.stl`)
 - material / presets: not stated
 - result: **printed.** The groove the badge lays in is slightly too small.

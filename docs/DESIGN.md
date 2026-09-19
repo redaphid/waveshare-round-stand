@@ -63,6 +63,10 @@ so the fit can be checked by eye. Ø3.2 pad forgives ±1 mm.
 **1.28 groove 2.4 → 2.7** (09-18). First button-post print: the badge's groove
 was slightly too small. Fit 0.8 → 1.1; shared with the plain 1.28 stand.
 
+**…which was the wrong fix** (09-18). His photo shows the 1.28 in a case — the
+rim is several mm thick, not 1.6. Fit gauge printed to measure it; the groove
+gets the gauge's number, not another guess.
+
 ## Pod
 
 **Cups on a spine, not a box with holes** (09-18, v2). v1 was a rectangular block
