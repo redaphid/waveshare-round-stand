@@ -60,6 +60,9 @@ own weight → ~30 gf on the pad, under the ~160 gf a tactile switch needs.
 caps found by colour: BOOT back (−9.0, −8.3), RESET (+9.7, −8.3). Overlay saved
 so the fit can be checked by eye. Ø3.2 pad forgives ±1 mm.
 
+**1.28 groove 2.4 → 2.7** (09-18). First button-post print: the badge's groove
+was slightly too small. Fit 0.8 → 1.1; shared with the plain 1.28 stand.
+
 ## Pod
 
 **Cups on a spine, not a box with holes** (09-18, v2). v1 was a rectangular block

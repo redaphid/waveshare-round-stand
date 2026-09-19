@@ -175,7 +175,7 @@ with 5 mm pins, and 8 mm pins clear by 8 mm+ everywhere.
 
 ## If the fit is wrong
 
-`fit` — the slop added to the board's thickness — is 0.8 mm on all three, and is
+`fit` — the slop added to the board's thickness — is 0.8 mm on the 1.46s and 1.1 mm on the 1.28 (0.8 printed too tight), and is
 the only number likely to need touching. A 0.6 mm nozzle tends to come out
 slightly undersized, which is why it starts generous.
 
