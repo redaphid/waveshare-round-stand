@@ -10,6 +10,18 @@ a windshield pillar isn't reproduced.
 
 ## What you print
 
+**Test the cup first:** `stl/cup-stand-1.28.stl` + `stl/trim-ring-1.28.stl` —
+one 1.28 pod cup on a desk base, ~16 g vs ~40 g for the pod. It is the pod's
+cup verbatim (`cup()` in `build_pod.py`), so if the badge seats and the ring
+presses in there, the pod fits. Prints face-up, no supports; stand it on its
+feet to use.
+
+![cup stand](../renders/cup-stand-1.28-in-use.png)
+
+**The 1.28s mount USB-C tab DOWN**, into the plug slot, same as the 1.46's port —
+rotate the display 180° in firmware. The tab sticks out past the round edge, so
+it can only go into the slot.
+
 | part | qty | file | notes |
 |---|---|---|---|
 | pod | 1 | `stl/pod-gap12.stl` | for right-angle USB-C cables — the default. `stl/pod-gap26.stl` if you must use straight plugs |

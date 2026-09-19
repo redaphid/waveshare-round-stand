@@ -73,6 +73,15 @@ button post back to meet the switch. Pod 1.28 cups: `seat_t` 1.6 → 4.7, so the
 pocket is 7.7 deep (seat + ring) and the trim ring lands on the display module,
 not 3 mm proud of it.
 
+**Cup stand, and what it caught before printing** (09-18). A test of the pod's
+cup at ~16 g: `cup()` pulled out of `pod()` (pod STL byte-identical after the
+refactor), put on a 20° desk base, exported face-up. Rendering it against the
+drawing showed two things that would have made the 1.28 un-seatable in the pod:
+the **USB-C tab reaches r 21.1**, outside the Ø37.2 pocket — now notched, tab
+down into the plug slot; and the **H1/H2 headers reach r ~17** against a 16.5
+bore — now relieved through the shoulder, 10 mm deep. Both live in `cup()`, so
+the pod has them too.
+
 ## Pod
 
 **Cups on a spine, not a box with holes** (09-18, v2). v1 was a rectangular block

@@ -14,8 +14,8 @@ Non-touch, GC9A01 driver. This is the board from Waveshare order
 | PCB outline | **round, R 18.25 → Ø 36.5 mm** |
 | PCB thickness | 1.6 mm (standard 2-layer; not stated on the drawing) |
 | **thickness at the rim** | **~4.7 mm** — the display module on the front reaches almost to the PCB edge. Measured with the fit gauge 09-18: drops into the 5.0 slot. |
-| flat chord | 18.37 mm wide, at the top |
-| USB-C | 12.81 mm wide, sits on the chord, **inserts sideways/upward** |
+| USB-C tab | **sticks out past the disc**: 18.37 mm wide at its root, reaches r ≈ 21.1 (vs R 18.25) — measured off the drawing, 13.3 px/mm, 09-18. Irrelevant to the stands (it is at the top); in the pod it goes down into the plug slot. |
+| USB-C | 12.81 mm wide, sits on the tab, **inserts sideways/upward** |
 | active display | **Ø 32.4 mm**, 240 × 240 |
 | headers | H1 + H2, 1.27 mm pitch, 20 pins each, ~27.00 mm outer span |
 | buttons | BOOT and RESET, lower left and lower right |

@@ -20,6 +20,9 @@ echo "== fit gauge (venv) =="
 echo "== pod (venv) =="
 "$CAD" pod/build_pod.py    | grep -vE "^wrote"
 "$CAD" pod/build_pod.py 26 | grep -E "^pod"
+"$CAD" pod/build_cup_stand.py | grep -E "^cup-stand"
+# pod/README links pod/stl/ -- keep it in step with the live stl/ copies
+cp stl/pod-gap*.stl stl/clip-*.stl stl/trim-ring-*.stl stl/cup-stand-*.stl pod/stl/
 
 echo "== docs: relative links and images =="
 python3 - <<'PY'

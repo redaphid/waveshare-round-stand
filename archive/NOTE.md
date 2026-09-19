@@ -11,3 +11,9 @@ Superseded files, kept rather than deleted.
   and now by `preview-stands.png`.
 - `preview-all_pre-docks.png` — combined preview of the three low stands before
   the dock family existed. Superseded by `preview-stands.png` + `preview-docks.png`.
+- `fit-test_pod-cup-1.28.stl`, `fit-test_pod-cup-1.46.stl` — bare pocket rings
+  (09-18), never shipped. Superseded the same hour by `stl/cup-stand-1.28.stl`,
+  which is the full pod cup on a desk base; they also predate the tab/header fix.
+- `fit-test-pod-cups.png` — render of those rings.
+- `cup-stand-1.28-section.png` — section render cut through the plug slot, so it
+  showed no wall. Replaced by `renders/cup-stand-1.28-empty-front.png`.

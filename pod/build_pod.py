@@ -22,10 +22,16 @@ from render import render
 #          module, 4.7 at the rim -- measured with the fit gauge 09-18, not the bare 1.6 PCB)
 # bore_r : rear bore radius. 1.46: snug on the Ø42.58 PCB so the stack passes through and the
 #          three M2 standoffs clear. 1.28: past its BOOT/RESET buttons (~r15), inside the PCB rim.
+# 1.28 extras, measured off reference/esp32-s3-lcd-1.28-outline.jpg (13.3 px/mm, 09-18):
+#   tab : the USB-C tab is NOT inside the Ø36.5 disc -- it sticks out to r 21.1, 18.37 wide at its
+#         root. It goes DOWN, into the plug slot (like the 1.46's port); rotate the display 180° in firmware.
+#   hdr : H1/H2 header housings + SMD leads reach r ~17.8 at |x| 10.9..16.1, y -5.4..7.7 -- past the
+#         Ø33 bore, onto the shoulder. Relieved: |x| >= hdr[0], |z| <= hdr[1], behind the seat.
+T128 = dict(tab=(18.37, 21.1), hdr=(10.3, 8.5))
 GAUGES = [                                   # top to bottom
     dict(name="1.46 cover glass", d=44.77, seat_t=1.3, bore_r=21.29+0.25, screen=36.96, stack=12.3),
-    dict(name="1.28",             d=36.50, seat_t=4.7, bore_r=16.5,       screen=32.40, stack=4.7),
-    dict(name="1.28",             d=36.50, seat_t=4.7, bore_r=16.5,       screen=32.40, stack=4.7),
+    dict(name="1.28",             d=36.50, seat_t=4.7, bore_r=16.5,       screen=32.40, stack=4.7, **T128),
+    dict(name="1.28",             d=36.50, seat_t=4.7, bore_r=16.5,       screen=32.40, stack=4.7, **T128),
 ]
 FIT       = 0.35   # radial clearance in the pocket
 CANT      = 15.0   # degrees the faces turn toward you (about Z)
@@ -68,26 +74,44 @@ CUP_Y0 = BB_Y0 - CUP_PROUD
 MARGIN = 5.0
 body_h = sum(2*r_outer(g) for g in GAUGES) + GAP*(len(GAUGES)-1) + 2*MARGIN
 
+def cup(g):
+    """One gauge cup in its own frame: axis along +Y, face at y=CUP_Y0 facing -Y, centre on the
+    axis, badge bottom toward -Z. Returns (solid, cuts, r_in, depth). Shared with build_cup_stand.py."""
+    ro = r_outer(g)
+    r_in, r_tube = g["d"]/2 + FIT, g["d"]/2 + FIT + CUP_WALL
+    cup_L  = CUP_PROUD + CUP_EMBED
+    depth  = g["seat_t"] + RING_L                                  # pocket: seat + ring, ring face flush
+    tube   = along_y(cyl(cup_L, r_tube)).translate([0, CUP_Y0, 0])
+    bezel  = along_y(cyl(BEZEL_L, ro)).translate([0, CUP_Y0, 0])
+    pocket = along_y(cyl(depth + 1, r_in)).translate([0, CUP_Y0 - 1, 0])
+    bore   = along_y(cyl(cup_L + BB_D + 2, g["bore_r"], 96)).translate([0, CUP_Y0 - 1, 0])
+    slot   = boxat(-8, 8, CUP_Y0 - 1, BB_Y0 + BB_D + 1, -r_tube - 12, -g["bore_r"] + 2)     # plug drop: right-angle head ~12x6.5, 9 deep
+    cuts   = pocket + bore + slot
+    if "tab" in g:                                                 # tab down into the slot, full pocket depth
+        tw, reach = g["tab"]
+        cuts += boxat(-tw/2 - 0.4, tw/2 + 0.4, CUP_Y0 - 1, CUP_Y0 + depth, -r_tube - 1, -g["bore_r"] + 2)
+        assert reach + 0.3 > r_in and tw/2 + 0.4 > 8, "tab relief pointless"
+    if "hdr" in g:                                                 # header relief through the shoulder
+        hx, hz = g["hdr"]
+        for sx in (-1, 1):
+            x0, x1 = sorted((sx*hx, sx*(r_in + 0.5)))
+            cuts += boxat(x0, x1, CUP_Y0 + depth - 0.01, CUP_Y0 + depth + 10, -hz, hz)   # headers stand ~8.5 off the PCB
+    return tube + bezel, cuts, r_in, depth
+
 def pod():
     solid = boxat(BB_X0, BB_X0 + BB_W, BB_Y0, BB_Y0 + BB_D, -body_h/2, body_h/2)
     cuts, cups = None, []
     z = body_h/2 - MARGIN
     for g in GAUGES:
         ro = r_outer(g); z -= ro
-        r_in, r_tube = g["d"]/2 + FIT, g["d"]/2 + FIT + CUP_WALL
-        cup_L  = CUP_PROUD + CUP_EMBED
-        depth  = g["seat_t"] + RING_L                              # pocket: seat + ring, ring face flush
-        tube   = along_y(cyl(cup_L, r_tube)).translate([0, CUP_Y0, 0])
-        bezel  = along_y(cyl(BEZEL_L, ro)).translate([0, CUP_Y0, 0])
-        pocket = along_y(cyl(depth + 1, r_in)).translate([0, CUP_Y0 - 1, 0])
-        bore   = along_y(cyl(cup_L + BB_D + 2, g["bore_r"], 96)).translate([0, CUP_Y0 - 1, 0])
-        slot   = boxat(-8, 8, CUP_Y0 - 1, BB_Y0 + BB_D + 1, -r_tube - 12, -g["bore_r"] + 2)     # plug drop: right-angle head ~12x6.5, 9 deep
+        r_tube = g["d"]/2 + FIT + CUP_WALL
+        cup_solid, cup_cuts, r_in, depth = cup(g)
         # pass-through from the drop zone into the spine's wiring channel, so the lead can be tucked
         # in whichever way the right-angle plug exits (sideways or backward)
         cx0 = BB_X0 + (BB_W - CHAN_W)/2
         passthru = boxat(cx0 + 1, 1.0, BB_Y0 + BB_D - CHAN_D, BB_Y0 + BB_D + 1, -r_tube - 12, -r_tube - 2).rotate([0, 0, 0])
-        solid += cant(tube + bezel, z)
-        c = cant(pocket + bore + slot, z) + passthru.translate([0, 0, z]); cuts = c if cuts is None else cuts + c
+        solid += cant(cup_solid, z)
+        c = cant(cup_cuts, z) + passthru.translate([0, 0, z]); cuts = c if cuts is None else cuts + c
         cups.append(dict(z=z, r_in=r_in, depth=depth, g=g))
         z -= ro + GAP
     cx0 = BB_X0 + (BB_W - CHAN_W)/2

@@ -55,3 +55,12 @@ repo root). Masses are PETG at 1.27 g/cm³.
 | file | does |
 |---|---|
 | `fit-gauge_groove-3.0-to-6.5mm.stl` | eight slots, 3.0 → 6.5 mm in 0.5 steps. Slot N has N dots under it; slot 1 is at the chamfered end. Slide the badge rim in; the narrowest slot it drops into freely is the groove width to use. ~6 g, prints flat. |
+
+## Pod cup test — print before the pod
+
+| file | does |
+|---|---|
+| `cup-stand-1.28.stl` | one 1.28 pod cup on a desk base, leaning back 20°. ~16 g. Exported face-up — print as is, no supports, then stand it on its two feet. Badge goes in **USB-C tab down**, then press `trim-ring-1.28.stl` in. |
+
+What to report: does the badge drop onto the ledge without force, does the tab
+clear, does the ring press in and hold. Loose or tight: say which.
