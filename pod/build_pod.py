@@ -142,21 +142,26 @@ def clip():
 
 def slider_set_to(s, edge_t): return s.translate([0, edge_t - EDGE_MAX, 0])
 
+SIZE = {"1.28": "small", "1.46": "large"}          # stl/ subfolder per badge
+def ring_name(g): s = SIZE[g["name"].split()[0]]; return f"{s}/Trim ring - {s}"
+POD_NAME = {12: "pod/Pod - right-angle cables", 26: "pod/Pod - straight cables"}.get(round(GAP), f"pod/Pod - {GAP:.0f} mm gaps")
+
 def export(name, man):
+    """name: path under stl/, no extension. The console line shows just the file name."""
     m = man.to_mesh()
     tm = trimesh.Trimesh(vertices=np.asarray(m.vert_properties)[:, :3], faces=np.asarray(m.tri_verts))
     tm.export(f"stl/{name}.stl"); sz = tm.bounds[1] - tm.bounds[0]
-    print(f"{name:26s} {man.volume()/1000:6.1f} cm^3  genus {man.genus():2d}  watertight {str(tm.is_watertight):5s} "
+    print(f"{name.split('/')[-1]:32s} {man.volume()/1000:6.1f} cm^3  genus {man.genus():2d}  watertight {str(tm.is_watertight):5s} "
           f"{sz[0]:.0f}x{sz[1]:.0f}x{sz[2]:.0f} mm")
     return tm
 
 if __name__ == "__main__":
     tag = f"gap{GAP:.0f}"
     P, cups = pod(); F, S = clip()
-    export(f"pod-{tag}", P); export("clip-fixed", F); export("clip-slider", S)
+    export(POD_NAME, P); export("pod/Clip - fixed jaw", F); export("pod/Clip - slider", S)
     rings = {}
     for i, c in enumerate(cups):
-        key = f"trim-ring-{c['g']['name'].split()[0]}"
+        key = ring_name(c["g"])
         if key not in rings: rings[key] = export(key, trim_ring(c))
     print(f"pod {body_h:.0f} mm tall, cups {POD_PROUD:.0f} mm proud of the screen, {GAP:.0f} mm gaps")
 

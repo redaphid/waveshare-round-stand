@@ -46,9 +46,11 @@ Full tables in `BOARDS.md`. The ones that change designs:
 
 ## Conventions
 
-- **Filenames carry the board and its outside diameter**
-  (`esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl`). The two 1.46
-  sizes are not interchangeable; the name is the guard.
+- **STLs: `stl/small/` = 1.28, `stl/large/` = 1.46, `stl/pod/` = the pod.**
+  Plain-English file names he can read at a glance (`Stand - BOOT button.stl`),
+  no board codes. Every `large/` file says **cover glass** or **no cover glass** —
+  the two 1.46s are not interchangeable; the name is the guard. New size →
+  new folder, and add it to `SIZE` in `pod/build_pod.py`.
 - **Never delete generated assets.** Move them to `archive/` and add a line to
   `archive/NOTE.md`.
 - **Windows mirror:** `D:\Projects\waveshare-round-stand` (`/mnt/d/...`). Copy

@@ -17,3 +17,7 @@ Superseded files, kept rather than deleted.
 - `fit-test-pod-cups.png` — render of those rings.
 - `cup-stand-1.28-section.png` — section render cut through the plug slot, so it
   showed no wall. Replaced by `renders/cup-stand-1.28-empty-front.png`.
+- `pod-stl-duplicates/` — the old `pod/stl/` folder: copies of the pod, clips,
+  rings and cup test that went stale whenever only `stl/` was rebuilt. Retired
+  09-18 when STLs moved to `stl/small|large|pod/` with readable names; the live
+  files are there.

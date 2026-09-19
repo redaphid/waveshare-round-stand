@@ -39,7 +39,7 @@ floor = BAR_H - DEPTH
 assert floor >= 3.0, f"slot floor only {floor} mm"
 assert 1.2 + (len(WIDTHS)-1)//2 * 1.1 + DOT_R < floor, "dots run into the slots"
 
-name = "stl/fit-gauge_groove-3.0-to-6.5mm.stl"
+name = "stl/small/Slot fit gauge.stl"
 m = bar.to_mesh(); tm = trimesh.Trimesh(vertices=np.asarray(m.vert_properties)[:, :3], faces=np.asarray(m.tri_verts))
 tm.export(name)
 print(f"{name}: {L:.1f} x {BAR_D} x {BAR_H} mm, {bar.volume()/1000:.2f} cm^3, watertight {tm.is_watertight}")

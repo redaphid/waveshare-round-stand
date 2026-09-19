@@ -11,9 +11,9 @@ First: **how will you power it?** That decides stand vs. dock.
 
 | board | low stand | dock |
 |---|---|---|
-| ESP32-S3-LCD-1.28 (SKU 26541) | [`…1.28_board-36.5mm_stand.stl`](stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl) | — (port is on the top chord) |
-| ESP32-S3-Touch-LCD-1.46, **with** cover glass | [`…coverglass_board-44.77mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl) | [`…coverglass_board-44.77mm_DOCK-straight-plug.stl`](stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_DOCK-straight-plug.stl) |
-| ESP32-S3-Touch-LCD-1.46, **no** cover glass | [`…bare_board-42.58mm_stand.stl`](stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl) | [`…bare_board-42.58mm_DOCK-straight-plug.stl`](stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_DOCK-straight-plug.stl) |
+| ESP32-S3-LCD-1.28 (SKU 26541) | [`small/Stand.stl`](stl/small/Stand.stl) | — (port is on the top chord) |
+| ESP32-S3-Touch-LCD-1.46, **with** cover glass | [`large/Stand - cover glass.stl`](<stl/large/Stand - cover glass.stl>) | [`large/Dock for straight cable - cover glass.stl`](<stl/large/Dock for straight cable - cover glass.stl>) |
+| ESP32-S3-Touch-LCD-1.46, **no** cover glass | [`large/Stand - no cover glass.stl`](<stl/large/Stand - no cover glass.stl>) | [`large/Dock for straight cable - no cover glass.stl`](<stl/large/Dock for straight cable - no cover glass.stl>) |
 
 If you're unsure which 1.46 you have, see the "telling them apart" note in
 [`BOARDS.md`](BOARDS.md). Printing the wrong one gives you a groove 1.65 mm out
@@ -111,7 +111,7 @@ actually *increases* groove engagement slightly.
 
 ## The 1.28 button-post stands
 
-`…1.28…_stand_BOOT-post.stl` and `…_RESET-post.stl` are the plain 1.28 stand
+`small/Stand - BOOT button.stl` and `small/Stand - RESET button.stl` are the plain 1.28 stand
 with one addition: a Ø3.2 pad on a Ø4 column, standing 3.6 mm out of the right
 (BOOT) or left (RESET) shoulder, exactly behind that switch on the badge's back.
 
@@ -183,7 +183,7 @@ Edit the relevant entry in `build_stands.py` (`gap = <thickness> + <fit>`), then
 
 ```
 python3 build_stands.py
-python3 check_stl.py stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl
+python3 check_stl.py "stl/large/Stand - cover glass.stl"
 ```
 
 - rattles → drop to 0.5

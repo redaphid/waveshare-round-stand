@@ -143,7 +143,7 @@ BOARDS = {
         base_d = 27.0, base_h = 12.0, front_h = 3.0, back_h = 4.0,
         ridge_half = 2.0, width = 26.0, slot_y = 12.0,
         notch_w = 13.0, notch_floor = 2.0,
-        stl = "stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl",
+        stl = "stl/small/Stand.stl",
     ),
     # The 1.46 ships in two cover-glass options and they are NOT the same part.
     # With glass: a round Ø44.77 glass disc overhangs the PCB, 12.30 stack.
@@ -157,7 +157,7 @@ BOARDS = {
         base_d = 36.0, base_h = 16.0, front_h = 4.0, back_h = 5.0,
         ridge_half = 2.5, width = 30.0, slot_y = 16.0,
         notch_w = 14.0, notch_floor = 2.0,
-        stl = "stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl",
+        stl = "stl/large/Stand - cover glass.stl",
     ),
     "1.46-bare": dict(
         group = "stand",
@@ -167,7 +167,7 @@ BOARDS = {
         base_d = 35.0, base_h = 16.0, front_h = 4.0, back_h = 5.0,
         ridge_half = 2.5, width = 29.0, slot_y = 15.5,
         notch_w = 14.0, notch_floor = 2.0,
-        stl = "stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl",
+        stl = "stl/large/Stand - no cover glass.stl",
     ),
     # DOCKS. A straight USB-C plug in the 1.46's bottom port points radially
     # down. The low stands leave ~5 mm under the rim; a plug body is ~20-25 mm.
@@ -181,7 +181,7 @@ BOARDS = {
         base_d = 38.0, base_h = 38.0, front_h = 5.0, back_h = 6.0,
         ridge_half = 2.5, width = 30.0, slot_y = 19.0,
         notch_w = 16.0, notch_floor = 2.0, plug_len = 24.0,
-        stl = "stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_DOCK-straight-plug.stl",
+        stl = "stl/large/Dock for straight cable - cover glass.stl",
     ),
     "1.46-bare-dock": dict(
         group = "dock",
@@ -191,7 +191,7 @@ BOARDS = {
         base_d = 37.0, base_h = 38.0, front_h = 5.0, back_h = 6.0,
         ridge_half = 2.5, width = 29.0, slot_y = 18.5,
         notch_w = 16.0, notch_floor = 2.0, plug_len = 24.0,
-        stl = "stl/esp32-s3-touch-lcd-1.46-bare_board-42.58mm_DOCK-straight-plug.stl",
+        stl = "stl/large/Dock for straight cable - no cover glass.stl",
     ),
 }
 

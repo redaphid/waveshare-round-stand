@@ -2,7 +2,7 @@
 """
 1.28 desk stand with a button post.
 
-Same stand as stl/esp32-s3-lcd-1.28_board-36.5mm_stand.stl, plus a short post
+Same stand as "stl/small/Stand.stl", plus a short post
 behind the badge, placed exactly behind the BOOT (or RESET) tactile switch.
 Press the display and the badge rocks back in its groove onto the post: the
 switch is the softest thing in the load path, so it is what gives -- click.
@@ -88,7 +88,7 @@ print(f"switch sits {btn_up:.1f} mm up the badge; rear lip at {p['depth']:.0f} m
       f"{(2*R - btn_up)/(btn_up - p['depth']):.0f}x")
 assert x1 - POST_R > tip[0] or tip[0] > x2 + POST_R, "post would land in the cable notch"
 
-name = f"stl/esp32-s3-lcd-1.28_board-36.5mm_stand_{BUTTON}-post.stl"
+name = f"stl/small/Stand - {BUTTON} button.stl"
 m = out.to_mesh(); tm = trimesh.Trimesh(vertices=np.asarray(m.vert_properties)[:, :3], faces=np.asarray(m.tri_verts))
 tm.export(name); print(f"{name}: {out.volume()/1000:.2f} cm^3, watertight {tm.is_watertight}, {len(tm.faces)} tris")
 

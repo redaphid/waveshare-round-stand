@@ -47,8 +47,9 @@ cover glass? The drawing shows the part as sold.
 
 - **Stand:** new entry in `BOARDS` in `build_stands.py` — `board_d`, `thick`
   (what the groove grips), `screen_d`, and base numbers scaled from the nearest
-  existing entry. `stl` name carries the board and its Ø:
-  `stl/<board>_board-<Ø>mm_stand.stl`. The asserts will tell you if the base is
+  existing entry. `stl` goes in the badge's size folder with
+  a plain-English name: `stl/<small|large|new>/Stand.stl` (see the naming rule in
+  `CLAUDE.md`; variants of one size say which in the name). The asserts will tell you if the base is
   too shallow or the CoM is off.
 - **Pod:** new dict in `GAUGES` in `pod/build_pod.py` — `d`, `seat_t` (what
   rests on the shoulder), `bore_r` (what the back of the board needs to pass

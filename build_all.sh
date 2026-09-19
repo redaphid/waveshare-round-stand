@@ -8,7 +8,7 @@ CAD=~/.venvs/cad/bin/python
 
 echo "== stands + docks (system python) =="
 python3 build_stands.py | grep -E "===|checks|Error" || true
-for f in stl/*_stand.stl stl/*DOCK*.stl; do python3 check_stl.py "$f" | tail -1 | sed "s|^|  $(basename "$f"): |"; done
+for f in stl/small/Stand.stl stl/large/Stand*.stl stl/large/Dock*.stl; do python3 check_stl.py "$f" | tail -1 | sed "s|^|  $(basename "$f"): |"; done
 python3 preview.py
 
 echo "== button-post stands (venv) =="
@@ -20,9 +20,7 @@ echo "== fit gauge (venv) =="
 echo "== pod (venv) =="
 "$CAD" pod/build_pod.py    | grep -vE "^wrote"
 "$CAD" pod/build_pod.py 26 | grep -E "^pod"
-"$CAD" pod/build_cup_stand.py | grep -E "^cup-stand"
-# pod/README links pod/stl/ -- keep it in step with the live stl/ copies
-cp stl/pod-gap*.stl stl/clip-*.stl stl/trim-ring-*.stl stl/cup-stand-*.stl pod/stl/
+"$CAD" pod/build_cup_stand.py | grep -E "^Pod cup test"
 
 echo "== docs: relative links and images =="
 python3 - <<'PY'
@@ -33,8 +31,8 @@ bad = 0
 for doc in docs:
     if not os.path.exists(doc): print("  missing doc", doc); bad += 1; continue
     base = os.path.dirname(doc)
-    for m in re.finditer(r'!?\[[^\]]*\]\(([^)]+)\)', open(doc).read()):
-        t = m.group(1)
+    for m in re.finditer(r'!?\[[^\]]*\]\((<[^>]+>|[^)]+)\)', open(doc).read()):
+        t = m.group(1).strip("<>")
         if t.startswith("http"): continue
         if not os.path.exists(os.path.normpath(os.path.join(base, t.split('#')[0]))):
             print(f"  BROKEN {doc} -> {t}"); bad += 1

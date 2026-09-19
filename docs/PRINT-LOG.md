@@ -15,7 +15,7 @@ Template:
 
 ---
 
-## 2026-09-18 — fit gauge (`fit-gauge_groove-3.0-to-6.5mm.stl`)
+## 2026-09-18 — fit gauge (`small/Slot fit gauge.stl`)
 - material / presets: presumed the usual (PETG, ECC2 0.6 / 0.30 mm)
 - result: **printed.** Photo from behind: the 1.28 stands seated in the **5th
   slot from the narrow end = 5.0 mm** (read by counting walls; the dots weren't
@@ -36,7 +36,7 @@ Template:
   1.6 mm bare PCB the stand was designed for. The 2.4 → 2.7 widening was
   solving the wrong problem.
 - fit numbers to change: unknown until measured. Printed
-  `stl/fit-gauge_groove-3.0-to-6.5mm.stl` requested to get the real width.
+  `stl/small/Slot fit gauge.stl` requested to get the real width.
 - also: the case changes where BOOT/RESET are reached from — the post may be
   landing on a button nub rather than behind the switch. Not redesigned yet.
 - photo: sent in chat 2026-09-18 (blue print, badge held above it, seen edge-on).

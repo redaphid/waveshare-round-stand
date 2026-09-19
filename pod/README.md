@@ -10,7 +10,7 @@ a windshield pillar isn't reproduced.
 
 ## What you print
 
-**Test the cup first:** `stl/cup-stand-1.28.stl` + `stl/trim-ring-1.28.stl` —
+**Test the cup first:** `../stl/small/Pod cup test.stl` + `../stl/small/Trim ring - small.stl` —
 one 1.28 pod cup on a desk base, ~16 g vs ~40 g for the pod. It is the pod's
 cup verbatim (`cup()` in `build_pod.py`), so if the badge seats and the ring
 presses in there, the pod fits. Prints face-up, no supports; stand it on its
@@ -24,11 +24,11 @@ it can only go into the slot.
 
 | part | qty | file | notes |
 |---|---|---|---|
-| pod | 1 | `stl/pod-gap12.stl` | for right-angle USB-C cables — the default. `stl/pod-gap26.stl` if you must use straight plugs |
-| trim ring, 1.46 | 1 | `stl/trim-ring-1.46.stl` | press fit, retains the gauge |
-| trim ring, 1.28 | 2 | `stl/trim-ring-1.28.stl` | |
-| clip, fixed | **2** | `stl/clip-fixed.stl` | two clips on the full-height rail |
-| clip, slider | **2** | `stl/clip-slider.stl` | |
+| pod | 1 | `../stl/pod/Pod - right-angle cables.stl` | for right-angle USB-C cables — the default. `../stl/pod/Pod - straight cables.stl` if you must use straight plugs |
+| trim ring, 1.46 | 1 | `../stl/large/Trim ring - large.stl` | press fit, retains the gauge |
+| trim ring, 1.28 | 2 | `../stl/small/Trim ring - small.stl` | |
+| clip, fixed | **2** | `../stl/pod/Clip - fixed jaw.stl` | two clips on the full-height rail |
+| clip, slider | **2** | `../stl/pod/Clip - slider.stl` | |
 | hardware | 2 | M3 × 12 screw | lock, one per clip; self-taps into the tongue (Ø2.8 hole), or fit a heat-set insert |
 
 Gauges, top to bottom: **1.46 cover glass, 1.28, 1.28** — the 60/52 mixed-stack look.
@@ -38,7 +38,7 @@ Gauges, top to bottom: **1.46 cover glass, 1.28, 1.28** — the 60/52 mixed-stac
 The 1.46's port is on its bottom edge and fires radially. Whatever hangs from it
 lands in the gap below that cup, so the gap is sized by the plug.
 
-| | `pod-gap12` (default) | `pod-gap26` |
+| | `Pod - right-angle cables` (default) | `Pod - straight cables` |
 |---|---|---|
 | cable | **right-angle** plug, head ~12 × 6.5 × 9 mm | **straight** plug, ~24 mm body |
 | rim-to-rim gap | 12 mm | 26 mm |

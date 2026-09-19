@@ -53,7 +53,7 @@ sudo. No OpenSCAD installed either (`stand.scad` is for Aaron's own machine).
 `./build_all.sh` does all of this; by hand:
 
 ```
-python3 build_stands.py && for f in stl/*.stl; do python3 check_stl.py "$f"; done
+python3 build_stands.py && for f in stl/*/*.stl; do python3 check_stl.py "$f"; done
 python3 preview.py
 ~/.venvs/cad/bin/python pod/build_pod.py && ~/.venvs/cad/bin/python pod/build_pod.py 26
 ~/.venvs/cad/bin/python build_stand_button.py BOOT && ... RESET
