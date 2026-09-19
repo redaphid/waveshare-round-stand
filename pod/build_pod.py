@@ -18,13 +18,14 @@ import math, sys, numpy as np, manifold3d as m3, trimesh
 from render import render
 
 # ------------------------------------------------------------------ gauges
-# seat_t : what rests on the shoulder (1.46 -> its glass, which overhangs the PCB; 1.28 -> the PCB)
+# seat_t : what rests on the shoulder (1.46 -> its glass, which overhangs the PCB; 1.28 -> PCB + display
+#          module, 4.7 at the rim -- measured with the fit gauge 09-18, not the bare 1.6 PCB)
 # bore_r : rear bore radius. 1.46: snug on the Ø42.58 PCB so the stack passes through and the
 #          three M2 standoffs clear. 1.28: past its BOOT/RESET buttons (~r15), inside the PCB rim.
 GAUGES = [                                   # top to bottom
     dict(name="1.46 cover glass", d=44.77, seat_t=1.3, bore_r=21.29+0.25, screen=36.96, stack=12.3),
-    dict(name="1.28",             d=36.50, seat_t=1.6, bore_r=16.5,       screen=32.40, stack=1.6),
-    dict(name="1.28",             d=36.50, seat_t=1.6, bore_r=16.5,       screen=32.40, stack=1.6),
+    dict(name="1.28",             d=36.50, seat_t=4.7, bore_r=16.5,       screen=32.40, stack=4.7),
+    dict(name="1.28",             d=36.50, seat_t=4.7, bore_r=16.5,       screen=32.40, stack=4.7),
 ]
 FIT       = 0.35   # radial clearance in the pocket
 CANT      = 15.0   # degrees the faces turn toward you (about Z)

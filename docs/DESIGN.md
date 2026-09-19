@@ -69,8 +69,9 @@ gets the gauge's number, not another guess.
 
 **1.28 groove 5.0, thick 4.7** (09-18). Gauge photo: no case — the display
 module itself reaches the rim. Drops into the 5.0 slot. `thick` 4.7 moves the
-button post back to meet the switch. **Open:** `pod/build_pod.py` still seats
-the 1.28 as a 1.6 stack (`seat_t`, `stack`) — fix before printing the pod.
+button post back to meet the switch. Pod 1.28 cups: `seat_t` 1.6 → 4.7, so the
+pocket is 7.7 deep (seat + ring) and the trim ring lands on the display module,
+not 3 mm proud of it.
 
 ## Pod
 
