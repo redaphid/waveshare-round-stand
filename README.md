@@ -38,6 +38,12 @@ the board 27 mm off the desk.
 
 Print flat on the base. No supports, no overhangs. Masses are PETG.
 
+**1.28 with a button:** `stl/…1.28…_stand_BOOT-post.stl` adds a post behind the
+badge's BOOT switch so pressing the screen clicks it (RESET twin too). Details
+in [`PRINTING.md`](PRINTING.md#the-128-button-post-stands).
+
+![BOOT post](renders/stand-1.28-BOOT-post-back.png)
+
 **Printable files live in [`stl/`](stl/).**
 
 ## The pod — where this is heading
@@ -100,6 +106,7 @@ the mesh comes out watertight without needing a general polygon boolean.
 | file | what it is |
 |---|---|
 | `build_stands.py` | generates all five STLs from one parameter table; prints a geometry report and asserts the board fits the base, the centre of mass stays centred, the notch floor clears the groove floor, a cable actually fits under the rim, and — for docks — that a straight plug does |
+| `build_stand_button.py [BOOT\|RESET]` | the 1.28 stand with a switch post; manifold3d, in the `~/.venvs/cad` venv |
 | `check_stl.py <f.stl>` | verifies watertightness, outward normals, no degenerate facets; exits non-zero on a problem |
 | `preview.py` → `preview-stands.png`, `preview-docks.png` | side sections and front elevations per family, board drawn in place |
 | `stand.scad` | same model, parametric, for tweaking in OpenSCAD; set `variant` at the top |

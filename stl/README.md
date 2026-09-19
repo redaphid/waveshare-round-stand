@@ -16,6 +16,18 @@ stand is fine and half the material.
 | `esp32-s3-touch-lcd-1.46-bare_board-42.58mm_stand.stl` | ESP32-S3-Touch-LCD-1.46, **no** cover glass | 42.58 mm | 29 × 35 mm, 16 mm tall | 8.2 g |
 | `esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl` | ESP32-S3-Touch-LCD-1.46, **with** cover glass | 44.77 mm | 30 × 36 mm, 16 mm tall | 8.9 g |
 
+## 1.28 stand with a button post
+
+| file | does |
+|---|---|
+| `esp32-s3-lcd-1.28_board-36.5mm_stand_BOOT-post.stl` | press the screen → clicks **BOOT** (GPIO0, the user button) |
+| `esp32-s3-lcd-1.28_board-36.5mm_stand_RESET-post.stl` | press the screen → clicks **RESET** |
+
+Same stand as the plain 1.28 one plus a Ø3.2 pad on a short column behind the
+badge, placed exactly behind the switch. Seat the badge **USB-C chord at the
+top**; the post is then behind the lower-right (BOOT) or lower-left (RESET)
+of the badge as you look at it. See `PRINTING.md` for how it works.
+
 ## Docks (straight plug in the bottom port)
 
 | file | for | board Ø | footprint | material |

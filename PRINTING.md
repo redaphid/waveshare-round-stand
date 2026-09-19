@@ -109,6 +109,34 @@ Because the board is unsupported across the notch it sinks about 1.2 mm lower
 than it otherwise would, which is accounted for in the numbers above and
 actually *increases* groove engagement slightly.
 
+## The 1.28 button-post stands
+
+`…1.28…_stand_BOOT-post.stl` and `…_RESET-post.stl` are the plain 1.28 stand
+with one addition: a Ø3.2 pad on a Ø4 column, standing 3.6 mm out of the right
+(BOOT) or left (RESET) shoulder, exactly behind that switch on the badge's back.
+
+**How it clicks.** The badge leans back in its groove, resting on the groove's
+rear lip 5 mm up its rim. The switch is 7.7 mm up — 2.7 mm above that lip — and
+the pad sits 0.2 mm off its cap. Press anywhere near the top of the screen and
+the badge tries to rotate about the lip; the switch is the softest thing in the
+load path, so it is what compresses. Because the switch is so close to the
+pivot, a push at the top is levered **~11×** onto it: a light tap does it. The
+badge's own weight puts ~30 gf on the pad — well under the ~160 gf a tactile
+switch needs — so it doesn't self-press.
+
+**Seat it USB-C chord up.** The badge is round and rotates freely, and the post
+only works in one orientation: chord at the top puts BOOT at the lower right and
+RESET at the lower left, as you look at the screen.
+
+Which switch: **BOOT is GPIO0**, the one firmware reads as a user button. RESET
+reboots the board — useful, but not for tapping.
+
+Switch positions were measured off Waveshare's outline drawing —
+`reference/esp32-s3-lcd-1.28-switch-positions.png` shows the fit. The Ø3.2 pad
+is there to forgive ±1 mm of that measurement. If the first print misses, the
+two numbers are `SWITCH` and `REST_CLR` in `build_stand_button.py`
+(`~/.venvs/cad/bin/python build_stand_button.py BOOT`).
+
 ## If your board has header pins fitted
 
 Waveshare's drawing shows a bare board, but these commonly ship with (or get
