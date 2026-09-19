@@ -47,7 +47,7 @@ side of a monitor** with the look of a 2G DSM A-pillar gauge pod: cups, trim
 rings, gauges canted toward you. That lives in [`pod/`](pod/) — its own README,
 STLs, and renders. The stands and docks above stay as they are.
 
-![pod](pod/renders/01-pod-gap26-front-quarter.png)
+![pod](pod/renders/01-pod-gap12-front-quarter.png)
 
 ## Start here
 

@@ -35,7 +35,7 @@ BEZEL, BEZEL_L = 1.5, 2.5
 RING_L    = 3.0    # trim ring depth; ring face sits flush with the cup face
 RING_PRESS= 0.10   # ring outer radius under the pocket radius
 RING_OVER = 1.5    # ring covers this much beyond the active screen
-GAP       = float(sys.argv[1]) if len(sys.argv) > 1 else 26.0   # rim-to-rim; 26 = straight plug, 12 = right-angle
+GAP       = float(sys.argv[1]) if len(sys.argv) > 1 else 12.0   # rim-to-rim; 12 = right-angle plug (default), 26 = straight
 BB_W, BB_D = 22.0, 18.0
 CHAN_W, CHAN_D = 12.0, 8.0
 POD_PROUD = 6.0    # cup faces stand this far in front of the screen plane when mounted
@@ -80,9 +80,13 @@ def pod():
         bezel  = along_y(cyl(BEZEL_L, ro)).translate([0, CUP_Y0, 0])
         pocket = along_y(cyl(depth + 1, r_in)).translate([0, CUP_Y0 - 1, 0])
         bore   = along_y(cyl(cup_L + BB_D + 2, g["bore_r"], 96)).translate([0, CUP_Y0 - 1, 0])
-        slot   = boxat(-5.5, 5.5, CUP_Y0 - 1, BB_Y0 + BB_D + 1, -r_tube - 9, -g["bore_r"] + 2)   # USB-C drop
+        slot   = boxat(-8, 8, CUP_Y0 - 1, BB_Y0 + BB_D + 1, -r_tube - 12, -g["bore_r"] + 2)     # plug drop: right-angle head ~12x6.5, 9 deep
+        # pass-through from the drop zone into the spine's wiring channel, so the lead can be tucked
+        # in whichever way the right-angle plug exits (sideways or backward)
+        cx0 = BB_X0 + (BB_W - CHAN_W)/2
+        passthru = boxat(cx0 + 1, 1.0, BB_Y0 + BB_D - CHAN_D, BB_Y0 + BB_D + 1, -r_tube - 12, -r_tube - 2).rotate([0, 0, 0])
         solid += cant(tube + bezel, z)
-        c = cant(pocket + bore + slot, z); cuts = c if cuts is None else cuts + c
+        c = cant(pocket + bore + slot, z) + passthru.translate([0, 0, z]); cuts = c if cuts is None else cuts + c
         cups.append(dict(z=z, r_in=r_in, depth=depth, g=g))
         z -= ro + GAP
     cx0 = BB_X0 + (BB_W - CHAN_W)/2
@@ -148,7 +152,7 @@ if __name__ == "__main__":
            title=f"Pod v3 — {GAP:.0f} mm gaps ({'straight' if GAP>=24 else 'right-angle'} USB-C), trim rings, {CANT:.0f}° cant · {body_h:.0f} mm tall")
     render([(P, body)] + pucks + ring_parts, f"renders/01b-pod-{tag}-front.png", elev=0, azim=-90,
            title=f"Pod v3 — straight on, {GAP:.0f} mm gaps")
-    if GAP >= 24:   # the shared parts only need rendering once
+    if GAP < 24:    # the shared parts only need rendering once (default run)
         render([(P, body)], "renders/02-pod-back-and-rail.png", elev=16, azim=128,
                title="Pod v3 from behind — wiring channel down the spine, full-height dovetail rail on the monitor side")
         render([(F, fixed_c), (S.translate([0, 12, 0]), slider_c)], "renders/03-clip-exploded.png", elev=28, azim=140,
