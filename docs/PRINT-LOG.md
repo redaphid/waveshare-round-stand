@@ -15,6 +15,20 @@ Template:
 
 ---
 
+## 2026-09-20 — 1.28 BOOT button stand, 5.4 mm groove (`small/Stand - BOOT button.stl`)
+- material / presets: black filament — not the usual blue; presets not stated
+- result: **the badge seats.** Two photos. Side-on: rim fully down in the
+  groove, a little slack in front of the glass, badge leaning back. From
+  behind: the post stands on the lower-left switch (BOOT, seen from the back);
+  the pad looks perhaps ~1 mm inboard of the switch centre, but the shot is
+  blurred and the post is nearer the lens than the switch, so not trusted.
+  The column printed with a rough, leaning top (a Ø4 column alone at 0.6 mm).
+- not yet known: **does a press click BOOT?** Asked.
+- also seen: H1/H2 are fitted with tall female sockets. The pod's 1.28 cups
+  already relieve for them (`hdr`, ~8.5 off the PCB) — no change.
+- fit numbers to change: none until he reports the click.
+- photo: sent in chat 2026-09-20 (black print on the bamboo desk; side view, and from behind).
+
 ## 2026-09-20 — 1.28 button-post stand, 5.0 mm groove (`small/Stand - … button.stl`)
 - material / presets: presumed the usual (PETG, ECC2 0.6 / 0.30 mm)
 - result: **"just barely too narrow."** The gauge's 5.0 slot took the badge but
