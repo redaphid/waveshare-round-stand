@@ -76,14 +76,25 @@ its glass and PCB are laminated into one puck.
 
 ### Switch positions (measured)
 
-Not dimensioned on Waveshare's drawing. Measured by fitting the disc to R 18.25
-and locating the two switch caps by colour — overlay in
-`reference/esp32-s3-lcd-1.28-switch-positions.png`. Accuracy ~±0.5 mm.
+**Measured off a photo of Aaron's own board** (09-20), not off the drawing. The
+drawing-derived numbers were **3.3 mm too far in and 2.2 mm too high**, which is
+what made the button stand fail: the switch housing landed below the groove's
+rear lip and could not enter it. Overlay:
+`reference/esp32-s3-lcd-1.28-switch-positions-photo.png`.
 
-| switch | back view (+x right, +y up) | front view | r | from bottom |
+Scale from the PCB's widest row (36.50 mm — horizontal distances are not
+foreshortened by the 20° lean); |x| from the switch-to-switch separation; height
+from the board's half-width at the switches' own row. Accuracy ~±0.4 mm.
+
+| switch | back view (+x right, +y up) | front view | r | in from the rim |
 |---|---|---|---|---|
-| **BOOT** (GPIO0) | (−9.0, −8.3) | (**+9.0**, −8.3) — lower **right** as you look at it | 12.2 | 47° |
-| **RESET** | (+9.7, −8.3) | (−9.7, −8.3) — lower **left** | 12.8 | 49° |
+| **BOOT** (GPIO0) | (−11.45, −10.5) | (**+11.45**, −10.5) — lower **right** as you look at it | 15.5 | **2.7 mm** |
+| **RESET** | (+11.45, −10.5) | (−11.45, −10.5) — lower **left** | 15.5 | **2.7 mm** |
+
+They sit **close to the rim** — that is the fact that matters to anything
+gripping the edge. The old drawing-fitted overlay
+(`reference/esp32-s3-lcd-1.28-switch-positions.png`) is kept for comparison but
+is **superseded**.
 
 With the USB-C chord at the top. Cap ≈ Ø1.9, switch body ~3.5 mm square,
 ~2 mm tall off the PCB.

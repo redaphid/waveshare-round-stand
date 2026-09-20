@@ -45,8 +45,20 @@ def build_profiles(p):
     ridge_back  = (top_back[0]  + p["ridge_half"], H)
     ridge_front = (top_front[0] - p["ridge_half"], H)
 
-    upper = [(D, p["back_h"]), ridge_back, top_back, bottom_back,
-             bottom_front, top_front, ridge_front, (0.0, p["front_h"])]
+    # Optional: stop the groove's REAR wall short of the ridge. The 1.28 needs
+    # this -- its BOOT/RESET switches stand ~1.7 mm off the back of the PCB only
+    # 2.7 mm in from the rim, so with a full-height rear wall the switch housing
+    # is below the lip and simply cannot enter a 5.4 mm groove: the badge is
+    # propped proud and shoved forward (print 09-20). Lowering the rear wall
+    # also drops the pivot, which is what gives a press any travel at the switch.
+    rl = p.get("rear_lip")
+    if rl is None:
+        upper = [(D, p["back_h"]), ridge_back, top_back, bottom_back,
+                 bottom_front, top_front, ridge_front, (0.0, p["front_h"])]
+    else:
+        lip_back = (bottom_back[0] + axis[0]*rl, bottom_back[1] + axis[1]*rl)
+        upper = [(D, p["back_h"]), lip_back, bottom_back,
+                 bottom_front, top_front, ridge_front, (0.0, p["front_h"])]
 
     A = [(0.0, 0.0), (D, 0.0), (D, f)] + upper + [(0.0, f)]
     B = [(0.0, 0.0), (D, 0.0), (D, f), (0.0, f)]
@@ -140,8 +152,9 @@ BOARDS = {
         label   = "ESP32-S3-LCD-1.28 (SKU 26541)",
         board_d = 36.5, thick = 4.7, screen_d = 32.4,   # PCB + display module at the rim (gauge, 09-18)
         gap = 5.4, lean = 20, depth = 5.0,             # gauge slot 5.0 + 0.4: the leaned walls stair-step ~0.1 each into the slot (print 09-20)
+        rear_lip = 3.0,                                # rear wall stops here: clears the BOOT/RESET housings (photo, 09-20)
         base_d = 27.0, base_h = 12.0, front_h = 3.0, back_h = 4.0,
-        ridge_half = 2.0, width = 26.0, slot_y = 12.0,
+        ridge_half = 2.0, width = 30.0, slot_y = 12.0,  # 26 -> 30: the switches are at |x| 11.45, the post needs shoulder
         notch_w = 13.0, notch_floor = 2.0,
         stl = "stl/small/Stand.stl",
     ),
@@ -217,6 +230,10 @@ if __name__ == "__main__":
         print(f"  cable notch   {p['notch_w']:.0f} wide, floor at z={p['notch_floor']:.1f}, "
               f"{p['base_h']-p['notch_floor']:.1f} tall, open front-to-back")
         print(f"  shoulders     {shoulder:.1f} mm each side")
+        full_wall = p["depth"] + (p["gap"]/2.0)*math.tan(math.radians(p["lean"]))
+        if p.get("rear_lip") is not None:
+            print(f"  rear wall     stops {p['rear_lip']:.1f} mm up the board "
+                  f"(full wall would be {full_wall:.2f}) -- switch clearance")
         clear = bc[1] - sag - p["notch_floor"]
         print(f"  disc sag      {sag:.2f} mm over the notch "
               f"(engagement {p['depth']+sag:.1f} mm)")
@@ -246,4 +263,11 @@ if __name__ == "__main__":
         assert clear >= 3.5, \
             f"{key}: only {clear:.2f} mm under the rim -- a cable will not pass"
         assert p["width"] < p["board_d"], f"{key}: stand wider than the board"
+        if p.get("rear_lip") is not None:
+            rl = p["rear_lip"]
+            assert 0 < rl < full_wall, f"{key}: rear_lip {rl} not inside the groove (wall is {full_wall:.2f})"
+            lip_z = bc[1] + perp[1]*(p["gap"]/2.0) + axis[1]*rl
+            assert lip_z > p["back_h"] + 0.5, \
+                f"{key}: rear lip z={lip_z:.2f} not above the back face {p['back_h']} -- ramp would invert"
+            assert lip_z > p["notch_floor"] + 0.5, f"{key}: rear lip below the notch floor"
         print("  checks        OK")

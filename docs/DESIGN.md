@@ -86,6 +86,31 @@ wider groove *helps*. Replaced: pad at `T/2 + CAP_H + REST_CLR` from the centre
 Now **0.8 mm** of travel, ≥0.7 for any rim 4.5–4.9 thick, and
 `build_stand_button.py` asserts ≥ 2× switch travel.
 
+**The switches are at the rim, so the groove's rear wall had to go** (09-20).
+The 5.4 stand seated the badge but BOOT would not click: the white switch
+housing was hard against the groove's rear wall. Measured the switches off
+Aaron's own back-view photo instead of the drawing — **r 15.5, only 2.7 mm in
+from the rim**, where the drawing put them at r 12.2. At that radius the housing
+sits *below* the rear lip, and since it stands ~1.7 mm off the PCB the badge is
+~6.4 mm thick there: it cannot enter a 5.4 mm groove **at any depth**. The badge
+was propped proud and pushed forward, which is why the post could not reach.
+
+Fix: `rear_lip`, a new optional parameter that stops the groove's **rear** wall
+short of the ridge (1.28: 3.0 mm, where the full wall would be 5.98). The front
+wall is untouched, so the badge is still held 5 mm deep. This does two jobs —
+the housings clear by 1.8 mm, and the **pivot drops**, which is what gives a
+press travel at all: 0.02 mm at the old full-height lip, **1.33 mm** now, against
+the ~0.25 mm a tact switch needs. Lever to the top of the screen ≈ 9×.
+
+Why not just a shallower groove: the housing reaches down to 4.8 mm up the
+board, so clearing it with depth alone means a ~2 mm groove — too little to hold
+the badge. Lowering only the rear wall keeps the depth and buys the travel.
+
+`width` 26 → 30 came with it: the post sits at |x| 11.45 and needed shoulder to
+root in. `build_stand_button.py` now asserts both things that were silently
+false before — that the housing clears the rear lip, and that a press has ≥ 2×
+the switch's travel.
+
 **Cup stand, and what it caught before printing** (09-18). A test of the pod's
 cup at ~16 g: `cup()` pulled out of `pod()` (pod STL byte-identical after the
 refactor), put on a 20° desk base, exported face-up. Rendering it against the

@@ -26,8 +26,14 @@ bs = importlib.util.module_from_spec(spec); spec.loader.exec_module(bs)
 
 BUTTON = (sys.argv[1] if len(sys.argv) > 1 else "BOOT").upper()
 # front-view mm from disc centre, +x = your right, +y = up   (back-view x negated)
-SWITCH = {"BOOT": (+8.95, -8.28), "RESET": (-9.67, -8.31)}[BUTTON]
+# MEASURED off Aaron's own back-view photo 09-20, not off the drawing: scale from
+# the PCB's widest row (36.50 mm, unforeshortened), |x| from the switch-to-switch
+# separation, height from the board's half-width at the switches' own row. The
+# drawing-derived (+8.95,-8.28) was 2.2 mm too high and 3.3 mm too far in, which
+# is why the housing fouled the groove. Overlay: reference/switches-from-photo.png
+SWITCH = {"BOOT": (+11.45, -10.51), "RESET": (-11.45, -10.51)}[BUTTON]
 CAP_H     = 2.0    # PCB surface to top of the switch actuator
+SW_BODY   = 3.5    # white housing, across (measured: 3.4 x 3.5 in the photo)
 REST_CLR  = 0.20   # post tip stands off the cap at rest
 POST_R    = 1.6    # Ø3.2 pad -- forgiving of ±1 mm in the measurement
 POST_LEN  = 14.0   # reaches back into the ridge/ramp
@@ -87,15 +93,24 @@ print(f"{BUTTON} switch at front-view ({SWITCH[0]:+.2f}, {SWITCH[1]:+.2f}) mm  -
       if SWITCH[0] > 0 else
       f"{BUTTON} switch at front-view ({SWITCH[0]:+.2f}, {SWITCH[1]:+.2f}) mm  ->  stand x={tip[0]:.2f} (shoulder 0..{x1:.1f})")
 print(f"post tip   y={tip[1]:.2f} z={tip[2]:.2f}   Ø{2*POST_R:.1f} pad; column Ø{2*(POST_R+0.4):.1f} stands {col_free:.1f} mm out of the shoulder, {buried:.1f} mm rooted")
-lip_h = p["base_h"]                                                 # groove opening (rear lip) height
-btn_up = (tip[2] - bc[1]) / axis[1]                                # along the board, from the groove floor
-print(f"switch sits {btn_up:.1f} mm up the badge; rear lip at {p['depth']:.0f} mm  ->  lever to the top ≈ "
-      f"{(2*R - btn_up)/(btn_up - p['depth']):.0f}x")
-# Can a press actually click it? Fully rocked back the badge lies on the rear lip with its bottom
-# front edge on the front wall; the cap must be able to travel well past the pad before that.
+# Everything below is measured along the board, up from the groove floor.
 SW_TRAVEL = 0.25                                                    # typical tact switch
-u_lip = p["depth"] + G/2*math.tan(math.radians(p["lean"]))         # rear lip, up the board from the groove floor
-u_sw  = (R - sag) + SWITCH[1]                                       # switch, up the board from the groove floor
+full_wall = p["depth"] + G/2*math.tan(math.radians(p["lean"]))     # rear wall if it ran to the ridge
+u_lip = p.get("rear_lip", full_wall)                                # where it actually stops
+u_sw  = (R - sag) + SWITCH[1]                                       # the switch
+print(f"switch sits {u_sw:.2f} mm up the badge; rear lip at {u_lip:.2f} (full wall would be {full_wall:.2f})"
+      f"  ->  lever to the top ≈ {(2*R - u_lip)/(u_sw - u_lip):.0f}x")
+
+# 1. The housing has to miss the groove entirely. It stands ~1.7 mm off the PCB back, so where it
+#    sits the badge is ~6.4 mm thick -- it cannot go into a 5.4 mm groove at any depth. This is
+#    what the 09-20 print hit: the housing bottomed on the rear wall and propped the badge up.
+housing_bottom = u_sw - SW_BODY/2
+print(f"switch housing reaches down to {housing_bottom:.2f} mm  ->  {housing_bottom - u_lip:+.2f} mm clear of the rear lip")
+assert housing_bottom > u_lip + 0.8, \
+    f"switch housing reaches {housing_bottom:.2f} mm, rear lip is at {u_lip:.2f} -- the badge cannot seat"
+
+# 2. Can a press actually click it? Fully rocked back the badge lies on the rear lip with its
+#    bottom front edge on the front wall; the cap must travel well past the pad before that.
 cap_max = G/2 + (u_sw - u_lip)*(G - T)/u_lip + CAP_H
 press = cap_max - tip_depth
 print(f"press travel {press:.2f} mm available at the switch (needs {SW_TRAVEL}); badge loose by {G-T:.1f} in the groove")

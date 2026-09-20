@@ -23,10 +23,21 @@ Template:
   the pad looks perhaps ~1 mm inboard of the switch centre, but the shot is
   blurred and the post is nearer the lens than the switch, so not trusted.
   The column printed with a rough, leaning top (a Ø4 column alone at 0.6 mm).
-- not yet known: **does a press click BOOT?** Asked.
+- **then he pressed it: no click.** "the bottom white plastic around the button
+  itself is pushed up against the back wall, so the arm can't reach." Third
+  photo, side-on in his hand. Measured the switches off his own back-view photo
+  rather than guessing again: they are at r **15.5**, only **2.7 mm in from the
+  rim** — the drawing said r 12.2. So the housing sits **below** the groove's
+  rear lip and cannot enter a 5.4 mm groove at all; the badge was propped proud
+  and shoved forward, which is also why the post could not reach.
 - also seen: H1/H2 are fitted with tall female sockets. The pod's 1.28 cups
   already relieve for them (`hdr`, ~8.5 off the PCB) — no change.
-- fit numbers to change: none until he reports the click.
+- fit numbers to change: not a fit number — a design fault. 1.28 gains
+  `rear_lip = 3.0` (the groove's rear wall stops short of the ridge so the
+  switch housings clear, and the pivot drops so a press has travel),
+  `width` 26 → 30 (the switches are at |x| 11.45; the post needs shoulder), and
+  `SWITCH` in `build_stand_button.py` is now the measured pair. Details in
+  DESIGN.md.
 - photo: sent in chat 2026-09-20 (black print on the bamboo desk; side view, and from behind).
 
 ## 2026-09-20 — 1.28 button-post stand, 5.0 mm groove (`small/Stand - … button.stl`)
