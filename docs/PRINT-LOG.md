@@ -15,6 +15,21 @@ Template:
 
 ---
 
+## 2026-09-20 — 1.28 button-post stand, 5.0 mm groove (`small/Stand - … button.stl`)
+- material / presets: presumed the usual (PETG, ECC2 0.6 / 0.30 mm)
+- result: **"just barely too narrow."** The gauge's 5.0 slot took the badge but
+  the stand's 5.0 groove does not: the groove leans 20°, so its walls print as
+  0.3 mm stair-steps that each reach ~0.1 mm into the slot, which the gauge's
+  slots do not have.
+- his worry: once the slot is wide enough the badge will sink and the post
+  won't reach the button. Height is set by the groove *floor*, not its width —
+  but the post was placed from the groove centre with no check that the badge
+  can rock far enough to click. Checked, see fit numbers.
+- fit numbers to change: 1.28 `gap` 5.0 → **5.4**. Button pad re-placed from the
+  groove's front wall (was: from its centre) — press travel at the switch
+  0.10 mm at the old 5.0 → **0.8 mm**, now asserted. Details in DESIGN.md.
+- photo: none
+
 ## 2026-09-18 — fit gauge (`small/Slot fit gauge.stl`)
 - material / presets: presumed the usual (PETG, ECC2 0.6 / 0.30 mm)
 - result: **printed.** Photo from behind: the 1.28 stands seated in the **5th

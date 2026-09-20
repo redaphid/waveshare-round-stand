@@ -73,6 +73,19 @@ button post back to meet the switch. Pod 1.28 cups: `seat_t` 1.6 → 4.7, so the
 pocket is 7.7 deep (seat + ring) and the trim ring lands on the display module,
 not 3 mm proud of it.
 
+**1.28 groove 5.0 → 5.4; button pad placed from the front wall** (09-20). The
+5.0 stand printed "just barely too narrow": the gauge's slots are vertical, the
+stand's groove leans 20°, and leaned walls print as 0.3 mm stair-steps that each
+reach ~0.1 into the slot. His worry — a wider slot lets the badge sink away from
+the post — was wrong about height (the groove *floor* sets that) but found a real
+hole: the pad was placed from the groove centre with nothing checking the badge
+could rock far enough to click. At 5.0 it could not: **0.10 mm** of press travel
+before the badge bottomed out on the front wall; a tact switch needs ~0.25. A
+wider groove *helps*. Replaced: pad at `T/2 + CAP_H + REST_CLR` from the centre
+→ `REST_CLR` clear of the cap with the badge upright against the front wall.
+Now **0.8 mm** of travel, ≥0.7 for any rim 4.5–4.9 thick, and
+`build_stand_button.py` asserts ≥ 2× switch travel.
+
 **Cup stand, and what it caught before printing** (09-18). A test of the pod's
 cup at ~16 g: `cup()` pulled out of `pod()` (pod STL byte-identical after the
 refactor), put on a 20° desk base, exported face-up. Rendering it against the

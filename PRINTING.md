@@ -112,12 +112,13 @@ actually *increases* groove engagement slightly.
 ## The 1.28 button-post stands
 
 `small/Stand - BOOT button.stl` and `small/Stand - RESET button.stl` are the plain 1.28 stand
-with one addition: a Ø3.2 pad on a Ø4 column, standing 3.6 mm out of the right
+with one addition: a Ø3.2 pad on a Ø4 column, standing 3.1 mm out of the right
 (BOOT) or left (RESET) shoulder, exactly behind that switch on the badge's back.
 
 **How it clicks.** The badge leans back in its groove, resting on the groove's
 rear lip 5 mm up its rim. The switch is 7.7 mm up — 2.7 mm above that lip — and
-the pad sits 0.2 mm off its cap. Press anywhere near the top of the screen and
+the pad is placed from the groove's *front* wall, so it can never hold the
+switch down; the badge simply leans back onto it. Press anywhere near the top of the screen and
 the badge tries to rotate about the lip; the switch is the softest thing in the
 load path, so it is what compresses. Because the switch is so close to the
 pivot, a push at the top is levered **~11×** onto it: a light tap does it. The
@@ -175,7 +176,7 @@ with 5 mm pins, and 8 mm pins clear by 8 mm+ everywhere.
 
 ## If the fit is wrong
 
-`fit` — the slop added to the board's thickness — is 0.8 mm on the 1.46s; the 1.28's groove is 5.0 mm, measured with the fit gauge. It is
+`fit` — the slop added to the board's thickness — is 0.8 mm on the 1.46s; the 1.28's groove is 5.4 mm (the fit gauge's 5.0 slot + 0.4, because the leaned groove walls stair-step into the slot). It is
 the only number likely to need touching. A 0.6 mm nozzle tends to come out
 slightly undersized, which is why it starts generous.
 

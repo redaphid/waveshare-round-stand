@@ -10,7 +10,7 @@ flexes, no fasteners.
 
 | board | stand | groove | notch | screen top | material |
 |---|---|---|---|---|---|
-| ESP32-S3-LCD-1.28 (SKU 26541) | [`stl/small/Stand.stl`](stl/small/Stand.stl) | 5.0 × 5 mm | 13 mm | 41.6 mm | 4.6 g |
+| ESP32-S3-LCD-1.28 (SKU 26541) | [`stl/small/Stand.stl`](stl/small/Stand.stl) | 5.4 × 5 mm | 13 mm | 41.6 mm | 4.6 g |
 | ESP32-S3-Touch-LCD-1.46, cover glass | [`stl/large/Stand - cover glass.stl`](<stl/large/Stand - cover glass.stl>) | 13.1 × 8 mm | 14 mm | 50.6 mm | 8.9 g |
 | ESP32-S3-Touch-LCD-1.46, bare | [`stl/large/Stand - no cover glass.stl`](<stl/large/Stand - no cover glass.stl>) | 11.5 × 8 mm | 14 mm | 48.5 mm | 8.2 g |
 

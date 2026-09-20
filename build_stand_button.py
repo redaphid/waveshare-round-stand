@@ -7,7 +7,7 @@ behind the badge, placed exactly behind the BOOT (or RESET) tactile switch.
 Press the display and the badge rocks back in its groove onto the post: the
 switch is the softest thing in the load path, so it is what gives -- click.
 
-Because the badge leans on the groove's rear lip 2.6 mm *below* the post, a
+Because the badge leans on the groove's rear lip just *below* the post, a
 push at the top of the display is levered ~12x onto the switch. A light tap
 does it; the badge's own weight (~30 gf on the post) does not.
 
@@ -50,7 +50,12 @@ def board_pt(bx, by, depth):                                       # depth: + = 
     yz = ctr + ax_*by + pp_*depth
     return np.array([W/2 + bx, yz[0], yz[1]])
 
-tip  = board_pt(*SWITCH, T/2 + CAP_H + REST_CLR)
+# The badge is loose in the groove by (gap - T) and rocks in it. Place the pad from the groove's
+# FRONT wall: with the badge pushed upright against that wall the cap clears the pad by REST_CLR,
+# so the post can never hold the switch down, whatever the real rim thickness turns out to be.
+G = p["gap"]
+tip_depth = -G/2 + T + CAP_H + REST_CLR                           # behind the groove centre-plane
+tip  = board_pt(*SWITCH, tip_depth)
 base = tip + np.array([0, pp_[0], pp_[1]]) * POST_LEN
 def along_perp(make, half_len):
     """make(): a manifold built along +Z from z=0. Return it rotated so +Z lies along perp,
@@ -86,6 +91,16 @@ lip_h = p["base_h"]                                                 # groove ope
 btn_up = (tip[2] - bc[1]) / axis[1]                                # along the board, from the groove floor
 print(f"switch sits {btn_up:.1f} mm up the badge; rear lip at {p['depth']:.0f} mm  ->  lever to the top ≈ "
       f"{(2*R - btn_up)/(btn_up - p['depth']):.0f}x")
+# Can a press actually click it? Fully rocked back the badge lies on the rear lip with its bottom
+# front edge on the front wall; the cap must be able to travel well past the pad before that.
+SW_TRAVEL = 0.25                                                    # typical tact switch
+u_lip = p["depth"] + G/2*math.tan(math.radians(p["lean"]))         # rear lip, up the board from the groove floor
+u_sw  = (R - sag) + SWITCH[1]                                       # switch, up the board from the groove floor
+cap_max = G/2 + (u_sw - u_lip)*(G - T)/u_lip + CAP_H
+press = cap_max - tip_depth
+print(f"press travel {press:.2f} mm available at the switch (needs {SW_TRAVEL}); badge loose by {G-T:.1f} in the groove")
+assert u_sw > u_lip, "switch is below the rear lip -- pressing the screen would lift it off the post"
+assert press >= 2*SW_TRAVEL, f"badge bottoms out in the groove after {press:.2f} mm -- the switch would not click"
 assert x1 - POST_R > tip[0] or tip[0] > x2 + POST_R, "post would land in the cable notch"
 
 name = f"stl/small/Stand - {BUTTON} button.stl"
@@ -99,7 +114,7 @@ sw    = along_perp(lambda: m3.Manifold.cylinder(CAP_H, 1.75, circular_segments=3
 grey, dark, red, blue = (0.62, 0.64, 0.68), (0.07, 0.07, 0.08), (0.90, 0.25, 0.20), (0.15, 0.48, 0.90)
 render([(stand, grey), (post, red), (badge, dark), (face, blue), (sw, (0.95, 0.95, 0.9))],
        f"renders/stand-1.28-{BUTTON}-post-back.png", elev=22, azim=140,
-       title=f"1.28 stand, {BUTTON} post (red) — from behind: post lands on the switch (white) with {REST_CLR} mm to spare")
+       title=f"1.28 stand, {BUTTON} post (red) — from behind: post lands on the switch (white), press travel {press:.1f} mm")
 render([(stand, grey), (post, red), (badge, dark), (face, blue)],
        f"renders/stand-1.28-{BUTTON}-post-front.png", elev=12, azim=-62,
        title=f"1.28 stand, {BUTTON} post — from the front, badge seated USB-C up; press the screen to click {BUTTON}")
