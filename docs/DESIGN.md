@@ -86,6 +86,32 @@ wider groove *helps*. Replaced: pad at `T/2 + CAP_H + REST_CLR` from the centre
 Now **0.8 mm** of travel, ≥0.7 for any rim 4.5–4.9 thick, and
 `build_stand_button.py` asserts ≥ 2× switch travel.
 
+**USB-C down, for the right-angle cable** (09-20). He bought an L-shaped USB-C
+lead and wanted the port facing down. Turning the badge over moves three things
+at once, so this is a new part rather than a parameter:
+
+- the **USB-C tab sticks 2.85 mm past the disc** (BOARDS.md), so tab-down the
+  tab *and* the plug hang into the cable notch — the notch has to pass an
+  **18.37 mm tab**, not a cable. 13 → **20 mm**, shoulders 6 mm each.
+- **BOOT/RESET go to the top**, out of the groove entirely — the fault that
+  broke the 20° stand cannot happen here.
+- the **headers and the battery JST come down** toward the groove instead.
+  `rear_lip` 2.5 keeps the rear wall below both.
+
+**Leaning it 30° rather than 20° is what makes it work**, and it was his hunch.
+The port then fires down-*and-forward*, so the plug tucks into the notch instead
+of demanding headroom under the rim; the dock is 26 mm at the ridge instead of
+the ~30 a 20° version would need. Push the lean much further and the plug walks
+out of the front of the base — at 30° it ends 2.6 mm inside it.
+
+Checked as **solids, not arithmetic**: `build_stand_usbdown.py` builds the
+badge, tab, plug, both headers, the JST and both switches and asserts each has
+**zero** overlap with the stand. That is what caught the plug's corner grazing
+the notch floor, which the centreline arithmetic had passed.
+
+Not verified against his actual cable: `plug_len` 12 mm is a generous guess for
+a right-angle plug. It is one number in `BOARDS["1.28-usbdown"]`.
+
 **The switches are at the rim, so the groove's rear wall had to go** (09-20).
 The 5.4 stand seated the badge but BOOT would not click: the white switch
 housing was hard against the groove's rear wall. Measured the switches off

@@ -16,7 +16,8 @@ at 1.27 g/cm³.
 
 | file | what it is | material |
 |---|---|---|
-| `Stand.stl` | desk stand. 5.0 mm groove, sized with the fit gauge. USB-C tab at the top | 4.6 g |
+| `Stand.stl` | desk stand. 5.4 mm groove, sized with the fit gauge. USB-C tab at the top | 5.1 g |
+| `Dock for right-angle cable - USB-C down.stl` | the badge **turned over**, USB-C facing **down**, for an L-shaped cable. Leans back 30°; the tab and the plug hang in the notch. Screen ends up upside down — **rotate it in firmware** | ~9.4 g |
 | `Stand - BOOT button.stl` | the stand plus a post behind the badge: press the screen → clicks **BOOT** (GPIO0, the user button) | 4.7 g |
 | `Stand - RESET button.stl` | same, clicks **RESET** | 4.7 g |
 | `Pod cup test.stl` | one pod cup on a desk base — **print before the pod**. Exported face-up: print as is, then stand it on its two feet. Badge **USB-C tab down**, then press the trim ring in | ~16 g |

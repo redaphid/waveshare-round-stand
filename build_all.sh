@@ -8,11 +8,14 @@ CAD=~/.venvs/cad/bin/python
 
 echo "== stands + docks (system python) =="
 python3 build_stands.py | grep -E "===|checks|Error" || true
-for f in stl/small/Stand.stl stl/large/Stand*.stl stl/large/Dock*.stl; do python3 check_stl.py "$f" | tail -1 | sed "s|^|  $(basename "$f"): |"; done
+for f in stl/small/Stand.stl stl/small/Dock*.stl stl/large/Stand*.stl stl/large/Dock*.stl; do python3 check_stl.py "$f" | tail -1 | sed "s|^|  $(basename "$f"): |"; done
 python3 preview.py
 
 echo "== button-post stands (venv) =="
 for b in BOOT RESET; do "$CAD" build_stand_button.py "$b" | grep -E "stl/|assert|Error"; done
+
+echo "== USB-C down dock: badge, tab, plug and back parts vs the stand (venv) =="
+"$CAD" build_stand_usbdown.py | grep -E "overlap|plug bottom|cm\^3|assert|Error"
 
 echo "== fit gauge (venv) =="
 "$CAD" build_fit_gauge.py | grep -E "stl/"

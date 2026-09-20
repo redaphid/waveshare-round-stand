@@ -27,6 +27,13 @@ down through the notch and the cable turns out the back at desk level.
 |---|---|---|---|---|
 | ESP32-S3-Touch-LCD-1.46, cover glass | `large/Dock for straight cable - cover glass.stl` | **27.0 mm** | 72.6 mm | 19.8 g |
 | ESP32-S3-Touch-LCD-1.46, bare | `large/Dock for straight cable - no cover glass.stl` | **26.9 mm** | 70.5 mm | 17.9 g |
+| ESP32-S3-LCD-1.28, **USB-C down** | `small/Dock for right-angle cable - USB-C down.stl` | **14.7 mm** | 51.3 mm | 9.4 g |
+
+The 1.28 one is for an **L-shaped USB-C cable**: the badge goes in **turned
+over**, tab down, so the port faces the desk. It leans back **30°** rather than
+20 — that points the port down-and-forward, so the plug tucks into the notch
+instead of needing headroom under the rim. The notch is **20 mm** to pass the
+18.37 mm USB-C tab. The screen ends up upside down: **rotate it in firmware**.
 
 Same groove, same notch (widened to 16 mm for plug bodies), ridge raised from
 16 mm to 38 mm and the groove moved 3 mm back. Sized for a 24 mm plug body with

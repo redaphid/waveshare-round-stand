@@ -182,6 +182,26 @@ BOARDS = {
         notch_w = 14.0, notch_floor = 2.0,
         stl = "stl/large/Stand - no cover glass.stl",
     ),
+    # The 1.28 seated the other way up, for a RIGHT-ANGLE cable. The USB-C sits
+    # on a tab that sticks 2.85 mm past the disc, so tab-down the tab and the
+    # plug both hang into the cable notch -- which therefore has to clear the
+    # 18.37 mm tab, not just a cable. Leaning it back 30 deg (vs 20) buys height
+    # back: the port then fires down-and-forward, so the plug tucks into the
+    # notch instead of needing headroom under the rim.
+    # Flipping the badge also swings the back-mounted parts about: BOOT/RESET go
+    # to the top (out of the way), but the headers and the battery JST come
+    # down. rear_lip keeps the groove's rear wall below all of them.
+    "1.28-usbdown": dict(
+        group = "dock",
+        label   = "ESP32-S3-LCD-1.28, USB-C DOWN -- right-angle cable",
+        board_d = 36.5, thick = 4.7, screen_d = 32.4,
+        gap = 5.4, lean = 30, depth = 5.0, rear_lip = 2.5,
+        base_d = 32.0, base_h = 26.0, front_h = 4.0, back_h = 5.0,
+        ridge_half = 2.5, width = 32.0, slot_y = 14.0,
+        notch_w = 20.0, notch_floor = 2.0,
+        tab_r = 21.1, tab_w = 18.37, plug_len = 12.0,   # plug_len: right-angle plug, along the insertion axis
+        stl = "stl/small/Dock for right-angle cable - USB-C down.stl",
+    ),
     # DOCKS. A straight USB-C plug in the 1.46's bottom port points radially
     # down. The low stands leave ~5 mm under the rim; a plug body is ~20-25 mm.
     # These lift the board so the plug hangs straight down through the notch
@@ -233,12 +253,20 @@ if __name__ == "__main__":
         full_wall = p["depth"] + (p["gap"]/2.0)*math.tan(math.radians(p["lean"]))
         if p.get("rear_lip") is not None:
             print(f"  rear wall     stops {p['rear_lip']:.1f} mm up the board "
-                  f"(full wall would be {full_wall:.2f}) -- switch clearance")
+                  f"(full wall would be {full_wall:.2f}) -- clears what is on the back")
         clear = bc[1] - sag - p["notch_floor"]
         print(f"  disc sag      {sag:.2f} mm over the notch "
               f"(engagement {p['depth']+sag:.1f} mm)")
         print(f"  cable clear   {clear:.2f} mm between the board rim and the notch floor")
-        if p.get("plug_len"):
+        if p.get("tab_r"):
+            over = p["tab_r"] - R                        # USB-C tab, beyond the disc
+            drop = sag + over + p["plug_len"]            # groove floor -> end of the plug, along the board
+            v, fwd = drop*axis[1], bc[0] - drop*axis[0]
+            print(f"  USB-C DOWN    tab {p['tab_w']:.1f} wide reaches {over:.2f} mm past the rim; "
+                  f"notch is {p['notch_w']:.0f} -> {p['notch_w']-p['tab_w']:.2f} mm spare")
+            print(f"  plug          {p['plug_len']:.0f} mm right-angle body ends {bc[1]-v:.1f} mm up, "
+                  f"y={fwd:.1f} of base 0..{p['base_d']:.0f} ({bc[1]-v-p['notch_floor']:.1f} mm over the notch floor)")
+        if p.get("plug_len") and not p.get("tab_r"):
             print(f"  straight plug {p['plug_len']:.0f} mm body -> "
                   f"{clear - p['plug_len']:.1f} mm spare for the cable to turn")
             run = (bc[1] - sag - p["notch_floor"]) / axis[1]      # along the plug axis
@@ -257,7 +285,15 @@ if __name__ == "__main__":
         assert p["notch_floor"] < min(p["front_h"], p["back_h"]), \
             f"{key}: notch floor above the front/back lip -- profile C would not be simple"
         assert shoulder >= 4.0, f"{key}: shoulders only {shoulder:.1f} mm"
-        if p.get("plug_len"):
+        if p.get("tab_r"):
+            assert p["notch_w"] >= p["tab_w"] + 1.5, \
+                f"{key}: notch {p['notch_w']} will not pass the {p['tab_w']} mm USB-C tab"
+            assert bc[1] - v >= p["notch_floor"] + 1.5, \
+                f"{key}: plug ends {bc[1]-v:.1f} mm up, notch floor is {p['notch_floor']} -- no room"
+            assert fwd > 1.0, f"{key}: plug pokes out the front of the base (y={fwd:.1f})"
+            assert p["rear_lip"] < 3.0, \
+                f"{key}: tab-down brings the headers and the battery JST down -- rear wall must stay low"
+        if p.get("plug_len") and not p.get("tab_r"):
             assert clear >= p["plug_len"] + 2.0, \
                 f"{key}: {clear:.1f} mm under the rim will not take a {p['plug_len']} mm plug"
         assert clear >= 3.5, \
