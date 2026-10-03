@@ -256,6 +256,16 @@ def build(b: Badge, c: Case):
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p + groove_l
     case -= all_keep
+    # The recess ceiling is the chamber wall spanning 14 mm: a flat roof prints as a floating
+    # bridge. A 45-degree pointed arch above it is self-supporting in the bezel-down print.
+    w = c.RECESS_W/2 + c.XY_CLR
+    z_top = b.port_z + c.RECESS_T/2 + c.FLOAT
+    y0, L = b.tip_y - c.XY_CLR, R_OUT + 2 - (b.tip_y - c.XY_CLR)
+    arch = m3.Manifold.extrude(m3.CrossSection([[(-w, z_top - 0.01), (w, z_top - 0.01), (0, z_top + w)]]), L)
+    arch = arch.rotate([90, 0, 0]).translate([0, y0 + L, 0])
+    ab = bbox(arch)
+    assert abs(ab[0, 1] - y0) < 1e-3 and abs(ab[1, 2] - (z_top + w)) < 1e-3, f"arch misplaced: {ab}"
+    case -= arch
 
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
@@ -379,6 +389,18 @@ def export(m, path, print_xform):
     tm = trimesh.Trimesh(vertices=np.asarray(mesh.vert_properties)[:, :3], faces=np.asarray(mesh.tri_verts))
     tm.export(path)
     check(tm.is_watertight and tm.volume > 0, f"{path} watertight", f"{m.volume()/1000:.2f} cm^3, {len(tm.faces)} tris")
+    # In print orientation, every point of a layer that isn't over the layer below (45 degrees
+    # allowed) must be within 2 mm of a supported point: a bridge spanning at most 4 mm.
+    L, prev, worst = 0.3, None, (0.0, None)
+    for z in np.arange(m.bounding_box()[2] + L/2, m.bounding_box()[5], L):
+        cs = m.slice(z)
+        if prev is not None:
+            below = prev.offset(L, Round)
+            far = (cs - below) - (cs ^ below).offset(2.0, Round)
+            if far.area() > worst[0]: worst = (far.area(), z)
+        prev = cs
+    check(worst[0] < 0.1, f"{path} prints without supports",
+          "every overhang bridges <= 4 mm" if worst[0] < 0.1 else f"{worst[0]:.1f} mm^2 floating at z {worst[1]:.2f}")
 
 
 def renders(b, c, feats, case, plate, lid, battery, geo):
