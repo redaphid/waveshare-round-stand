@@ -22,11 +22,14 @@ Every solid comes from two tables. `Badge` is what the board IS (measured).
 +y toward the USB-C tab (12 o'clock), +x right as seen from the BACK, +z
 backward from the glass into the case.
 
-Run with ~/.venvs/cad/bin/python from the repo root.
+Run with the CAD venv's python (.venv/bin/python after ./setup.sh). --help lists the options:
+  --battery 402030 --name mine     a case for another LiPo, in stl/pocketwatch/mine/
+  --set FLOAT=0.8                  override any Badge or Case field below
 """
-import sys, math
+import argparse, os, re, sys, math
 from dataclasses import dataclass, field, fields
 import numpy as np, manifold3d as m3, trimesh
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))   # every path below is repo-relative
 sys.path.insert(0, "pod"); from render import render
 
 Round = m3.JoinType.Round
@@ -403,7 +406,7 @@ def export(m, path, print_xform):
           "every overhang bridges <= 4 mm" if worst[0] < 0.1 else f"{worst[0]:.1f} mm^2 floating at z {worst[1]:.2f}")
 
 
-def renders(b, c, feats, case, plate, lid, battery, geo):
+def renders(b, c, feats, case, plate, lid, battery, geo, out):
     # badge +y -> up, badge +z (backward) -> away from a viewer at azim 90. Refined to short edges because
     # the painter's sort misorders the long sliver triangles of big flat faces.
     D = lambda m: m.rotate([90, 0, 0]).refine_to_length(1.0)
@@ -414,7 +417,6 @@ def renders(b, c, feats, case, plate, lid, battery, geo):
     plate_np = plate - geo["post_cyl"]
     fs = {f.name: f.solid() for f in feats if not f.name.startswith("plug")}
     colour = lambda n: dark if n == "disc + tab" else green if n.startswith(c.BUTTON) else white
-    out = "pocketwatch/renders/"
 
     E = 16.0
     ex = [(case, brass), (plate.translate([0, 0, 2*E]), back_c), (battery.translate([0, 0, 3*E]), steel),
@@ -448,30 +450,87 @@ def renders(b, c, feats, case, plate, lid, battery, geo):
            title="Front: bezel lip over the glass edge, USB-C recess at 12 o'clock")
 
 
+def battery(s):
+    """'TxWxL' in mm, or the 6-digit code printed on a LiPo: 402030 = 4.0 thick, 20 wide, 30 long."""
+    m = re.fullmatch(r"(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)", s.lower())
+    if m:
+        t, w, l = map(float, m.groups())
+    elif re.fullmatch(r"\d{6}", s):
+        t, w, l = int(s[:2])/10, float(s[2:4]), float(s[4:])
+    else:
+        raise argparse.ArgumentTypeError(f"{s!r}: give thickness x width x length in mm (7.4x22.28x42.65) "
+                                         "or the 6-digit code printed on the cell (402030)")
+    if min(t, w, l) <= 0:
+        raise argparse.ArgumentTypeError(f"{s!r}: every dimension must be above zero")
+    return dict(BATT_T=t, BATT_W=w, BATT_L=l)
+
+
 def main():
-    b, c = Badge(), Case()
+    ap = argparse.ArgumentParser(description="Build the pocketwatch case, plate and lid, check them, render them.")
+    ap.add_argument("--battery", type=battery, metavar="TxWxL",
+                    help="LiPo size in mm (4x20x30) or its code (402030). Default: the Makerfocus 1000 mAh, 7.4x22.28x42.65")
+    ap.add_argument("--set", action="append", default=[], metavar="NAME=VALUE",
+                    help="override one Badge or Case field, e.g. --set FLOAT=0.8. Repeatable")
+    ap.add_argument("--name", help="write STLs to stl/pocketwatch/NAME/ and renders to pocketwatch/renders/NAME/. "
+                                   "Required with --battery or --set, so the default files stay the default")
+    ap.add_argument("--no-render", action="store_true", help="skip the PNG renders (faster)")
+    a = ap.parse_args()
+
+    owner = {f.name: (t, f.type) for t in (Badge, Case) for f in fields(t)}
+    kw = {Badge: {}, Case: {**(a.battery or {})}}
+    for s in a.set:
+        name, _, value = s.partition("=")
+        if name not in owner:
+            ap.error(f"--set {name}: no such parameter. Valid names:\n  Case:  {' '.join(f.name for f in fields(Case))}"
+                     f"\n  Badge: {' '.join(f.name for f in fields(Badge))}")
+        t, typ = owner[name]
+        try:
+            kw[t][name] = typ(value)
+        except ValueError:
+            ap.error(f"--set {s}: {name} takes a {typ.__name__}")
+    if kw[Case].get("BUTTON", "BOOT") not in ("BOOT", "RESET"):
+        ap.error("--set BUTTON: BOOT or RESET")
+    if (a.battery or a.set) and not a.name:
+        ap.error("a custom build needs --name NAME, so it doesn't overwrite the default 1000 mAh files")
+    if a.name and not re.fullmatch(r"[\w-][\w.-]*", a.name):
+        ap.error(f"--name {a.name!r}: letters, digits, '-', '_' and '.' only")
+    stl_dir = f"stl/pocketwatch/{a.name}/" if a.name else "stl/pocketwatch/"
+    render_dir = f"pocketwatch/renders/{a.name}/" if a.name else "pocketwatch/renders/"
+
+    b, c = Badge(**kw[Badge]), Case(**kw[Case])
     print("PLACEHOLDERS still in use (replace with measurements):")
     for t in (b, c):
         for f in fields(t):
             if "placeholder" in f.metadata:
                 print(f"  {type(t).__name__}.{f.name:12s} = {getattr(t, f.name):7.2f}   <- {f.metadata['placeholder']}")
 
-    feats, case, plate, lid, battery, geo = build(b, c)
+    feats, case, plate, lid, batt, geo = build(b, c)
     asm = bbox(case + plate + lid)
     size = asm[1] - asm[0]
     print(f"\nTip at y={b.tip_y:.3f}; headers may sit anywhere in y +-{b.hdr_y_half:.2f}; bore Ø{2*geo['R_BORE']:.2f}; "
           f"battery chamber Ø{2*geo['R_REAR']:.2f}; case Ø{2*geo['R_OUT']:.2f} x {size[2]:.2f} thick")
-    run_checks(b, c, feats, case, plate, lid, battery, geo)
+    run_checks(b, c, feats, case, plate, lid, batt, geo)
     print()
-    export(case, "stl/pocketwatch/Pocketwatch - case.stl", lambda m: m.translate([0, 0, c.LIP_T]))
-    export(plate, "stl/pocketwatch/Pocketwatch - plate.stl",
+    os.makedirs(stl_dir, exist_ok=True)
+    export(case, stl_dir + "Pocketwatch - case.stl", lambda m: m.translate([0, 0, c.LIP_T]))
+    export(plate, stl_dir + "Pocketwatch - plate.stl",
            lambda m: m.rotate([0, 180, 0]).translate([0, 0, geo["FLOOR"] + c.PLATE_T]))
-    export(lid, "stl/pocketwatch/Pocketwatch - lid.stl", lambda m: m.translate([0, 0, -geo["lid_z0"]]))
-    if "--no-render" not in sys.argv:
-        renders(b, c, feats, case, plate, lid, battery, geo)
+    export(lid, stl_dir + "Pocketwatch - lid.stl", lambda m: m.translate([0, 0, -geo["lid_z0"]]))
+    if not a.no_render:
+        os.makedirs(render_dir, exist_ok=True)
+        renders(b, c, feats, case, plate, lid, batt, geo, render_dir)
+
+    print(f"\n== Pocketwatch{' ' + a.name if a.name else ''} ==")
+    print(f"  size      Ø{2*geo['R_OUT']:.1f} x {size[2]:.1f} mm thick")
+    print(f"  battery   {c.BATT_T:g} x {c.BATT_W:g} x {c.BATT_L:g} mm (T x W x L)")
+    if a.set: print(f"  changed   {' '.join(a.set)}")
+    print(f"  STLs      {stl_dir}")
+    print(f"  renders   {'skipped (--no-render)' if a.no_render else render_dir}")
     if FAILS:
-        sys.exit("FAILED: " + "; ".join(FAILS))
-    print("all checks passed")
+        print(f"  result    FAIL, {len(FAILS)} check(s). Don't print it:")
+        for f in FAILS: print(f"              {f}")
+        sys.exit(1)
+    print("  result    PASS, every check")
 
 
 if __name__ == "__main__":
