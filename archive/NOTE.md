@@ -21,3 +21,6 @@ Superseded files, kept rather than deleted.
   rings and cup test that went stale whenever only `stl/` was rebuilt. Retired
   09-18 when STLs moved to `stl/small|large|pod/` with readable names; the live
   files are there.
+- `Pocketwatch - back (v1, wrong header span).stl` — pocketwatch v1 back
+  (10-03), built on a placeholder header span of 26 and a small cell. Its guides
+  miss the real 30.0 headers. Superseded by the v2 plate + lid.
