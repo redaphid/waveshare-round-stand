@@ -15,6 +15,24 @@ Template:
 
 ---
 
+## 2026-10-13 — pocketwatch USB-only, case (`stl/pocketwatch/Pocketwatch USB-only - case.stl`)
+- material / presets: not stated
+- result: **printed.** "Case is a great fit" (badge seats with `RAD_CLR` 1.15,
+  crown boss and metal-shell slot as designed). Plate, plug engagement (3.7 of
+  6.65 mm shell, a guess) and BOOT click not reported yet.
+- fit numbers to change: none.
+- photo: none
+
+## 2026-10-13 — pocketwatch v2 battery case, reprint (`Pocketwatch - case.stl`)
+- material / presets: not stated
+- result: **printed, "looking better".** The USB-C port is high enough to plug
+  something in. The recess was far too big (at least 2x too tall) and he did
+  not want the tapered roof: only the plug's metal shell goes in. → slot now
+  9.6 x 4.3, flat roof, `BRIDGE_MAX` 10. Open: the 5.2 mm wall in front of the
+  port leaves ~1.5 mm of shell engaged with the small slot.
+- fit numbers to change: `RECESS_W` 14 → 9.0, `RECESS_T` 9 → 3.6 (done, not yet printed).
+- photo: none
+
 ## 2026-10-13 — pocketwatch bore fit gauge (`pocketwatch/Pocketwatch - bore fit gauge.stl`)
 - material / presets: not stated
 - result: **printed.** Only the widest ring (4 dots, bore Ø37.6, `RAD_CLR` 1.15)
