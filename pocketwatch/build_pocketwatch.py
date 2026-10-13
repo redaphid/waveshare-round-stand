@@ -89,7 +89,7 @@ class Case:
     REST_CLR: float = 0.20       # post tip to actuator at rest
     SW_TRAVEL: float = 0.25      # typical tact switch
     FLOAT: float = 0.70          # every other stop behind the badge: stroke + 0.25 print slop
-    RAD_CLR: float = 0.25        # bore around disc + tab, per side
+    RAD_CLR: float = 1.15        # bore around disc + tab, per side
     XY_CLR: float = 0.30         # material beside switches, JST, port
     HDR_CLR: float = 0.15        # header guides, per side in x: snug sideways, free in z
     LIP_T: float = 1.2           # bezel lip thickness

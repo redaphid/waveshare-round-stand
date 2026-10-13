@@ -15,6 +15,16 @@ Template:
 
 ---
 
+## 2026-10-13 — pocketwatch bore fit gauge (`pocketwatch/Pocketwatch - bore fit gauge.stl`)
+- material / presets: not stated
+- result: **printed.** Only the widest ring (4 dots, bore Ø37.6, `RAD_CLR` 1.15)
+  lets the badge sit flat on the lip: "fits perfectly". Rings 1-3 did not.
+  Confirms the v2 bore was too small (it printed undersize and the badge
+  stopped on the plate step), not a missed tab slot.
+- fit numbers to change: `RAD_CLR` 0.25 → **1.15**. Note 1.15 is the edge of the
+  tested range; 0.85 failed, so the true minimum is somewhere in 0.85-1.15.
+- photo: none
+
 ## 2026-10-12 — pocketwatch v2, plate + case (`pocketwatch/Pocketwatch - plate.stl`, `- case.stl`)
 - material / presets: not stated (default presets assumed)
 - result, in his words, from memory (the print is lost): "the back plate is

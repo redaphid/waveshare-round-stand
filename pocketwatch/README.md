@@ -42,6 +42,6 @@ v2's badge stopped on the plate step instead of reaching the bezel lip. `stl/poc
 | 3 | 3 | Ø37.0 | 0.85 |
 | 4 | 4 | Ø37.6 | 1.15 |
 
-Drop the badge in from the back, screen first, tab in the slot. **The tightest ring where the glass sits flat on the lip** is the `RAD_CLR` to use. Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_bore_gauge.py`.
+**Result (10-13): ring 4 fits; `RAD_CLR` is now 1.15.** Drop the badge in from the back, screen first, tab in the slot. **The tightest ring where the glass sits flat on the lip** is the `RAD_CLR` to use. Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_bore_gauge.py`.
 
 Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch.py` from the repo root. Add `--no-render` for a fast check run.
