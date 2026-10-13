@@ -32,3 +32,8 @@ How:
 The board is documentation, not a source of truth. The code and
 `docs/PRINT-LOG.md` win if they disagree with it. If the draw MCP is down, say so
 in your report and leave a line in `HANDOFF.md` that the board is stale.
+
+Measured schematics (frames S, R, V for the hoop stand) come from the CAD, not by hand:
+`~/.venvs/cad/bin/python pocketwatch/stands/hoop/board_schematics.py /tmp/ops.json` writes draw ops cut from
+the same solids the build checks. Re-run it after a geometry change and `put` the ops (same ids, so it overwrites).
+Prefer this flat, dimensioned style over traced 3D renders: Aaron asked for it (2026-10-13).
