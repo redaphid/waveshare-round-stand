@@ -2,15 +2,15 @@
 """
 Pocketwatch, USB-powered variant: no battery, so no chamber and no lid. Two parts.
 
-  case   bezel lip, badge bore, a counterbore for the plate, and the USB-C tab pocket
-         left open to the back at 12 o'clock for the plug. Ø43.6 x 12.5.
+  case   bezel lip, badge bore, a counterbore for the plate that follows the USB-C tab, and
+         a slot the size of the plug's metal shell through the wall at 12 o'clock. Ø43.6 x 12.5, with a crown boss at 12 o'clock.
   plate  the back: snaps into the bore, grips the headers in x only, and its
          post clicks BOOT when the screen is pressed. Flush with the case back.
 
 Everything that is not the battery comes from build_pocketwatch.py (Badge, Case,
 features, snap), so a change to the badge or the fit applies to both variants.
-Because the case is only 12.5 deep the recess roof of the battery case would sit
-behind the back face, so the recess is simply open to the back: no bridge at all.
+The case wall wraps the tab in a boss, so the slot is a plain 9.6 x 4.3 hole with a
+flat roof, the same as the battery case.
 
 Run with ~/.venvs/cad/bin/python from the repo root.
 """
@@ -21,17 +21,22 @@ from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, 
                                bbox, check, FAILS, export, render)
 
 OUT = "pocketwatch/renders/usb-"
+SHELL_LEN, MIN_PLUG_ENGAGE = 6.65, 3.5    # USB-C plug metal shell length; least engagement trusted
 BACK_CHAMFER = 0.6        # smaller than the front: the back rim is only CASE_WALL thick
 
 
 def build(b: Badge, c: Case):
     feats, sw = features(b, c)
     R_BORE = b.r + c.RAD_CLR
-    R_REAR = R_BORE + 1.2                         # counterbore the plate sits in: a 1.2 step in front of it
+    STEP = 1.2                                    # the plate sits in a counterbore this much wider than the bore
+    R_REAR = R_BORE + STEP
     R_OUT = R_REAR + c.CASE_WALL
     FLOOR = b.hdr_top_z + c.FLOAT                 # the step = plate's front face
     Z_CASE = FLOOR + c.PLATE_T                    # plate back face = case back face
     bore_xy = feats[0].grown()
+    pocket = circle(R_REAR) + bore_xy                             # counterbore: stepped round, straight over the tab
+    # the case wall follows the tab too: a crown boss at 12 o'clock, so the plug slot goes through a wall
+    boss = (bore_xy.offset(c.CASE_WALL, Round) ^ rect(-40, 40, 10, 40)).hull()
 
     keep = {f.name: f.keepout(c.FLOAT) for f in feats}
     all_keep = union(keep.values())
@@ -43,25 +48,19 @@ def build(b: Badge, c: Case):
     skirt_front = zb_p - bh_p/2 - 0.4
 
     window = m3.Manifold.cylinder(c.LIP_T + 0.02, b.r - c.LIP_OVERLAP + c.LIP_BEVEL, b.r - c.LIP_OVERLAP, SEG)
-    case = chamfered([circle(R_OUT)], -c.LIP_T, Z_CASE, c.CHAMFER, BACK_CHAMFER)
-    case -= prism(bore_xy, 0.0, FLOOR + 1)
+    case = chamfered([circle(R_OUT), boss], -c.LIP_T, Z_CASE, c.CHAMFER, BACK_CHAMFER)
+    case -= prism(bore_xy, 0.0, Z_CASE + 1)             # the tab pocket runs straight through to the back
     case -= prism(circle(R_REAR), FLOOR, Z_CASE + 1)
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p
     case -= all_keep
-    # The tab pocket is wider than the plug, so cutting it through the back face leaves no roof over
-    # the USB-C end: the notch is open to the back and nothing bridges.
-    case -= prism(bore_xy, FLOOR, Z_CASE + 1)
-
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
     guides = guides ^ prism(skirt_xy.offset(-0.3, Round), 0.0, FLOOR + 0.01)
-    plate = prism(circle(R_REAR - c.FIT_CLR), FLOOR, Z_CASE)
+    plate = prism(pocket.offset(-c.FIT_CLR - 0.03, Round), FLOOR, Z_CASE)   # 0.03 in: never share a face with the skirt
     plate += prism(skirt_xy - skirt_xy.offset(-c.SKIRT_WALL, Round), skirt_front, FLOOR + 0.01) + bead_p
     plate += guides
     plate -= all_keep
-    # the tab pocket reaches past the plate's round edge: a skirt wall there would hang in the air
-    plate ^= prism(circle(R_REAR - c.FIT_CLR), -10, Z_CASE + 1)
     tip_z = b.pcb_back_z + b.sw_cap_h + c.REST_CLR
     post_cyl = m3.Manifold.cylinder(FLOOR + 0.01 - tip_z, c.POST_D/2, c.POST_D/2, 64).translate([sw[c.BUTTON], b.sw_y, tip_z])
     plate += post_cyl - union(k for n, k in keep.items() if not n.startswith(c.BUTTON))
@@ -136,13 +135,15 @@ def run_checks(b, c, feats, case, plate, geo):
     s = (case ^ plate.translate([0, 0, geo["bh_p"]])).volume()
     check(s > 1.0, "plate pulled back one bead height interferes (it snaps)", f"{s:.1f} mm^3")
     walls = {"case wall behind the plate groove": geo["R_OUT"] - geo["groove_r_p"], "bezel lip": c.LIP_T,
-             "case wall at the back rim": geo["R_OUT"] - geo["R_REAR"] - BACK_CHAMFER,
+             "case wall at the back rim": c.CASE_WALL - BACK_CHAMFER,
              "step under the plate": geo["R_REAR"] - geo["R_BORE"], "plate": c.PLATE_T,
              "guide walls": c.GUIDE_WALL, "skirt": c.SKIRT_WALL}
     for nm, t in walls.items():
         check(t >= c.MIN_WALL - 1e-9, f"{nm} >= {c.MIN_WALL}", f"{t:.2f}")
-    reach = geo["R_OUT"] - b.tip_y
-    check(reach < 10.0, "plug overmold reaches the port through the notch", f"notch {reach:.1f} deep")
+    wall = bbox(case)[1, 1] - b.tip_y
+    engaged = SHELL_LEN - wall
+    check(engaged >= MIN_PLUG_ENGAGE, f"plug shell engages the port >= {MIN_PLUG_ENGAGE} (a guess)",
+          f"{engaged:.1f} of {SHELL_LEN}, {wall:.1f} of case in front of the port")
     back = bbox(case)[1, 2]
     check(abs(back - bbox(plate)[1, 2]) < 1e-3, "plate is flush with the case back", f"z {back:.2f}")
 
@@ -168,7 +169,7 @@ def renders(b, c, feats, case, plate, geo):
     render(cut, OUT + "section-post.png", elev=0, azim=180,
              title=f"USB-powered, section through the {c.BUTTON} post (x={x:+.1f}), at rest")
     render([(D(case), brass), (D(fs["disc + tab"]), dark)], OUT + "back.png", elev=-25, azim=-70,
-             title="From the back: plate removed, USB-C notch open at 12 o'clock")
+             title="From the back: plate removed, crown boss and USB-C slot at 12 o'clock")
 
 
 def main():
