@@ -66,3 +66,7 @@ Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch_usb.py` from the
 ## Stands and clips (overnight designs, 2026-10-13)
 
 Ten unprinted concepts, each with its own script, STLs, renders and README: stands `pocketwatch/stands/{pedestal,hoop,hood,kickstand,scissor}/`, clips `pocketwatch/clips/{sidepod,stalk,lowprofile}/`, style families `pocketwatch/styles/{braun,te}/` (a stand and a clip each). STLs mirror under `stl/pocketwatch/`. Overview: `docs/gallery/overnight-designs-2026-10-13.png`. All generated and unreviewed beyond the renders; print one test part first.
+
+### Press BOOT by pushing the plastic (flexure button)
+
+`Pocketwatch USB-only - plate (button).stl` (and `(button, roomy)`) keeps the little **post** that clicks BOOT, but puts it on a thin **flexure tab** cut free by a U-slot. **Push the plate with a fingertip at the dimple on the back**: the tab flexes 0.45 mm, the post clicks BOOT, and nothing touches the glass. Tab 4.4 wide, 12 long, 1.2 thick (0.56% strain at full push, about 0.7 N plus the switch's own force). The post and the button position are still the ±1 mm guess. Pressing the screen no longer clicks with this plate; use it as the button instead.

@@ -24,3 +24,5 @@ Superseded files, kept rather than deleted.
 - `Pocketwatch - back (v1, wrong header span).stl` — pocketwatch v1 back
   (10-03), built on a placeholder header span of 26 and a small cell. Its guides
   miss the real 30.0 headers. Superseded by the v2 plate + lid.
+
+- `hoop-screw-v1/`: the hoop stand with an M3 x 12 screw joint (mortise 0.25 per side printed loose; 0.18 and 0.12 base variants made). Replaced 2026-10-13 by the snap-arm joint. Script, README and the four STLs kept.

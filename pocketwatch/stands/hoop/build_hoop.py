@@ -7,7 +7,7 @@ Watch-stand hoop: the USB-only pocketwatch case fused into a gimbal ring, on a t
                neck at 6 o'clock that ends in a tenon. Every member lies in the print plane, so
                every bending stress runs along the layers, never across them.
   base         a two-tier round plinth, flat on the bed. A slanted mortise holds the tenon at
-               20 degrees back; one M3 x 12 from underneath, along the tenon, pulls it home.
+               20 degrees back. Two snap arms on the tenon click into notches: no screw.
                A keyhole groove at the back grips the cable at desk height.
   plate        the existing USB-only BOOT-hole plate, unchanged: it snaps into the case back.
 
@@ -62,16 +62,18 @@ class Stand:
     BASE_R: float = 38.0        # lower tier
     BASE_T: float = 5.0
     TIER_R: float = 19.0        # upper tier, carries the mortise
-    TIER_T: float = 10.0
-    MORT_D: float = 4.5         # mortise depth, vertical
-    FIT: float = 0.25           # tenon in mortise, per side: the leaned walls print as stair-steps ~0.1 proud
-    PILOT_D: float = 2.8        # M3 self-taps into it (same as the pod clip)
-    PILOT_L: float = 12.0
-    CLR_D: float = 3.4
-    HEAD_D: float = 6.4         # M3 button / pan head <= 6.0
-    HEAD_H: float = 3.0         # head pocket along the screw: deep enough that the tilted head clears the desk
+    TIER_T: float = 13.0
+    MORT_D: float = 11.5        # mortise depth, vertical: the snap arms need the length
+    FIT: float = 0.12           # tenon in mortise, per side: 0.25 printed loose, the leaned walls are ~0.1 proud
+    TANG_T: float = 1.5         # snap arm thickness (in-plane, along the layers)
+    TANG_GAP: float = 2.0       # slot beside each arm: how far it can flex inward
+    TANG_L: float = 10.5        # slot length up the neck from the tenon's bottom end
+    BARB_H: float = 0.45        # barb height on each arm's outer face
+    BARB_Y: float = 2.2         # barb crest above the tenon's bottom end
+    BARB_RAMP: float = 2.6      # gentle lead-in length, so the tenon snaps in with a firm push
+    BARB_BACK: float = 0.16     # the back face is nearly square (~70 deg): it holds a 20 N plug pull
+    PETG_E: float = 1500.0      # MPa, along the layers
     BASE_SHIFT: float = 3.0     # base centre behind the neck, toward the leaning watch
-    SCREW_L: float = 12.0
     CABLE_D: float = 4.0        # typical USB-C cable; the keyhole grips 3.5-4.5
     KEY_D: float = 4.2
     KEY_MOUTH: float = 3.2
@@ -277,38 +279,33 @@ def stand_solids(s, c, geo, F, kind):
     for p in info["pivots"]:
         hoop += chamfered([p], Z0, Z0 + s.PIVOT_H, s.EDGE, s.EDGE)
     hoop -= prism((circle(geo["R_OUT"]) + geo["boss"]).offset(-1.2, Round), Z0 - 1, Z0 + 20)
-    # tenon: trimmed flat at the mortise floor (a world-horizontal plane)
+    # tenon: trimmed flat at the mortise floor (a world-horizontal plane), with two snap arms
     floor = s.TIER_T - s.MORT_D
     n = F.up_b()
-    hoop = hoop.trim_by_plane(list(n), floor - F.H0)
-    # pilot for the M3, in the print plane along the neck (-y), from the tenon's bottom face
     zm = Z0 + s.HD/2
     y_bot = (floor - F.H0 + F.S*zm)/F.C               # where the axis x=0, z=zm meets the floor plane
-    axis_dir_b = np.array([0, 1.0, 0])
-    pilot = m3.Manifold.cylinder(s.PILOT_L + 1, s.PILOT_D/2, s.PILOT_D/2, 32).rotate([-90, 0, 0]).translate([0, y_bot - 1, zm])
-    hoop -= pilot
+    tenon_nb = hoop.trim_by_plane(list(n), floor - F.H0)
+    X0 = s.NECK_BOT/2
+    yb = y_bot + s.BARB_Y
+    def poly(pts):
+        q = m3.CrossSection([pts])
+        return q if q.area() > 0 else m3.CrossSection([pts[::-1]])
+    barbs_cs = union_cs([poly([(sg*X0, yb - s.BARB_RAMP), (sg*(X0 + s.BARB_H), yb - 0.2),
+                               (sg*(X0 + s.BARB_H), yb + 0.3), (sg*X0, yb + 0.3 + s.BARB_BACK)]) for sg in (-1, 1)])
+    slots_cs = union_cs([rect(*sorted((sg*(X0 - s.TANG_T - s.TANG_GAP), sg*(X0 - s.TANG_T))), y_bot - 25, y_bot + s.TANG_L)
+                         for sg in (-1, 1)])
+    hoop = (hoop + prism(barbs_cs, Z0, Z0 + s.HD)).trim_by_plane(list(n), floor - F.H0)
+    hoop -= prism(slots_cs, Z0 - 1, Z0 + s.HD + 1)
 
     base = chamfered([circle(s.BASE_R)], 0, s.BASE_T, 0.6, 1.5) + chamfered([circle(s.TIER_R)], 0, s.TIER_T, 0, 1.2)
     base = base.translate([0, geo["Yb"], 0])
     # mortise: the tenon's own section, grown by FIT, slid down its own plane (the insertion direction)
     # straight-sided up past the tier top, so the flare above never narrows the way out
     neck_cs = (cs ^ rect(-40, 40, -200, -ring_radii(s, geo)[1] + 0.5)) + rect(-s.NECK_BOT/2, s.NECK_BOT/2, -200, geo["y_t"] + 4)
+    neck_cs = neck_cs + barbs_cs                       # the barbs get their notch, grown by FIT with the rest
     mort_b = prism(neck_cs.offset(s.FIT, m3.JoinType.Miter), Z0 - s.FIT, Z0 + s.HD + s.FIT)
     mort = F.W(mort_b).trim_by_plane([0, 0, 1], floor)
     base -= mort
-    # screw: clearance hole and head pocket in the base, coaxial with the pilot
-    a0 = F.pt([0, y_bot, zm]); d = F.vec(axis_dir_b)        # up the neck in the world
-    def along(dia, t0, t1):
-        cyl = m3.Manifold.cylinder(t1 - t0, dia/2, dia/2, 48)
-        # cylinder is along +z; rotate +z onto d
-        ax = np.cross([0, 0, 1.0], d); ang = math.degrees(math.acos(np.clip(d[2], -1, 1)))
-        Rm = trimesh.transformations.rotation_matrix(math.radians(ang), ax)[:3, :3]
-        p = a0 + t0*d
-        return cyl.transform(np.hstack([Rm, p[:, None]]))
-    t_bottom = -a0[2]/d[2]                                   # where the axis meets the desk (negative)
-    hole = along(s.CLR_D, t_bottom - 1, 2.0)
-    head = along(s.HEAD_D, t_bottom - 3, t_bottom + s.HEAD_H)
-    base -= hole + head
     # cable keyhole at the back, centred on x = 0, along +Y to the rim
     yk0 = geo["Yb"] + s.TIER_R - 3.0
     zk = s.BASE_T - 0.4 - s.KEY_D/2
@@ -317,8 +314,8 @@ def stand_solids(s, c, geo, F, kind):
     # where the cable drops in from above: open to the full keyhole width, so it lies in without forcing
     key += orient_keyhole(disc(s.KEY_D/2, 0, zk, 48) + rect(-s.KEY_D/2, s.KEY_D/2, zk, s.TIER_T + 1), yk0 - 2.0, yk0 + s.KEY_ENTRY)
     base -= key
-    screw = dict(a0=a0, d=d, t_bottom=t_bottom, y_bot=y_bot, zm=zm, along=along)
-    return hoop, base, info, screw, dict(zk=zk, yk0=yk0, key=key, mort=mort)
+    screw = dict(y_bot=y_bot, zm=zm)
+    return hoop, base, info, screw, dict(zk=zk, yk0=yk0, key=key, mort=mort, tenon_nb=tenon_nb)
 
 
 def orient_keyhole(cs_xz, y0, y1):
@@ -395,22 +392,28 @@ def run_stand_checks(s, b, c, feats, case, plate_h, base, geo, F, info, screw, e
     seat = (hw.translate([0, 0, -0.05]) ^ base).volume()
     check(seat > 1.0, "tenon bottoms on the mortise floor (sets the height)", f"{seat:.1f} mm^3 at 0.05 down")
     out_dir = F.vec([0, 1, 0])
-    stuck = max((F.W(case.translate([0, t, 0])) ^ base).volume() for t in np.arange(0.25, s.MORT_D/F.C + 1.0, 0.25))
-    check(stuck < 1e-3, "tenon slides straight in and out along the neck", f"{stuck:.4f} mm^3 in the way")
+    stuck = max((F.W(keyinfo["tenon_nb"].translate([0, t, 0])) ^ base).volume() for t in np.arange(0.25, s.MORT_D/F.C + 1.0, 0.25))
+    check(stuck < 1e-3, "tenon (barbs flexed in) slides straight in and out along the neck", f"{stuck:.4f} mm^3 in the way")
     side = (hw.translate([s.FIT + 0.05, 0, 0]) ^ base).volume()
     check(side > 1.0, f"tenon located sideways within {s.FIT + 0.05:.2f}", f"{side:.1f} mm^3 at {s.FIT + 0.05:.2f} over")
-    d, a0, tb = screw["d"], screw["a0"], screw["t_bottom"]
-    seat_len = -tb - s.HEAD_H                           # base material the head clamps through, along the axis
-    in_tenon = s.SCREW_L - seat_len
-    check(1.0 <= in_tenon <= s.PILOT_L - 0.5, f"M3 x {s.SCREW_L:g} reaches {in_tenon:.1f} into a {s.PILOT_L:g} pilot",
-          f"{seat_len:.1f} of base under the head")
-    rod = screw["along"](3.0, tb + s.HEAD_H, tb + s.HEAD_H + s.SCREW_L)
-    v = (rod ^ base).volume()
-    check(v < 1e-3, "M3 passes the base without touching it", f"{v:.4f} mm^3")
-    pil_w = min(s.HD/2 - s.PILOT_D/2, s.NECK_TOP/2 - s.PILOT_D/2)
-    check(pil_w >= c.MIN_WALL, f"wall round the pilot >= {c.MIN_WALL}", f"{pil_w:.2f}")
-    above = -ring_radii(s, geo)[0] - (screw["y_bot"] + s.PILOT_L + s.PILOT_D/2)
-    check(above >= c.MIN_WALL, f"pilot stops short of the gap inside the ring by >= {c.MIN_WALL}", f"{above:.2f}")
+    # snap: two arms bending in the print plane (along the layers), a barb on each outer face
+    h_def = s.BARB_H - s.FIT                              # each arm is pushed in this far while the barb passes the straight mortise
+    L_eff = s.TANG_L - s.BARB_Y
+    eps = 3*s.TANG_T*h_def/(2*L_eff**2)
+    check(eps <= 0.02, "snap arm strain <= 2% while the barbs pass", f"{eps*100:.2f}% over {L_eff:.1f} mm, deflecting {h_def:.2f}")
+    check(h_def >= 0.15, "barb overlaps the straight mortise by >= 0.15 (it really snaps)", f"{h_def:.2f}")
+    check(s.TANG_T >= c.MIN_WALL and s.TANG_GAP >= c.MIN_WALL, "arm and slot widths >= min wall", f"arm {s.TANG_T:g}, slot {s.TANG_GAP:g}")
+    k = 3*s.PETG_E*(s.HD*s.TANG_T**3/12)/L_eff**3        # N/mm per arm
+    ramp = math.atan(s.BARB_H/(s.BARB_RAMP - 0.2))
+    back = math.atan(s.BARB_BACK/s.BARB_H)
+    f_in, f_out = 2*k*h_def*math.tan(ramp), 2*k*h_def/math.tan(back)
+    check(f_in <= 30.0, "push to snap the hoop in (two arms, no friction) <= 30 N", f"{f_in:.1f} N, ramp {math.degrees(ramp):.0f} deg")
+    check(f_out >= s.PUSH_N, f"pull to unsnap (back face {math.degrees(back):.0f} deg off square) >= a {s.PUSH_N:g} N plug pull", f"{f_out:.0f} N")
+    slot_top = screw["y_bot"] + s.TANG_L
+    gap = -ring_radii(s, geo)[0] - slot_top
+    check(gap >= c.MIN_WALL, f"slots stop short of the gap inside the ring by >= {c.MIN_WALL}", f"{gap:.2f}")
+    above_tier = (s.MORT_D/F.C) - s.TANG_L
+    check(above_tier >= 0.5, "slots end inside the mortise, never open above the tier", f"{above_tier:.1f} mm to spare")
     worst_wall = 99.0
     for z in (s.TIER_T - s.MORT_D + 0.3, s.TIER_T - 0.6):
         hole = keyinfo["mort"].slice(z)
@@ -419,12 +422,8 @@ def run_stand_checks(s, b, c, feats, case, plate_h, base, geo, F, info, screw, e
             if (hole - tier.offset(-wl, Round)).area() > 1e-3:
                 worst_wall = min(worst_wall, wl - 0.1); break
     check(worst_wall >= c.MIN_WALL, f"tier wall round the mortise >= {c.MIN_WALL}", f"{worst_wall:.1f} (inside the chamfer)")
-    pocket = screw["along"](s.HEAD_D, tb - 3, tb + s.HEAD_H)
-    fl = pocket.min_gap(keyinfo["mort"], 5.0)
-    check(fl >= c.MIN_WALL, f"floor between the head pocket and the mortise >= {c.MIN_WALL}", f"{fl:.2f}")
-    head = screw["along"](5.6, tb + s.HEAD_H - 1.65, tb + s.HEAD_H)
-    check(bbox(head)[0, 2] >= 0.2, "M3 head (Ø5.6 x 1.65) sits up inside the base, clear of the desk",
-          f"lowest edge {bbox(head)[0, 2]:.2f} above it")
+    floor_t = s.TIER_T - s.MORT_D
+    check(floor_t >= c.MIN_WALL, f"floor under the mortise >= {c.MIN_WALL}", f"{floor_t:.1f}")
 
     print(f"\n9. Strength: bending along the layers, min section >= {s.MIN_SECTION:g} in the load direction")
     Rc, w, sides = info["lever"], info["arm_w"], info["sides"]
@@ -454,7 +453,6 @@ def run_stand_checks(s, b, c, feats, case, plate_h, base, geo, F, info, screw, e
     stand_only = extra - prism(circle(geo["R_OUT"] + 0.5) + geo["boss"].offset(0.5, Round), Z0 - 1, 40)
     stand_only = stand_only - prism(rect(-60, 60, -200, -ring_radii(s, geo)[1] - 1), Z0 - 1, 40)   # tenon is trimmed by a slanted plane
     stand_only = stand_only - union(prism(p.offset(0.6, Round), Z0 - 1, 40) for p in info["pivots"])
-    stand_only = stand_only - prism(rect(-s.PILOT_D, s.PILOT_D, -200, screw["y_bot"] + s.PILOT_L + 1), Z0 - 1, 40)
     areas = [stand_only.slice(z).area() for z in np.linspace(Z0 + s.EDGE + 0.05, Z0 + s.HD - s.EDGE - 0.05, 9)]
     check(max(areas) - min(areas) < 0.01*max(areas), "stand is a straight extrusion in print: layers run along every member",
           f"slice area {min(areas):.0f}..{max(areas):.0f} mm^2")
@@ -567,9 +565,7 @@ def renders(s, b, c, feats, case, plate_h, base, geo, F, cable, plug, alt):
            title="From behind: plate free, a Ø2 pin goes straight into the BOOT hole (red), clear of the cable")
 
     # section on x = 0 (crown, plug, tenon, screw)
-    a0, d, tb = s_screw["a0"], s_screw["d"], s_screw["t_bottom"]
-    screw = s_screw["along"](3.0, tb + s.HEAD_H, tb + s.HEAD_H + s.SCREW_L) + s_screw["along"](5.6, tb + s.HEAD_H - 1.65, tb + s.HEAD_H)
-    parts = [(F.W(case), brass), (F.W(plate_h), plate_c), (base, walnut), (F.W(disc_tab), dark), (screw, steel),
+    parts = [(F.W(case), brass), (F.W(plate_h), plate_c), (base, walnut), (F.W(disc_tab), dark),
              (body, black), (shell, steel), (boot, black), (cable, black)]
     for f in feats:
         if f.name.startswith(("header", "JST")): parts.append((F.W(f.solid()), white))
@@ -578,7 +574,7 @@ def renders(s, b, c, feats, case, plate_h, base, geo, F, cable, plug, alt):
         m = m.trim_by_plane([1, 0, 0], 0.0)
         if not m.is_empty(): cut.append((rf(m, 1.0), col))
     render(cut, OUT + "04-section.png", elev=0, azim=180, zoom=1.05,
-           title="Section on the centre line: plug into the crown, 20 deg lean, tenon in the mortise, M3 from below")
+           title="Section on the centre line: plug into the crown, 20 deg lean, snap arms and barbs in the mortise")
 
     # print layout: hoop+case bezel down, plate flat, base flat
     hb = bbox(case)
@@ -587,7 +583,7 @@ def renders(s, b, c, feats, case, plate_h, base, geo, F, cable, plug, alt):
     lay = [(rf(lay_h), brass), (rf(pl.translate([62, 4, 0])), plate_c),
            (rf(base.translate([0, -geo["Yb"], 0]).translate([0, -96, 0]), 1.6), walnut)]
     render(lay, OUT + "05-print-layout.png", elev=38, azim=-70, zoom=1.1,
-           title="Print: hoop + case bezel down, plate flat, base flat. No supports. Plus one M3 x 12.")
+           title="Print: hoop + case bezel down, plate flat, base flat (100% infill). No supports, no screw.")
 
     # alternate silhouette
     ac, abase = alt
@@ -599,16 +595,13 @@ def renders(s, b, c, feats, case, plate_h, base, geo, F, cable, plug, alt):
     up = F.vec([0, 1, 0]); back = F.vec([0, 0, 1])
     mv = lambda m, v: m.translate(list(v))
     hoop_up = 34*up
-    tb = s_screw["t_bottom"]
-    m3_screw = s_screw["along"](3.0, tb + s.HEAD_H, tb + s.HEAD_H + s.SCREW_L) + s_screw["along"](5.6, tb + s.HEAD_H - 1.65, tb + s.HEAD_H)
     ex = [(rf(mv(F.W(case), hoop_up)), brass), (rf(mv(F.W(disc_tab), hoop_up + 26*back)), dark),
-          (rf(mv(F.W(plate_h), hoop_up + 46*back)), plate_c), (rf(base, 1.6), walnut),
-          (rf(m3_screw.translate(list(-18*s_screw["d"])), 0.6), steel)]
+          (rf(mv(F.W(plate_h), hoop_up + 46*back)), plate_c), (rf(base, 1.6), walnut)]
     for f in feats:
         if f.name.startswith(("header", "JST", "BOOT", "RESET")):
             ex.append((rf(mv(F.W(f.solid()), hoop_up + 26*back), 0.8), white))
     render(ex, OUT + "07-exploded.png", elev=10, azim=150, zoom=1.0, light=(0.45, 0.75, 0.5),
-           title="Assembly: badge in from the back, plate snaps on; hoop slides down its neck; M3 x 12 from below")
+           title="Assembly: badge in from the back, plate snaps on; hoop pushes down its neck until the arms click")
 
 
 s_screw = {}
@@ -663,17 +656,21 @@ def main():
     print()
     export(case, STL + "Hoop stand - hoop and case.stl", lambda m: m.translate([0, 0, c.LIP_T]))
     export(base, STL + "Hoop stand - base.stl", lambda m: m)
-    # a base printed with the original 0.25 mortise clearance wobbled: snug and medium versions
-    for fit, tag in ((0.18, "medium"), (0.12, "snug")):
+    # a roomier mortise (0.12 is the default; 0.25 printed loose with the screw design), for a printer that runs tight
+    for fit, tag in ((0.18, "roomier"),):
         s2 = dataclasses.replace(s, FIT=fit)
-        _, base2, _, _, _ = stand_solids(s2, c, built["hoop"][5], F, "hoop")
+        _, base2, _, _, ki2 = stand_solids(s2, c, built["hoop"][5], F, "hoop")
         hw = F.W(case)
         check((hw ^ base2).volume() < 1e-2, f"base ({tag}): hoop and base do not overlap", f"fit {fit}")
-        stuck = max((F.W(case.translate([0, t, 0])) ^ base2).volume() for t in np.arange(0.25, s.MORT_D/F.C + 1.0, 0.25))
+        stuck = max((F.W(ki2["tenon_nb"].translate([0, t, 0])) ^ base2).volume() for t in np.arange(0.25, s.MORT_D/F.C + 1.0, 0.25))
         check(stuck < 1e-3, f"base ({tag}): tenon still slides straight in", f"{stuck:.4f} mm^3 in the way at {fit} per side")
         export(base2, STL + f"Hoop stand - base ({tag}, {fit:g}).stl", lambda m: m)
     flip = lambda m: m.rotate([0, 180, 0]).translate([0, 0, geo["Z_CASE"]])
     export(plate_h, STL + "Hoop stand - back plate (BOOT hole).stl", flip)
+    # the same back plate with a push-the-plastic BOOT flexure instead of the hole (checks run in build_pocketwatch_usb.py)
+    for clr, tag in ((U.PLATE_DISC_CLR, "button"), (U.PLATE_DISC_CLR_ROOMY, "button, roomy")):
+        _, _, plate_b, _ = U.build(b, c, clr, button=True)
+        export(plate_b, STL + f"Hoop stand - back plate ({tag}).stl", flip)
     tot = bbox(F.W(case) + base + body)
     print(f"\nStanding: {tot[1, 0] - tot[0, 0]:.0f} wide x {tot[1, 1] - tot[0, 1]:.0f} deep x {tot[1, 2]:.0f} tall to the plug top")
     if "--no-render" not in sys.argv:

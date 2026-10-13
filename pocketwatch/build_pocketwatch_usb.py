@@ -25,10 +25,12 @@ SHELL_LEN, MIN_PLUG_ENGAGE = 6.65, 3.5    # USB-C plug metal shell length; least
 BOOT_HOLE_D, PIN_D = 3.4, 2.0   # access hole through the plate over BOOT; the stylus or plunger that goes in it
 PLATE_DISC_CLR = 0.18        # plate disc inside the counterbore, per side: the size that printed and fit
 PLATE_DISC_CLR_ROOMY = 0.65  # for a print that runs oversize: 0.47 per side smaller, ~1 mm in diameter
+TAB_R, TAB_GAP, TAB_L, TAB_T = 2.2, 0.65, 12.0, 1.2   # BOOT button flexure: tab half-width, slot, length to the root, thickness
+PETG_E = 1500.0           # MPa, along the layers
 BACK_CHAMFER = 0.6        # smaller than the front: the back rim is only CASE_WALL thick
 
 
-def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR):
+def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR, button=False):
     feats, sw = features(b, c)
     R_BORE = b.r + c.RAD_CLR
     STEP = 1.2                                    # the plate sits in a counterbore this much wider than the bore
@@ -60,16 +62,34 @@ def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR):
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
     guides = guides ^ prism(skirt_xy.offset(-0.3, Round), 0.0, FLOOR + 0.01)
-    plate = prism(pocket.offset(-disc_clr, Round), FLOOR, Z_CASE)   # also keeps the disc off the skirt face
-    plate += prism(skirt_xy - skirt_xy.offset(-c.SKIRT_WALL, Round), skirt_front, FLOOR + 0.01) + bead_p
+    px, py = sw[c.BUTTON], b.sw_y
+    if button:
+        # a flexure: the BOOT post rides on a thin tab, cut free by a U-slot. Pushing the plate behind the post clicks BOOT.
+        tab = rect(px, px + TAB_L, py - TAB_R, py + TAB_R) + circle(TAB_R).translate([px, py])
+        zone = tab.offset(TAB_GAP, Round)
+        slot = (zone - tab) ^ rect(-60, px + TAB_L, -60, 60)             # open at the root end
+        guides = guides - prism(tab.offset(TAB_GAP + 0.05, Round), -1, FLOOR + 1)                    # the header guides stay off the tab
+    disc = prism(pocket.offset(-disc_clr, Round), FLOOR, Z_CASE)   # also keeps the disc off the skirt face
+    if button:
+        disc -= prism(slot, FLOOR - 1, Z_CASE + 1)                        # the U-slot, clear through
+        disc -= prism(tab, FLOOR - 1, FLOOR + TAB_T)                       # thin the tab from the front: the bed side stays flat
+        disc -= prism(circle(2.0).translate([px, py]), Z_CASE - 0.4, Z_CASE + 1)   # a finger dimple on the back, over the post
+    plate = disc
+    ring = prism(skirt_xy - skirt_xy.offset(-c.SKIRT_WALL, Round), skirt_front, FLOOR + 0.01)
+    if button:
+        ring -= prism(slot, FLOOR, FLOOR + 1)                             # no 0.01 fin of skirt hanging over the slot
+    plate += ring + bead_p
     plate += guides
     plate -= all_keep
     tip_z = b.pcb_back_z + b.sw_cap_h + c.REST_CLR
-    post_cyl = m3.Manifold.cylinder(FLOOR + 0.01 - tip_z, c.POST_D/2, c.POST_D/2, 64).translate([sw[c.BUTTON], b.sw_y, tip_z])
+    post_top = FLOOR + (TAB_T if button else 0.0) + 0.01
+    post_cyl = m3.Manifold.cylinder(post_top - tip_z, c.POST_D/2, c.POST_D/2, 64).translate([px, py, tip_z])
     plate += post_cyl - union(k for n, k in keep.items() if not n.startswith(c.BUTTON))
 
     geo = dict(R_BORE=R_BORE, R_REAR=R_REAR, R_OUT=R_OUT, FLOOR=FLOOR, Z_CASE=Z_CASE, bh_p=bh_p,
-               groove_r_p=groove_r_p, hdrs=hdrs, sw=sw, post_cyl=post_cyl)
+               groove_r_p=groove_r_p, hdrs=hdrs, sw=sw, post_cyl=post_cyl, R_DISC=R_REAR - disc_clr)
+    if button:
+        geo.update(tab=tab, slot=slot)
     return feats, case, plate, geo
 
 
@@ -151,6 +171,27 @@ def run_checks(b, c, feats, case, plate, geo):
     check(abs(back - bbox(plate)[1, 2]) < 1e-3, "plate is flush with the case back", f"z {back:.2f}")
 
 
+def run_button_checks(b, c, feats, case, plate, geo):
+    print("\n7. BOOT button flexure: push the plastic behind the post, the glass is never touched")
+    tab, slot = geo["tab"], geo["slot"]
+    check((slot - circle(geo["R_DISC"] - c.MIN_WALL)).area() < 1e-6, f"slot stays {c.MIN_WALL} inside the plate edge", "")
+    travel = c.REST_CLR + c.SW_TRAVEL
+    moved = (plate ^ prism(tab, -2, geo["Z_CASE"] + 2)).translate([0, 0, -travel])
+    for f in feats:
+        v = (moved ^ f.solid()).volume()
+        if f.name == f"{c.BUTTON} actuator":
+            check(v > 1e-3, f"tab pushed {travel:.2f}: post reaches the {c.BUTTON} actuator", f"{v:.3f} mm^3")
+        else:
+            gap = moved.min_gap(f.solid(), 3.0)
+            check(v < 1e-3 and gap > 0.05, f"tab pushed {travel:.2f}: {f.name} still clear", f"gap {gap:.2f}")
+    t, w = TAB_T, 2*TAB_R
+    eps = 3*t*travel/(2*TAB_L**2)
+    k = 3*PETG_E*(w*t**3/12)/TAB_L**3
+    check(eps <= 0.02, "tab strain <= 2% at full push", f"{eps*100:.2f}% over {TAB_L:g} mm")
+    check(t >= c.MIN_WALL, f"tab thickness >= {c.MIN_WALL}", f"{t:g}")
+    print(f"      push at the post: {k*travel:.2f} N to flex the tab {travel:.2f} + the switch's own ~2 N (tab {w:g} wide, k {k:.2f} N/mm)")
+
+
 def boot_hole_plate(b, c, plate, geo):
     """The same plate with the post replaced by a hole straight onto the BOOT actuator, so the
     button is pressed from behind and the glass is never touched."""
@@ -216,8 +257,19 @@ def main():
     plate_rh, _, _ = boot_hole_plate(b, c, plate_r, geo_r)
     export(plate_r, "stl/pocketwatch/Pocketwatch USB-only - plate (roomy).stl", flip)
     export(plate_rh, "stl/pocketwatch/Pocketwatch USB-only - plate (BOOT hole, roomy).stl", flip)
+    for clr, tag in ((PLATE_DISC_CLR, "button"), (PLATE_DISC_CLR_ROOMY, "button, roomy")):
+        _, _, plate_b, geo_b = build(b, c, clr, button=True)
+        if clr == PLATE_DISC_CLR:
+            run_checks(b, c, feats, case, plate_b, geo_b)
+            run_button_checks(b, c, feats, case, plate_b, geo_b)
+        export(plate_b, f"stl/pocketwatch/Pocketwatch USB-only - plate ({tag}).stl", flip)
+        if clr == PLATE_DISC_CLR:
+            plate_btn, geo_btn = plate_b, geo_b
     if "--no-render" not in sys.argv:
         renders(b, c, feats, case, plate, geo)
+        D = lambda m: m.rotate([90, 0, 0]).refine_to_length(1.0)
+        render([(D(plate_btn - geo_btn["post_cyl"]), (0.66, 0.50, 0.24)), (D(plate_btn ^ geo_btn["post_cyl"]), (0.62, 0.30, 0.80))],
+               OUT + "plate-button.png", elev=-28, azim=62, title="Button plate from the badge side: U-slot, thin tab, post (violet)")
     if FAILS:
         sys.exit("FAILED: " + "; ".join(FAILS))
     print("all checks passed")
