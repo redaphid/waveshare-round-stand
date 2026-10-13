@@ -15,6 +15,16 @@ Template:
 
 ---
 
+## 2026-10-13 — hoop stand, base + hoop and case (`stl/pocketwatch/stands/hoop/`)
+- material / presets: not stated
+- result: **printed.** "The case is slightly too loose to snap in to the base":
+  the neck wobbles in the slanted mortise. (The design has no snap: an M3 x 12
+  from underneath holds it; the 0.25 mm per side clearance was a guess for the
+  stair-stepped 20 deg walls.)
+- fit numbers to change: mortise clearance 0.25 per side → **0.12** (snug)
+  and **0.18** (medium) as separate base files. Hoop and case unchanged.
+- photo: none
+
 ## 2026-10-13 — pocketwatch USB-only, back plate (`Pocketwatch USB-only - plate.stl`)
 - material / presets: not stated
 - result: **one print came out about 1 mm too large to fit; the next print of

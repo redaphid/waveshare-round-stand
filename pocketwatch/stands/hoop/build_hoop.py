@@ -18,7 +18,7 @@ Badge frame as in build_pocketwatch.py (origin = glass face centre, +y to the US
 +z backward). World: z up, the viewer at -Y. Run from the repo root with
 ~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop.py [--no-render]
 """
-import sys, math
+import sys, dataclasses, math
 from dataclasses import dataclass
 sys.path.insert(0, "pocketwatch")
 import numpy as np, manifold3d as m3, trimesh
@@ -663,6 +663,15 @@ def main():
     print()
     export(case, STL + "Hoop stand - hoop and case.stl", lambda m: m.translate([0, 0, c.LIP_T]))
     export(base, STL + "Hoop stand - base.stl", lambda m: m)
+    # a base printed with the original 0.25 mortise clearance wobbled: snug and medium versions
+    for fit, tag in ((0.18, "medium"), (0.12, "snug")):
+        s2 = dataclasses.replace(s, FIT=fit)
+        _, base2, _, _, _ = stand_solids(s2, c, built["hoop"][5], F, "hoop")
+        hw = F.W(case)
+        check((hw ^ base2).volume() < 1e-2, f"base ({tag}): hoop and base do not overlap", f"fit {fit}")
+        stuck = max((F.W(case.translate([0, t, 0])) ^ base2).volume() for t in np.arange(0.25, s.MORT_D/F.C + 1.0, 0.25))
+        check(stuck < 1e-3, f"base ({tag}): tenon still slides straight in", f"{stuck:.4f} mm^3 in the way at {fit} per side")
+        export(base2, STL + f"Hoop stand - base ({tag}, {fit:g}).stl", lambda m: m)
     flip = lambda m: m.rotate([0, 180, 0]).translate([0, 0, geo["Z_CASE"]])
     export(plate_h, STL + "Hoop stand - back plate (BOOT hole).stl", flip)
     tot = bbox(F.W(case) + base + body)

@@ -38,3 +38,6 @@ No supports on any part. You also need **one M3 × 12** screw, the same one as t
 
 **Alternate silhouette:** a crescent cantilever arm (`renders/06-alternate-crescent.png`). It's prettier from one side, but one arm carries all the load (SF 2.2 against 3.9), and a BOOT press twists a single arm (I didn't compute how much). Not built.
 **Scores:** aesthetics **4**/5 · printability **4**/5 · robustness **4**/5
+
+## Print result (2026-10-13) and fit variants
+Printed. The case wobbled in the mortise at the original **0.25 mm per side** clearance. Two tighter bases, same shape: `Hoop stand - base (medium, 0.18).stl` and `Hoop stand - base (snug, 0.12).stl`. Try snug first; the script checks the tenon still slides straight in at both. The hoop and case file is unchanged. The M3 from underneath still does the holding.
