@@ -31,6 +31,7 @@ sys.path.insert(0, "pod"); from render import render
 
 Round = m3.JoinType.Round
 SEG = 180
+BRIDGE_MAX = 8.0     # longest unsupported span the printer is trusted with (0.6 nozzle, PETG)
 
 
 def ph(value, replaced_by):
@@ -262,7 +263,7 @@ def build(b: Badge, c: Case):
     w = c.RECESS_W/2 + c.XY_CLR
     z_top = b.port_z + c.RECESS_T/2 + c.FLOAT
     y0, L = b.tip_y - c.XY_CLR, R_OUT + 2 - (b.tip_y - c.XY_CLR)
-    ROOF_FLAT = 3.8
+    ROOF_FLAT = BRIDGE_MAX - 0.2
     h = w - ROOF_FLAT/2
     arch = m3.Manifold.extrude(m3.CrossSection([[(-w, z_top - 0.01), (w, z_top - 0.01), (ROOF_FLAT/2, z_top + h), (-ROOF_FLAT/2, z_top + h)]]), L)
     arch = arch.rotate([90, 0, 0]).translate([0, y0 + L, 0])
@@ -393,17 +394,17 @@ def export(m, path, print_xform):
     tm.export(path)
     check(tm.is_watertight and tm.volume > 0, f"{path} watertight", f"{m.volume()/1000:.2f} cm^3, {len(tm.faces)} tris")
     # In print orientation, every point of a layer that isn't over the layer below (45 degrees
-    # allowed) must be within 2 mm of a supported point: a bridge spanning at most 4 mm.
+    # allowed) must be within 2 mm of a supported point: a bridge spanning at most BRIDGE_MAX.
     L, prev, worst = 0.3, None, (0.0, None)
     for z in np.arange(m.bounding_box()[2] + L/2, m.bounding_box()[5], L):
         cs = m.slice(z)
         if prev is not None:
             below = prev.offset(L, Round)
-            far = (cs - below) - (cs ^ below).offset(2.0, Round)
+            far = (cs - below) - (cs ^ below).offset(BRIDGE_MAX/2, Round)
             if far.area() > worst[0]: worst = (far.area(), z)
         prev = cs
     check(worst[0] < 0.1, f"{path} prints without supports",
-          "every overhang bridges <= 4 mm" if worst[0] < 0.1 else f"{worst[0]:.1f} mm^2 floating at z {worst[1]:.2f}")
+          f"every overhang bridges <= {BRIDGE_MAX:g} mm" if worst[0] < 0.1 else f"{worst[0]:.1f} mm^2 floating at z {worst[1]:.2f}")
 
 
 def renders(b, c, feats, case, plate, lid, battery, geo):
