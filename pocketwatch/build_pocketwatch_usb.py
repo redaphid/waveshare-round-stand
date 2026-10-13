@@ -23,11 +23,12 @@ from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, 
 OUT = "pocketwatch/renders/usb-"
 SHELL_LEN, MIN_PLUG_ENGAGE = 6.65, 3.5    # USB-C plug metal shell length; least engagement trusted
 BOOT_HOLE_D, PIN_D = 3.4, 2.0   # access hole through the plate over BOOT; the stylus or plunger that goes in it
-PLATE_DISC_CLR = 0.65        # plate disc inside the counterbore, per side (also keeps it off the skirt face)
+PLATE_DISC_CLR = 0.18        # plate disc inside the counterbore, per side: the size that printed and fit
+PLATE_DISC_CLR_ROOMY = 0.65  # for a print that runs oversize: 0.47 per side smaller, ~1 mm in diameter
 BACK_CHAMFER = 0.6        # smaller than the front: the back rim is only CASE_WALL thick
 
 
-def build(b: Badge, c: Case):
+def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR):
     feats, sw = features(b, c)
     R_BORE = b.r + c.RAD_CLR
     STEP = 1.2                                    # the plate sits in a counterbore this much wider than the bore
@@ -59,7 +60,7 @@ def build(b: Badge, c: Case):
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
     guides = guides ^ prism(skirt_xy.offset(-0.3, Round), 0.0, FLOOR + 0.01)
-    plate = prism(pocket.offset(-PLATE_DISC_CLR, Round), FLOOR, Z_CASE)   # PETG prints the edge out and the bore in: 0.18 was ~1 mm too tight
+    plate = prism(pocket.offset(-disc_clr, Round), FLOOR, Z_CASE)   # also keeps the disc off the skirt face
     plate += prism(skirt_xy - skirt_xy.offset(-c.SKIRT_WALL, Round), skirt_front, FLOOR + 0.01) + bead_p
     plate += guides
     plate -= all_keep
@@ -211,6 +212,10 @@ def main():
     plate_h, x, y = boot_hole_plate(b, c, plate, geo)
     run_hole_checks(b, c, feats, case, plate_h, x, y, geo)
     export(plate_h, "stl/pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl", flip)
+    _, _, plate_r, geo_r = build(b, c, PLATE_DISC_CLR_ROOMY)
+    plate_rh, _, _ = boot_hole_plate(b, c, plate_r, geo_r)
+    export(plate_r, "stl/pocketwatch/Pocketwatch USB-only - plate (roomy).stl", flip)
+    export(plate_rh, "stl/pocketwatch/Pocketwatch USB-only - plate (BOOT hole, roomy).stl", flip)
     if "--no-render" not in sys.argv:
         renders(b, c, feats, case, plate, geo)
     if FAILS:

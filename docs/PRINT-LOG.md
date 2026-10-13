@@ -17,11 +17,12 @@ Template:
 
 ## 2026-10-13 — pocketwatch USB-only, back plate (`Pocketwatch USB-only - plate.stl`)
 - material / presets: not stated
-- result: **printed, a smidge too large to fit: "like 1 mm".** Plate disc was
-  Ø39.65 in a Ø40.01 counterbore (0.18 per side). An oversize PETG outer edge
-  plus an undersize hole eats that and more.
-- fit numbers to change: plate disc clearance per side 0.18 → **0.65**
-  (`PLATE_DISC_CLR`), i.e. Ø38.7. Snap bead and skirt unchanged.
+- result: **one print came out about 1 mm too large to fit; the next print of
+  the original plate worked.** So the 0.18 mm per side clearance (Ø39.65 disc
+  in a Ø40.01 counterbore) is right when the printer is dialled in, and tight
+  when it runs oversize. Nothing changed in the default.
+- fit numbers: default stays 0.18. Added a **roomy** variant at 0.65 per side
+  (Ø38.71) as separate files, for a print that runs oversize.
 - photo: none
 
 ## 2026-10-13 — pocketwatch USB-only, case (`stl/pocketwatch/Pocketwatch USB-only - case.stl`)
