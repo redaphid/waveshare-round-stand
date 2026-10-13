@@ -22,6 +22,7 @@ from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, 
 
 OUT = "pocketwatch/renders/usb-"
 SHELL_LEN, MIN_PLUG_ENGAGE = 6.65, 3.5    # USB-C plug metal shell length; least engagement trusted
+BOOT_HOLE_D, PIN_D = 3.4, 2.0   # access hole through the plate over BOOT; the stylus or plunger that goes in it
 BACK_CHAMFER = 0.6        # smaller than the front: the back rim is only CASE_WALL thick
 
 
@@ -148,6 +149,29 @@ def run_checks(b, c, feats, case, plate, geo):
     check(abs(back - bbox(plate)[1, 2]) < 1e-3, "plate is flush with the case back", f"z {back:.2f}")
 
 
+def boot_hole_plate(b, c, plate, geo):
+    """The same plate with the post replaced by a hole straight onto the BOOT actuator, so the
+    button is pressed from behind and the glass is never touched."""
+    x, y = geo["sw"][c.BUTTON], b.sw_y
+    hole = m3.Manifold.cylinder(geo["Z_CASE"] + 1 - (b.pcb_back_z + 1.0), BOOT_HOLE_D/2, BOOT_HOLE_D/2, 64) \
+        .translate([x, y, b.pcb_back_z + 1.0])
+    return (plate - geo["post_cyl"]) - hole, x, y
+
+
+def run_hole_checks(b, c, feats, case, plate_h, x, y, geo):
+    print("\n6. BOOT access hole: a pin goes in from behind, presses the actuator, touches nothing else")
+    top = b.pcb_back_z + b.sw_cap_h                       # actuator top at rest
+    pin = lambda dz: m3.Manifold.cylinder(geo["Z_CASE"] + 8 - (top - dz), PIN_D/2, PIN_D/2, 48).translate([x, y, top - dz])
+    for dz, label in ((0.0, "at rest"), (c.SW_TRAVEL, f"pressed {c.SW_TRAVEL:.2f}")):
+        hit = sum((pin(dz) ^ m).volume() for m in (case, plate_h))
+        check(hit < 1e-3, f"{PIN_D:g} mm pin {label} clears the case and plate", f"{hit:.4f} mm^3")
+    act = next(f for f in feats if f.name == f"{c.BUTTON} actuator")
+    v = (pin(c.SW_TRAVEL) ^ act.solid()).volume()
+    check(v > 1e-3, f"pin pressed {c.SW_TRAVEL:.2f} reaches the actuator", f"{v:.3f} mm^3")
+    depth = geo["Z_CASE"] - top
+    check(depth > 0, "hole depth from the back face to the actuator", f"{depth:.1f} mm")
+
+
 def renders(b, c, feats, case, plate, geo):
     D = lambda m: m.rotate([90, 0, 0]).refine_to_length(1.0)
     brass, back_c, dark, white, green, violet = ((0.82, 0.66, 0.32), (0.66, 0.50, 0.24), (0.10, 0.10, 0.11),
@@ -181,8 +205,11 @@ def main():
     run_checks(b, c, feats, case, plate, geo)
     print()
     export(case, "stl/pocketwatch/Pocketwatch USB-only - case.stl", lambda m: m.translate([0, 0, c.LIP_T]))
-    export(plate, "stl/pocketwatch/Pocketwatch USB-only - plate.stl",
-           lambda m: m.rotate([0, 180, 0]).translate([0, 0, geo["Z_CASE"]]))
+    flip = lambda m: m.rotate([0, 180, 0]).translate([0, 0, geo["Z_CASE"]])
+    export(plate, "stl/pocketwatch/Pocketwatch USB-only - plate.stl", flip)
+    plate_h, x, y = boot_hole_plate(b, c, plate, geo)
+    run_hole_checks(b, c, feats, case, plate_h, x, y, geo)
+    export(plate_h, "stl/pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl", flip)
     if "--no-render" not in sys.argv:
         renders(b, c, feats, case, plate, geo)
     if FAILS:

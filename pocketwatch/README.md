@@ -58,3 +58,7 @@ Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch.py` from the rep
 Assembly: badge in from the back, screen first, tab in the pocket at 12 o'clock; plate snaps in flush with the back. The case wraps the tab in a small crown boss, and the USB-C slot through it is **9.6 × 4.3, flat roof, no taper**: the plug's metal shell only. 3.0 mm of boss in front of the port, so about 3.7 of the 6.65 mm shell engages. Shares `Badge` and `Case` with the battery build, so `RAD_CLR` 1.15 and the slot size apply here too.
 
 Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch_usb.py` from the repo root. Add `--no-render` for a fast check run. Not yet printed.
+
+### Press BOOT from the back (no pressure on the glass)
+
+`stl/pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl` replaces the post with a **Ø3.4 hole straight onto the BOOT actuator**, 4.7 mm deep from the back face. Push a Ø2 stylus, paperclip or SIM tool in: the pin presses the switch and the glass sits on the bezel lip, so the screen takes no load. Use this plate instead of the normal one; clicking by pressing the screen no longer works with it. A stand can put a plunger in its rear wall over the same hole.
