@@ -62,3 +62,7 @@ Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch_usb.py` from the
 ### Press BOOT from the back (no pressure on the glass)
 
 `stl/pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl` replaces the post with a **Ø3.4 hole straight onto the BOOT actuator**, 4.7 mm deep from the back face. Push a Ø2 stylus, paperclip or SIM tool in: the pin presses the switch and the glass sits on the bezel lip, so the screen takes no load. Use this plate instead of the normal one; clicking by pressing the screen no longer works with it. A stand can put a plunger in its rear wall over the same hole.
+
+## Stands and clips (overnight designs, 2026-10-13)
+
+Ten unprinted concepts, each with its own script, STLs, renders and README: stands `pocketwatch/stands/{pedestal,hoop,hood,kickstand,scissor}/`, clips `pocketwatch/clips/{sidepod,stalk,lowprofile}/`, style families `pocketwatch/styles/{braun,te}/` (a stand and a clip each). STLs mirror under `stl/pocketwatch/`. Overview: `docs/gallery/overnight-designs-2026-10-13.png`. All generated and unreviewed beyond the renders; print one test part first.
