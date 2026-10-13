@@ -15,6 +15,23 @@ Template:
 
 ---
 
+## 2026-10-12 — pocketwatch v2, plate + case (`pocketwatch/Pocketwatch - plate.stl`, `- case.stl`)
+- material / presets: not stated (default presets assumed)
+- result, in his words, from memory (the print is lost): "the back plate is
+  great!" On the case: "a deep 'lip' of plastic before the screen. Like half an
+  inch", and no room behind the screen for the battery, "as if the depth of the
+  chambers had to be reversed."
+- reading: the model has **1.2 mm** in front of the glass, not ~12. The badge
+  must have **stopped on the plate step** (8.85 + 1.2 ≈ 10 mm behind the
+  bezel) instead of dropping through the bore to the lip, which also leaves the
+  battery no room. Either the bore printed too small (Ø35.81 bore cut for the
+  caliper 35.31; Waveshare's drawing says Ø36.5; PETG holes print undersize) or
+  the tab missed its slot.
+- photo: none.
+- fit numbers to change: none yet. Printed `Pocketwatch - bore fit gauge.stl`
+  first: four rings at `RAD_CLR` 0.25 / 0.55 / 0.85 / 1.15. The tightest ring
+  that lets the glass sit flat on the lip sets `RAD_CLR`.
+
 ## 2026-09-20 — 1.28 BOOT button stand, 5.4 mm groove (`small/Stand - BOOT button.stl`)
 - material / presets: black filament — not the usual blue; presets not stated
 - result: **the badge seats.** Two photos. Side-on: rim fully down in the

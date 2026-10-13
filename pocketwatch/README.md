@@ -31,4 +31,17 @@ Measured and trusted: Ø35.31 envelope, 38.64 tip to far edge, tab 16.25 / 15.38
 
 Headers' y position is not measured, and the design doesn't need it. The guides grip in x only and are open in y. The round board in the bore plus the tab in its slot locate y and rotation.
 
+## Bore fit gauge (print this before the case)
+
+v2's badge stopped on the plate step instead of reaching the bezel lip. `stl/pocketwatch/Pocketwatch - bore fit gauge.stl` is the front of the case only, as four rings. Print it bezel down, about 10 minutes.
+
+| ring | dots | bore | `RAD_CLR` |
+|---|---|---|---|
+| 1 | 1 | Ø35.8 | 0.25 (v2) |
+| 2 | 2 | Ø36.4 | 0.55 |
+| 3 | 3 | Ø37.0 | 0.85 |
+| 4 | 4 | Ø37.6 | 1.15 |
+
+Drop the badge in from the back, screen first, tab in the slot. **The tightest ring where the glass sits flat on the lip** is the `RAD_CLR` to use. Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_bore_gauge.py`.
+
 Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch.py` from the repo root. Add `--no-render` for a fast check run.
