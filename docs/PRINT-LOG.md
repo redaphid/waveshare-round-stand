@@ -15,6 +15,15 @@ Template:
 
 ---
 
+## 2026-10-13 — button back plate (`… - plate (button).stl` / `Hoop stand - back plate (button).stl`)
+- material / presets: not stated
+- result: **printed; the rest is OK, but the finger dimple came out melted and
+  deformed.** The plate prints back face down, so the Ø4 x 0.4 dimple was a
+  hole in the first layer on the bed: too small and too shallow for a 0.6 nozzle.
+- fit numbers to change: dimple removed. The U-slot is cut clear through, so
+  the tab already shows on the back face; that outline marks the button.
+- photo: none
+
 ## 2026-10-13 — hoop stand, base + hoop and case (`stl/pocketwatch/stands/hoop/`)
 - material / presets: not stated
 - result: **printed.** "The case is slightly too loose to snap in to the base":

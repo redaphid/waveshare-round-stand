@@ -8,7 +8,7 @@
 |---|---|---|---|
 | **hoop + case** | `Hoop stand - hoop and case.stl` | bezel down, as exported | one piece; same case as the USB-only build |
 | **base** | `Hoop stand - base.stl` | flat, as exported | **100% infill**: it's the ballast |
-| **back plate** | `Hoop stand - back plate (button).stl` | flat back down | BOOT button: push the plastic at the dimple on the back. `(BOOT hole)` is the stylus-hole alternative; `roomy` variants if a plate runs tight |
+| **back plate** | `Hoop stand - back plate (button).stl` | flat back down | BOOT button: push the U-shaped tab on the back. `(BOOT hole)` is the stylus-hole alternative; `roomy` variants if a plate runs tight |
 
 No supports on any part, and no hardware. The base also comes as `base (roomier, 0.18)` for a printer that runs tight (the default mortise is 0.12 per side).
 
@@ -16,7 +16,7 @@ No supports on any part, and no hardware. The base also comes as `base (roomier,
 1. Put the **badge** in the case from the back, screen first, with the tab in the crown slot. **Snap the plate** in flush.
 2. **Push the neck straight down** into the slot in the base, which leans back 20°. The two arms on the tenon flex in, ride over the barbs' ramps and **click** into their notches. A firm push (a few N) does it. To remove, pull the hoop straight up with about 30 N.
 3. **Plug the cable** into the crown. Loop it back and press it into the **keyhole groove** at the back of the base. The groove grips 3.5–4.5 mm cable at desk height.
-4. **BOOT:** press the dimple on the back of the plate with a fingertip: the little tab flexes and its post clicks BOOT. (With the `BOOT hole` plate instead, push a Ø2 pin or a SIM tool straight into the hole.) There are 40 mm of clear path behind it, 11 mm to the side of the cable.
+4. **BOOT:** press the U-shaped tab on the back of the plate with a fingertip: the little tab flexes and its post clicks BOOT. (With the `BOOT hole` plate instead, push a Ø2 pin or a SIM tool straight into the hole.) There are 40 mm of clear path behind it, 11 mm to the side of the cable.
 
 ## The numbers (all asserted by the script)
 | what | value |

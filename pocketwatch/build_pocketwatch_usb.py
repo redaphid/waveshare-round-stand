@@ -73,7 +73,6 @@ def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR, button=False):
     if button:
         disc -= prism(slot, FLOOR - 1, Z_CASE + 1)                        # the U-slot, clear through
         disc -= prism(tab, FLOOR - 1, FLOOR + TAB_T)                       # thin the tab from the front: the bed side stays flat
-        disc -= prism(circle(2.0).translate([px, py]), Z_CASE - 0.4, Z_CASE + 1)   # a finger dimple on the back, over the post
     plate = disc
     ring = prism(skirt_xy - skirt_xy.offset(-c.SKIRT_WALL, Round), skirt_front, FLOOR + 0.01)
     if button:
