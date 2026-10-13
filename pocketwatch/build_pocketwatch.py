@@ -257,14 +257,17 @@ def build(b: Badge, c: Case):
     case -= groove_p + groove_l
     case -= all_keep
     # The recess ceiling is the chamber wall spanning 14 mm: a flat roof prints as a floating
-    # bridge. A 45-degree pointed arch above it is self-supporting in the bezel-down print.
+    # bridge. Chamfering the top corners at 45 degrees leaves a flat roof of ROOF_FLAT, short enough to
+    # bridge, and is self-supporting in the bezel-down print.
     w = c.RECESS_W/2 + c.XY_CLR
     z_top = b.port_z + c.RECESS_T/2 + c.FLOAT
     y0, L = b.tip_y - c.XY_CLR, R_OUT + 2 - (b.tip_y - c.XY_CLR)
-    arch = m3.Manifold.extrude(m3.CrossSection([[(-w, z_top - 0.01), (w, z_top - 0.01), (0, z_top + w)]]), L)
+    ROOF_FLAT = 3.8
+    h = w - ROOF_FLAT/2
+    arch = m3.Manifold.extrude(m3.CrossSection([[(-w, z_top - 0.01), (w, z_top - 0.01), (ROOF_FLAT/2, z_top + h), (-ROOF_FLAT/2, z_top + h)]]), L)
     arch = arch.rotate([90, 0, 0]).translate([0, y0 + L, 0])
     ab = bbox(arch)
-    assert abs(ab[0, 1] - y0) < 1e-3 and abs(ab[1, 2] - (z_top + w)) < 1e-3, f"arch misplaced: {ab}"
+    assert abs(ab[0, 1] - y0) < 1e-3 and abs(ab[1, 2] - (z_top + h)) < 1e-3, f"arch misplaced: {ab}"
     case -= arch
 
     hdrs = [f for f in feats if f.name.startswith("header")]
