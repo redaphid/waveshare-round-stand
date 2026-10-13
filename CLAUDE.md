@@ -3,6 +3,8 @@
 Read this first. It is the project-specific layer; Aaron's general rules live in
 his vault (`kb/procedures/working-with-aaron-read-first.md`) and still apply.
 
+Also read `AGENTS.md`: after any pocketwatch change, update the whiteboard.
+
 ## What this is
 
 Printable mounts for Waveshare's round ESP32-S3 display boards, for Aaron's
