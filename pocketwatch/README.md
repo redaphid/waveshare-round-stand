@@ -45,3 +45,16 @@ v2's badge stopped on the plate step instead of reaching the bezel lip. `stl/poc
 **Result (10-13): ring 4 fits; `RAD_CLR` is now 1.15.** Drop the badge in from the back, screen first, tab in the slot. **The tightest ring where the glass sits flat on the lip** is the `RAD_CLR` to use. Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_bore_gauge.py`.
 
 Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch.py` from the repo root. Add `--no-render` for a fast check run.
+
+## USB-only variant (no battery)
+
+**Ø43.6 × 12.5 mm, two parts, powered only through the USB-C cable.** Same badge, bore, header grips and BOOT post as the battery case; no chamber, no lid.
+
+| print | file | orientation | supports |
+|---|---|---|---|
+| **case** | `stl/pocketwatch/Pocketwatch USB-only - case.stl` | bezel face down, as exported | none |
+| **plate** | `stl/pocketwatch/Pocketwatch USB-only - plate.stl` | flat back down, guides and post up, as exported | none |
+
+Assembly: badge in from the back, screen first, tab in the 12 o'clock opening; plate snaps in flush with the back. The USB-C opening is the tab pocket cut right through the back face, so there is no roof to bridge and the cable leaves straight out. Shares `Badge` and `Case` with the battery build, so `RAD_CLR` 1.15 applies here too.
+
+Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch_usb.py` from the repo root. Add `--no-render` for a fast check run. Not yet printed.
