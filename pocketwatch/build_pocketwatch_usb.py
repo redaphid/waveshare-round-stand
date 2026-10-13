@@ -23,6 +23,7 @@ from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, 
 OUT = "pocketwatch/renders/usb-"
 SHELL_LEN, MIN_PLUG_ENGAGE = 6.65, 3.5    # USB-C plug metal shell length; least engagement trusted
 BOOT_HOLE_D, PIN_D = 3.4, 2.0   # access hole through the plate over BOOT; the stylus or plunger that goes in it
+PLATE_DISC_CLR = 0.65        # plate disc inside the counterbore, per side (also keeps it off the skirt face)
 BACK_CHAMFER = 0.6        # smaller than the front: the back rim is only CASE_WALL thick
 
 
@@ -58,7 +59,7 @@ def build(b: Badge, c: Case):
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
     guides = guides ^ prism(skirt_xy.offset(-0.3, Round), 0.0, FLOOR + 0.01)
-    plate = prism(pocket.offset(-c.FIT_CLR - 0.03, Round), FLOOR, Z_CASE)   # 0.03 in: never share a face with the skirt
+    plate = prism(pocket.offset(-PLATE_DISC_CLR, Round), FLOOR, Z_CASE)   # PETG prints the edge out and the bore in: 0.18 was ~1 mm too tight
     plate += prism(skirt_xy - skirt_xy.offset(-c.SKIRT_WALL, Round), skirt_front, FLOOR + 0.01) + bead_p
     plate += guides
     plate -= all_keep

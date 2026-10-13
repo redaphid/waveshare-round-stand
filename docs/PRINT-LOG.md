@@ -15,6 +15,15 @@ Template:
 
 ---
 
+## 2026-10-13 — pocketwatch USB-only, back plate (`Pocketwatch USB-only - plate.stl`)
+- material / presets: not stated
+- result: **printed, a smidge too large to fit: "like 1 mm".** Plate disc was
+  Ø39.65 in a Ø40.01 counterbore (0.18 per side). An oversize PETG outer edge
+  plus an undersize hole eats that and more.
+- fit numbers to change: plate disc clearance per side 0.18 → **0.65**
+  (`PLATE_DISC_CLR`), i.e. Ø38.7. Snap bead and skirt unchanged.
+- photo: none
+
 ## 2026-10-13 — pocketwatch USB-only, case (`stl/pocketwatch/Pocketwatch USB-only - case.stl`)
 - material / presets: not stated
 - result: **printed.** "Case is a great fit" (badge seats with `RAD_CLR` 1.15,
