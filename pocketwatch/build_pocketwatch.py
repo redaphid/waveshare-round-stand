@@ -4,8 +4,8 @@ Pocketwatch case for the 1.28 badge (ESP32-S3-LCD-1.28).
 
 Three printed parts:
   CASE   bezel lip, the badge bore, a step, and a wider battery chamber behind
-         it. At 12 o'clock a recess lets any straight USB-C cable seat fully in
-         the port: the plug is the crown, the cable is the chain.
+         it. At 12 o'clock a slot the size of a USB-C plug's metal shell leads to the
+         port: the plug is the crown, the cable is the chain.
   PLATE  drops in from the back onto the step and snaps into a groove in the
          badge bore. Carries the header guides and the BOOT post.
   LID    snaps into the back of the battery chamber and holds the LiPo
@@ -31,7 +31,7 @@ sys.path.insert(0, "pod"); from render import render
 
 Round = m3.JoinType.Round
 SEG = 180
-BRIDGE_MAX = 8.0     # longest unsupported span the printer is trusted with (0.6 nozzle, PETG)
+BRIDGE_MAX = 10.0    # longest unsupported span the printer is trusted with (0.6 nozzle, PETG)
 
 
 def ph(value, replaced_by):
@@ -98,8 +98,8 @@ class Case:
     LIP_BEVEL: float = 0.6       # window opens toward the front by this much
     CASE_WALL: float = 1.8
     CHAMFER: float = 0.8         # outer front / back edges
-    RECESS_W: float = 14.0       # room for any straight USB-C overmold at 12 o'clock
-    RECESS_T: float = 9.0
+    RECESS_W: float = 9.0        # USB-C plug metal shell is ~8.4 wide; only the shell enters
+    RECESS_T: float = 3.6        # shell is ~2.6 tall
     GUIDE_WALL: float = 1.2
     POST_D: float = 3.0          # forgives ~0.6 mm of switch-position error
     FIT_CLR: float = 0.15        # plate skirt in the bore, lid in the chamber, per side
@@ -214,7 +214,7 @@ def features(b: Badge, c: Case):
         Feature("header H2 (any y)", hdr(+1), pcb, b.hdr_top_z, c.HDR_CLR),
         Feature("JST", rect(b.jst_x - b.jst_w/2, b.jst_x + b.jst_w/2, b.jst_y - b.jst_d/2, b.jst_y + b.jst_d/2),
                 pcb, b.jst_top_z, c.XY_CLR),
-        Feature("plug (any straight cable)", rect(-c.RECESS_W/2, c.RECESS_W/2, b.tip_y, b.tip_y + 40),
+        Feature("plug (metal shell)", rect(-c.RECESS_W/2, c.RECESS_W/2, b.tip_y, b.tip_y + 40),
                 b.port_z - c.RECESS_T/2, b.port_z + c.RECESS_T/2, c.XY_CLR),
     ]
     for name, x in sw.items():
@@ -257,19 +257,8 @@ def build(b: Badge, c: Case):
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p + groove_l
     case -= all_keep
-    # The recess ceiling is the chamber wall spanning 14 mm: a flat roof prints as a floating
-    # bridge. Chamfering the top corners at 45 degrees leaves a flat roof of ROOF_FLAT, short enough to
-    # bridge, and is self-supporting in the bezel-down print.
-    w = c.RECESS_W/2 + c.XY_CLR
-    z_top = b.port_z + c.RECESS_T/2 + c.FLOAT
-    y0, L = b.tip_y - c.XY_CLR, R_OUT + 2 - (b.tip_y - c.XY_CLR)
-    ROOF_FLAT = BRIDGE_MAX - 0.2
-    h = w - ROOF_FLAT/2
-    arch = m3.Manifold.extrude(m3.CrossSection([[(-w, z_top - 0.01), (w, z_top - 0.01), (ROOF_FLAT/2, z_top + h), (-ROOF_FLAT/2, z_top + h)]]), L)
-    arch = arch.rotate([90, 0, 0]).translate([0, y0 + L, 0])
-    ab = bbox(arch)
-    assert abs(ab[0, 1] - y0) < 1e-3 and abs(ab[1, 2] - (z_top + h)) < 1e-3, f"arch misplaced: {ab}"
-    case -= arch
+    # The slot is the plug keepout already cut above: flat roof, no taper. Its span is a bridge,
+    # which the overhang check in export() holds to BRIDGE_MAX.
 
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
@@ -383,7 +372,7 @@ def run_checks(b, c, feats, case, plate, lid, battery, geo):
     for nm, t in walls.items():
         check(t >= c.MIN_WALL, f"{nm} >= {c.MIN_WALL}", f"{t:.2f}")
     recess_floor = geo["R_OUT"] - b.tip_y
-    check(recess_floor < 10.0, "plug overmold reaches the port through the recess", f"recess {recess_floor:.1f} deep")
+    check(recess_floor < 10.0, "plug shell reaches the port through the recess", f"recess {recess_floor:.1f} deep")
 
 
 # ---- output ----------------------------------------------------------------

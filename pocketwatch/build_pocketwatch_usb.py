@@ -60,6 +60,8 @@ def build(b: Badge, c: Case):
     plate += prism(skirt_xy - skirt_xy.offset(-c.SKIRT_WALL, Round), skirt_front, FLOOR + 0.01) + bead_p
     plate += guides
     plate -= all_keep
+    # the tab pocket reaches past the plate's round edge: a skirt wall there would hang in the air
+    plate ^= prism(circle(R_REAR - c.FIT_CLR), -10, Z_CASE + 1)
     tip_z = b.pcb_back_z + b.sw_cap_h + c.REST_CLR
     post_cyl = m3.Manifold.cylinder(FLOOR + 0.01 - tip_z, c.POST_D/2, c.POST_D/2, 64).translate([sw[c.BUTTON], b.sw_y, tip_z])
     plate += post_cyl - union(k for n, k in keep.items() if not n.startswith(c.BUTTON))
