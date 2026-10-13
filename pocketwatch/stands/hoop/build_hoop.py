@@ -536,7 +536,7 @@ def dial(b):
     return union(ticks), hour + minute, sec_, hub
 
 
-def renders(s, b, c, feats, case, plate_h, base, geo, F, cable, plug, alt):
+def renders(s, b, c, feats, case, plate_h, base, geo, F, cable, plug, alt, plate_btn=None):
     rf = lambda m, L=1.0: m.refine_to_length(L)
     brass, plate_c, dark, white, red, steel, walnut, black, cream = (
         (0.84, 0.67, 0.33), (0.66, 0.50, 0.24), (0.07, 0.07, 0.09), (0.95, 0.95, 0.90), (0.88, 0.22, 0.18),
@@ -596,12 +596,12 @@ def renders(s, b, c, feats, case, plate_h, base, geo, F, cable, plug, alt):
     mv = lambda m, v: m.translate(list(v))
     hoop_up = 34*up
     ex = [(rf(mv(F.W(case), hoop_up)), brass), (rf(mv(F.W(disc_tab), hoop_up + 26*back)), dark),
-          (rf(mv(F.W(plate_h), hoop_up + 46*back)), plate_c), (rf(base, 1.6), walnut)]
+          (rf(mv(F.W(plate_btn if plate_btn is not None else plate_h), hoop_up + 46*back)), plate_c), (rf(base, 1.6), walnut)]
     for f in feats:
         if f.name.startswith(("header", "JST", "BOOT", "RESET")):
             ex.append((rf(mv(F.W(f.solid()), hoop_up + 26*back), 0.8), white))
     render(ex, OUT + "07-exploded.png", elev=10, azim=150, zoom=1.0, light=(0.45, 0.75, 0.5),
-           title="Assembly: badge in from the back, plate snaps on; hoop pushes down its neck until the arms click")
+           title="Exploded: base, hoop + case, badge, button plate. Badge in from the back, plate snaps on, hoop clicks into the base")
 
 
 s_screw = {}
@@ -671,10 +671,11 @@ def main():
     for clr, tag in ((U.PLATE_DISC_CLR, "button"), (U.PLATE_DISC_CLR_ROOMY, "button, roomy")):
         _, _, plate_b, _ = U.build(b, c, clr, button=True)
         export(plate_b, STL + f"Hoop stand - back plate ({tag}).stl", flip)
+        if tag == "button": plate_btn = plate_b
     tot = bbox(F.W(case) + base + body)
     print(f"\nStanding: {tot[1, 0] - tot[0, 0]:.0f} wide x {tot[1, 1] - tot[0, 1]:.0f} deep x {tot[1, 2]:.0f} tall to the plug top")
     if "--no-render" not in sys.argv:
-        renders(s, b, c, feats, case, plate_h, base, geo, F, cable, (body, shell, boot), (a_case, a_base))
+        renders(s, b, c, feats, case, plate_h, base, geo, F, cable, (body, shell, boot), (a_case, a_base), plate_btn)
     if FAILS:
         sys.exit("FAILED: " + "; ".join(FAILS))
     print("all checks passed")
