@@ -45,3 +45,5 @@ Coworkers with printers and the same 1.28 board should be able to make their own
 
 - No print result yet for pocketwatch v2. Log it in `docs/PRINT-LOG.md` when it comes.
 - The USB-C-down dock (`stl/small/Dock for right-angle cable - USB-C down.stl`) missed on print. Its model used drawing numbers that the calipers later corrected. It's superseded by the pocketwatch direction, so it hasn't been fixed.
+
+- **Board stale (2026-10-14):** draw MCP was down. Not on the board yet: USB-C slot 14.0 x 8.3 (label lblrec says 10.0 x 4.3) and the pry notch at 10 o clock (commit 0796ba6).
