@@ -42,7 +42,10 @@ Full tables in `BOARDS.md`. The ones that change designs:
   **ElegooSlicer** on Windows, `D:\tools\ElegooSlicer\elegoo-slicer.exe`.
   Presets that match his last good print: printer `Elegoo Centauri Carbon 2
   0.6 nozzle`, process `0.30mm Standard @Elegoo CC2 0.6 nozzle - Copy`,
-  filament `PRUSA Strontium` = **PETG 260/85**, not PLA.
+  filament `PRUSA Strontium` = PETG 260/85 (the old preset).
+- **He prints the pocketwatch family in PLA** (said 2026-10-14). Design for PLA:
+  E ≈ 2500 MPa, brittle, so anything that flexes repeatedly stays ≤ 1% strain;
+  flex-once snaps ≤ 1.5%. The scripts' `PETG_E` / `E = 1500` constants predate this.
 - **He slices in the GUI.** The CLI does not work headlessly — see
   `docs/TOOLCHAIN.md` before spending time on it again.
 
