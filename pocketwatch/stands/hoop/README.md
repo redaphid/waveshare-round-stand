@@ -69,3 +69,53 @@ Printed with the screw joint: the case wobbled in the mortise at 0.25 mm per sid
 - The forces come from a linear beam-and-spring model, not FEA. The switch force (2 N) and the BOOT position (±1 mm) are still guesses.
 - Pressing the outer edge of the pad to the stop twists the nub 0.93 mm sideways, against a 1.35 mm margin. A press leaning more than 18° slides the stand; a flat key invites a straight press, and rubber feet would fix it.
 - Gravity, the heel hook and the plate retain the rocker, so shaken upside down it could work loose. The blade's fatigue life at 1% strain is untested. The slot leaves a small notch at the back of the tier.
+
+## Telegraph key: the badge leans back 40°, BOOT is a brass key (2026-10-14)
+**Press the brass knob at the front. The lever turns on a pin between two posts, and its short rear arm tips up into the button plate's flush BOOT tab. BOOT clicks after 3.2 mm of knob travel (2.6–3.8 across the gap tolerance) at about 1.75 N. At 4.2 mm the lever lands on an anvil, so a hard press goes into the base, never into the switch.** The face leans 40° back (the hoop stand leans 20°), so the badge looks up more. Rebuild: `~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_telegraph.py` from the repo root (both angles, 196 checks, `--no-render` is faster). `build_hoop.py` is unchanged.
+
+**Choose the lean** (`renders/telegraph-angles.png`):
+
+| lean | glass centre | height | stand footprint | plug | tip angle, 1 N cable pull |
+|---|---|---|---|---|---|
+| **40° (default)** | 40 mm up | 75 mm | Ø70 | inside the Ø76 base | 24.0° |
+| 50° | 37 mm up | 66 mm | Ø75 | 12 mm past the rim | 24.8° |
+
+55° doesn't fit Ø76. At 55° the tilted hoop and neck alone run 75 mm front to back, before the mortise wall and the knob.
+
+| print (`stl/pocketwatch/stands/hoop/`) | orientation | notes |
+|---|---|---|
+| `Hoop stand telegraph - hoop and case (40 deg).stl` | bezel down | the same hoop, with the tenon cut for the new lean |
+| `Hoop stand telegraph - base (40 deg).stl` | flat | **100% infill**: it's the ballast. Has the posts, anvil, back stop and a low plinth round the mortise |
+| `Hoop stand telegraph - lever (40 deg).stl` | on its side, as exported | 2.1 g. Every arm and the hairpin spring bend along the layers |
+| `Hoop stand telegraph - knob.stl` | upright | snaps onto the lever's split peg |
+| `Hoop stand telegraph - pin.stl` | on its flat | Ø3, with a head on one end and a split, barbed end on the other |
+| `Hoop stand - back plate (button).stl` | unchanged | **must be the button plate** |
+
+For 50°, use the `(50 deg)` hoop, base and lever. The knob and pin fit both.
+
+**Assembly:**
+1. Lower the lever between the posts. The hairpin's foot touches the base first.
+2. Push the pin in from the outside (the right) until its split end clicks past the inner post.
+3. Press the knob onto the peg until it clicks.
+4. Fit the badge and plate into the hoop, then push the hoop down its neck until it clicks. The plate slides past the nub with 0.5 mm to spare (0.2 at worst). **To take the plate off, lift the hoop out first.**
+
+| number (all asserted, 40°) | value |
+|---|---|
+| lever | nub arm 12.1, knob arm 23.1: **2:1**. The rear arm is 17° steeper than the plate so the pin clears the case rim. The nub then pushes 17° off square and slides 0.1 mm on the tab before the switch bottoms |
+| gap G (nub to tab) 0.2 / 0.5 / 0.8 | click at 2.6 / 3.2 / 3.8 mm of knob travel. The anvil stops the knob at 4.2 |
+| push on the tab at the stop | at most **7.6 N** at the smallest gap (switch 6.4 + tab spring 1.2), against a limit of 8 |
+| why the blade bends | ±0.3 of gap is ±0.6 at the knob. Once the switch bottoms, the front blade (1.5 thick, tapering to 1.0) bends, up to 2.7 mm. It's sized so the worst case stays under 8 N. A 30 N press lands on the anvil |
+| strain (PLA, 1% limit for every-press parts) | blade 0.93%, rear arm 0.1%, hairpin 0.3%, plate tab 0.56%. Snap-once parts (limit 1.5%): pin 0.90%, knob peg 0.98%, hoop arms 1.21% |
+| pin and posts | 9.5 N on the pin, 7.5 MPa along its layers. The posts see 1.2 MPa across theirs (limit 10) |
+| return | the hairpin holds the knob up with 2.1 N·mm, 15× the key's own weight. The heel on the back stop sets the gap |
+| stability | tip angle 24.0° with 1 N on the cable. 6 N straight down on the knob can't tip it (26°). A press can lean 19° before the 76 g stand slides (μ 0.3), and leaning that far it still can't tip |
+| clearances | 0.4 to the base, posts and hoop through the whole swing. The nub lands on the tab only, even 0.7 off in any direction |
+| hoop joint | plinth 10 tall, mortise 8.5 deep, FIT 0.08. Snaps in at 3.6 N; pulling it out takes 54 N (PLA) |
+
+**Honest weaknesses**
+- **The blade flexes on purpose.** About 1 mm of the 3.2 mm to the click is the blade bending. A stiffer blade I tried first (0.2 mm/N) put 16 N on the switch at the smallest gap. If the printed blade is softer than the model, the click comes later: there's 0.4 mm of knob travel to spare at the largest gap. If a print doesn't click, lower the anvil (reprint the base) rather than stiffening the blade.
+- At the nominal gap the click comes at 3.2 mm, a little over the 2.5–3 target.
+- The forces come from linear beam models, not FEA. The switch force (2 N) and the BOOT position (±1 mm) are still guesses. G ±0.3 is assumed, with the pin's 0.15 clearance and the tenon's play counted inside it.
+- There are four new prints (base, lever, knob, pin) against the rocker's two, and the pin and knob are small parts.
+- At 50° the mortise roof is a 50° overhang. It passes the bridge check but prints as stair-steps. The plug also hangs 12 mm past the rim.
+- The hairpin's foot slides about 1.5 mm on the base with every press.
