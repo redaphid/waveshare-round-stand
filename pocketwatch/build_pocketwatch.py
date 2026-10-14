@@ -100,6 +100,8 @@ class Case:
     CHAMFER: float = 0.8         # outer front / back edges
     RECESS_W: float = 9.4        # USB-C plug metal shell is ~8.4 wide; 9.0 pinched the plastic on some cables
     RECESS_T: float = 3.6        # shell is ~2.6 tall
+    RECESS_GROW: float = 2.0     # the slot is cut this much bigger all round: 10.0 x 4.3 was too tight (2026-10-14)
+    RECESS_CH: float = 2.4       # 45 deg roof corners: the 14.0 slot's flat roof bridges 9.2, under BRIDGE_MAX
     GUIDE_WALL: float = 1.2
     POST_D: float = 3.0          # forgives ~0.6 mm of switch-position error
     FIT_CLR: float = 0.15        # plate skirt in the bore, lid in the chamber, per side
@@ -132,16 +134,28 @@ class Feature:
     z0: float
     z1: float
     fit: float           # sideways clearance any printed material keeps
+    chamfer: float = 0.0  # 45 deg off the two top (back) corners along y: keeps a wide slot's roof a short bridge
+    grow: float = 0.0     # extra room all round in the cut only (the solid stays the real part)
 
     def solid(self, dz=0.0):
         return prism(self.outline, self.z0 + dz, self.z1 + dz)
 
     def grown(self):
         # Miter: a Round offset of a polygonal circle adds micro-arcs whose vertices pinch on export
-        return self.outline.offset(self.fit, m3.JoinType.Miter, 4.0)
+        return self.outline.offset(self.fit + self.grow, m3.JoinType.Miter, 4.0)
 
     def keepout(self, rear):
-        return prism(self.grown(), self.z0, self.z1 + rear)
+        k = prism(self.grown(), self.z0 - self.grow, self.z1 + rear + self.grow)
+        return k - top_chamfers(self.grown(), self.z1 + rear + self.grow, self.chamfer) if self.chamfer else k
+
+
+def top_chamfers(outline, zt, ch):
+    """Two 45 deg wedges along y at the top x-corners of an outline's bounding box, ch on each leg."""
+    x0, y0, x1, y1 = outline.bounds()
+    tris = [[(x1 - ch - 1, zt + 1), (x1 + 1, zt + 1), (x1 + 1, zt - ch - 1)],
+            [(x0 - 1, zt + 1), (x0 + ch + 1, zt + 1), (x0 - 1, zt - ch - 1)]]
+    cs = m3.CrossSection([t if m3.CrossSection([t]).area() > 0 else t[::-1] for t in tris])
+    return m3.Manifold.extrude(cs, y1 - y0 + 2).transform(np.array([[1, 0, 0, 0], [0, 0, 1, y0 - 1], [0, 1, 0, 0]], float))
 
 
 # ---- 2D/3D helpers ---------------------------------------------------------
@@ -215,7 +229,7 @@ def features(b: Badge, c: Case):
         Feature("JST", rect(b.jst_x - b.jst_w/2, b.jst_x + b.jst_w/2, b.jst_y - b.jst_d/2, b.jst_y + b.jst_d/2),
                 pcb, b.jst_top_z, c.XY_CLR),
         Feature("plug (metal shell)", rect(-c.RECESS_W/2, c.RECESS_W/2, b.tip_y, b.tip_y + 40),
-                b.port_z - c.RECESS_T/2, b.port_z + c.RECESS_T/2, c.XY_CLR),
+                b.port_z - c.RECESS_T/2, b.port_z + c.RECESS_T/2, c.XY_CLR, c.RECESS_CH, c.RECESS_GROW),
     ]
     for name, x in sw.items():
         out.append(Feature(f"{name} housing", m3.CrossSection.square([b.sw_body]*2, True).translate([x, b.sw_y]),

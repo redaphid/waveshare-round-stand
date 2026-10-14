@@ -27,7 +27,8 @@ PLATE_DISC_CLR = 0.18        # plate disc inside the counterbore, per side: the 
 PLATE_DISC_CLR_ROOMY = 0.65  # for a print that runs oversize: 0.47 per side smaller, ~1 mm in diameter
 TAB_R, TAB_GAP, TAB_L, TAB_T = 2.2, 0.65, 12.0, 1.2   # BOOT button flexure: tab half-width, slot, length to the root, thickness
 PETG_E = 1500.0           # MPa, along the layers
-BACK_CHAMFER = 0.6        # smaller than the front: the back rim is only CASE_WALL thick
+PRY_DEG, PRY_W, PRY_DEPTH = 120.0, 5.0, 1.0   # pry notch at 10 o'clock (seen from the front): the plate printed too tight to get off
+BACK_CHAMFER = 0.6       # smaller than the front: the back rim is only CASE_WALL thick
 
 
 def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR, button=False):
@@ -58,6 +59,10 @@ def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR, button=False):
     case -= prism(circle(R_REAR), FLOOR, Z_CASE + 1)
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p
+    # pry notch: a slot through the back rim, cut PRY_DEPTH under the plate's edge, so a screwdriver or coin can
+    # lever a tight plate out without loosening the snap
+    pry = rect(R_BORE + 0.3, R_OUT + 1.0, -PRY_W/2, PRY_W/2).rotate(PRY_DEG)
+    case -= prism(pry, FLOOR - PRY_DEPTH, Z_CASE + 1)
     case -= all_keep
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)

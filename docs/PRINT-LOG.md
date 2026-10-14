@@ -15,6 +15,17 @@ Template:
 
 ---
 
+## 2026-10-14 — USB-only family case + button plate
+- material / presets: **PLA**
+- result: "The case around the device is so tight I can't pry it back off." And
+  the USB-C opening "needs to be 2 mm larger all around".
+- fit numbers to change: snap left as tight as it is; a **pry notch** (5 wide,
+  1 mm under the plate's edge, 10 o'clock seen from the front) added to every
+  USB-only-family case. New `Case.RECESS_GROW` **2.0** cuts the slot 2 mm bigger
+  all round (10.0 × 4.3 → **14.0 × 8.3**, measured 14.0 in the STL), with 45°
+  roof corners (`RECESS_CH` 2.4) so the roof still bridges under 10 mm.
+- photo: none
+
 ## 2026-10-13 — hoop stand front-BOOT, base + rocker (`Hoop stand front-BOOT - base.stl`, `- rocker.stl`)
 - material / presets: not stated
 - result: **printed; "pretty close to good."** The key works the lever, but
