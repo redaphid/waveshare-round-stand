@@ -98,7 +98,7 @@ class Case:
     LIP_BEVEL: float = 0.6       # window opens toward the front by this much
     CASE_WALL: float = 1.8
     CHAMFER: float = 0.8         # outer front / back edges
-    RECESS_W: float = 9.0        # USB-C plug metal shell is ~8.4 wide; only the shell enters
+    RECESS_W: float = 9.4        # USB-C plug metal shell is ~8.4 wide; 9.0 pinched the plastic on some cables
     RECESS_T: float = 3.6        # shell is ~2.6 tall
     GUIDE_WALL: float = 1.2
     POST_D: float = 3.0          # forgives ~0.6 mm of switch-position error

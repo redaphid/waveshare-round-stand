@@ -10,7 +10,7 @@
 | **base** | `Hoop stand - base.stl` | flat, as exported | **100% infill**: it's the ballast |
 | **back plate** | `Hoop stand - back plate (button).stl` | flat back down | BOOT button: push the U-shaped tab on the back. `(BOOT hole)` is the stylus-hole alternative; `roomy` variants if a plate runs tight |
 
-No supports on any part, and no hardware. The base also comes as `base (roomier, 0.18)` for a printer that runs tight (the default mortise is 0.12 per side).
+No supports on any part, and no hardware. The default mortise is 0.08 per side (0.12 printed loose). The base also comes as `base (looser, 0.12)` and `base (roomier, 0.18)` for a printer that runs tight.
 
 ## Assembly
 1. Put the **badge** in the case from the back, screen first, with the tab in the crown slot. **Snap the plate** in flush.
@@ -42,8 +42,10 @@ No supports on any part, and no hardware. The base also comes as `base (roomier,
 ## Print result (2026-10-13), then the snap
 Printed with the screw joint: the case wobbled in the mortise at 0.25 mm per side. The snap version replaces the screw: two 1.5 mm arms on the tenon, a 0.45 mm barb each, 8.3 mm of flex length (1.1% strain, push-in about 2 N before friction, pull-out about 29 N, above a 20 N plug pull). The mortise is 0.12 per side. The screw version is in `archive/hoop-screw-v1/`. Not printed yet.
 
-## Front-BOOT: press a key on the base (2026-10-13, not printed)
-**Press the ivory key at the front right of the base straight down. BOOT clicks after 2.1 mm of travel at about 3.1 N, and the key bottoms on the lower tier at 2.7 mm.** A one-piece rocker (`renders/frontboot-*.png`) pivots on a flexure in the tier. Its arm rises behind the case to a nub 0.5 mm off the button plate's flush flexure tab, and the nub pushes that tab, so nothing touches the glass. Rebuild: `~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_frontboot.py` (103 checks).
+## Front-BOOT: press a key on the base (2026-10-13; v2 after the first print)
+**Press the ivory key at the front right of the base straight down. BOOT clicks after 2.1 mm of travel at about 3.1 N, and the key bottoms on the lower tier at 3.4 mm.**
+
+**v2, after the first print** ("close to good"; the lever and the hoop flex more than the model says, so the click came too late): the key stop is 0.7 mm deeper (1.0 mm of key to spare after the click at the worst gap, was 0.25), and the nub is bigger, Ø4.4 and 2.0 proud (was Ø3.2, 1.4). Reprint the **base and the rocker** only. A one-piece rocker (`renders/frontboot-*.png`) pivots on a flexure in the tier. Its arm rises behind the case to a nub 0.5 mm off the button plate's flush flexure tab, and the nub pushes that tab, so nothing touches the glass. Rebuild: `~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_frontboot.py` (103 checks).
 
 | print (`stl/pocketwatch/stands/hoop/`) | notes |
 |---|---|
@@ -56,14 +58,14 @@ Printed with the screw joint: the case wobbled in the mortise at 0.25 mm per sid
 | number (all asserted) | value |
 |---|---|
 | lever | nub 27 mm from the pivot, key 28 mm. The pivot is straight below the nub tip, so the nub meets the tab square |
-| gap G (nub to tab) 0.2 / 0.5 / 0.8 | touch at 0.2 / 0.55 / 0.9 mm; click at 1.8 / 2.1 / 2.4 mm with 3.0–3.2 N; at the 2.7 mm stop the key takes 5.4 / 4.7 / 3.9 N |
-| push on the switch (and glass on its lip) at the stop | at most 5.1 N, against 2.7 N needed. The arms bend, so overtravel can't crush anything |
-| strain | blade 1.4 × 4 × 6 at a 30° tilt: 0.82%; upright arm 0.80%; key arm 0.90%; tab 0.56% |
-| stability | tip angle 24.9° with a 1 N cable pull. 6 N straight down on the key can't tip it (40°). The press may lean 19° off vertical before the 83 g stand slides (μ 0.3), and leaning that far it still can't tip |
+| gap G (nub to tab) 0.2 / 0.5 / 0.8 | touch at 0.2 / 0.55 / 0.9 mm; click at 1.8 / 2.1 / 2.4 mm with 3.0–3.2 N; at the 3.4 mm stop the key takes 7.4 / 6.6 / 5.9 N (model; the printed rocker is softer) |
+| push on the switch (and glass on its lip) at the stop | at most 7.1 N, against 2.7 N needed. The arms bend, so overtravel can't crush anything |
+| strain | blade 1.4 × 4 × 6 at a 30° tilt: 1.02%; upright arm 1.11%; key arm 1.23%; tab 0.56% |
+| stability | tip angle 24.9° with a 1 N cable pull. 7.4 N straight down on the key can't tip it (39°). The press may lean 18° off vertical before the 83 g stand slides (μ 0.3), and leaning that far it still can't tip |
 | clearances | 0.4 to the slot all the way to the stop; nub 0.7 off in any direction still hits only the tab; tier walls 1.4–1.8 |
 
 **Honest weaknesses**
-- **G is ±0.3**, mostly the tenon's 0.12 play in the mortise times a 2.5× lever to the tab. The stop leaves only 0.25 mm of key spare at the largest gap.
+- **G is ±0.3**, mostly the tenon's play in the mortise (now 0.08) times a 2.5× lever to the tab. The stop leaves 1.0 mm of key spare at the largest gap, to soak up the flex the first print showed.
 - The forces come from a linear beam-and-spring model, not FEA. The switch force (2 N) and the BOOT position (±1 mm) are still guesses.
-- Pressing the outer edge of the pad twists the nub 0.75 mm sideways, against a 1.35 mm margin. A press leaning more than 19° slides the stand; a flat key invites a straight press, and rubber feet would fix it.
+- Pressing the outer edge of the pad to the stop twists the nub 0.93 mm sideways, against a 1.35 mm margin. A press leaning more than 18° slides the stand; a flat key invites a straight press, and rubber feet would fix it.
 - Gravity, the heel hook and the plate retain the rocker, so shaken upside down it could work loose. The blade's fatigue life at 1% strain is untested. The slot leaves a small notch at the back of the tier.

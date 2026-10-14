@@ -15,6 +15,21 @@ Template:
 
 ---
 
+## 2026-10-13 — hoop stand front-BOOT, base + rocker (`Hoop stand front-BOOT - base.stl`, `- rocker.stl`)
+- material / presets: not stated
+- result: **printed; "pretty close to good."** The key works the lever, but
+  "the lever action needs to be a little bit more" and the peg that clicks
+  the button should be "a bit larger". "There's flex in the plastic of the
+  lever, and the device": the rocker's arms and the hoop give more than the
+  linear-spring model says, and that eats the 0.25 mm of spare key travel.
+- fit numbers to change: deeper key stop (`STOP_SPARE`) and a bigger nub
+  (`R_NUB`, `NUB_P`). Base and rocker only.
+- also: **"the case is loose on the stand"** with the snap tenon in the 0.12
+  mortise → `Stand.FIT` **0.08** (0.12 kept as `base (looser, 0.12)`). And
+  **the USB-C hole needs to be "barely wider"** for the plastic on some
+  cables → `Case.RECESS_W` 9.0 → **9.4** (hole 9.6 → 10.0), all cases.
+- photo: none
+
 ## 2026-10-13 — button back plate (`… - plate (button).stl` / `Hoop stand - back plate (button).stl`)
 - material / presets: not stated
 - result: **printed; the rest is OK, but the finger dimple came out melted and

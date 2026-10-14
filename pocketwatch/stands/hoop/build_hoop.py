@@ -64,7 +64,7 @@ class Stand:
     TIER_R: float = 19.0        # upper tier, carries the mortise
     TIER_T: float = 13.0
     MORT_D: float = 11.5        # mortise depth, vertical: the snap arms need the length
-    FIT: float = 0.12           # tenon in mortise, per side: 0.25 printed loose, the leaned walls are ~0.1 proud
+    FIT: float = 0.08           # tenon in mortise, per side: 0.25 and then 0.12 printed loose
     TANG_T: float = 1.5         # snap arm thickness (in-plane, along the layers)
     TANG_GAP: float = 2.0       # slot beside each arm: how far it can flex inward
     TANG_L: float = 10.5        # slot length up the neck from the tenon's bottom end
@@ -656,8 +656,8 @@ def main():
     print()
     export(case, STL + "Hoop stand - hoop and case.stl", lambda m: m.translate([0, 0, c.LIP_T]))
     export(base, STL + "Hoop stand - base.stl", lambda m: m)
-    # a roomier mortise (0.12 is the default; 0.25 printed loose with the screw design), for a printer that runs tight
-    for fit, tag in ((0.18, "roomier"),):
+    # roomier mortises (0.08 is the default; 0.12 printed loose with the snap), for a printer that runs tight
+    for fit, tag in ((0.12, "looser"), (0.18, "roomier")):
         s2 = dataclasses.replace(s, FIT=fit)
         _, base2, _, _, ki2 = stand_solids(s2, c, built["hoop"][5], F, "hoop")
         hw = F.W(case)
