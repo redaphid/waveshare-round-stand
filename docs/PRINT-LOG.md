@@ -15,6 +15,20 @@ Template:
 
 ---
 
+## 2026-10-14 (evening) — Pendant case + back plate (`Pendant - case.stl`, `Pendant - back plate (button).stl`)
+- material / presets: **PLA**
+- result: **printing** (the 14.0 × 8.3 slot from the entry below). Aaron, before
+  it finished: the USB-C hole needs to be "2 mm taller", **or, preferred, the
+  case should let the USB-C port stick out a little.** Second plug-fit request
+  in a day: growing the slot keeps losing to the next cable's overmold.
+- fit numbers to change: the slot is gone, not grown. New `Pendant.PORT_OUT`
+  **0.5**: case, back plate and kid button all stop at a flat at
+  y = `tip_y − RAD_CLR − PORT_OUT`, so the receptacle stands **1.65** past the
+  case nominally and **≥ 0.5** with the board pushed down by the plug. Any
+  overmold seats on the receptacle. Old STLs:
+  `archive/pendant-v1 (14.0 x 8.3 USB-C slot)/`.
+- photo: none
+
 ## 2026-10-14 — USB-only family case + button plate
 - material / presets: **PLA**
 - result: "The case around the device is so tight I can't pry it back off." And

@@ -181,6 +181,20 @@ channel so the lead tucks in whichever way the plug exits. gap26 kept.
 **No fillets** (standing). manifold3d has no fillet op. Prints fine; looks
 crisper than a moulded pod. Revisit only if he asks.
 
+## Pocketwatch pendant
+
+**The USB-C receptacle sticks out; no plug slot** (10-14). The crown boss put
+3 mm of case in front of the port, so every plug's overmold had to fit a slot:
+9.6 → 10.0 → 14.0 × 8.3, and Aaron still asked for 2 mm more. He preferred the
+port sticking out, which removes the question for every cable. Case, back plate
+and kid button now stop at one flat, `y = tip_y − RAD_CLR − PORT_OUT`. The
+badge floats `RAD_CLR` (1.15) in y, and a plug pushes it down that far before
+it seats, so the flat sits below the pushed-down mouth by `PORT_OUT` (0.5). The
+boss stays below the flat for the wall beside the tab. Rotation still comes from
+the tab sides in the slot; y and z from the disc in the bore and the lip.
+Rejected: a 10.3-tall slot (leaves ~1 mm of case front and back of it, and the
+next cable can still be bigger).
+
 ## Not done / rejected
 
 - **Headless slicing.** ElegooSlicer CLI: `type`/`from` fields and `inherits`

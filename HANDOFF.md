@@ -46,4 +46,6 @@ Coworkers with printers and the same 1.28 board should be able to make their own
 - No print result yet for pocketwatch v2. Log it in `docs/PRINT-LOG.md` when it comes.
 - The USB-C-down dock (`stl/small/Dock for right-angle cable - USB-C down.stl`) missed on print. Its model used drawing numbers that the calipers later corrected. It's superseded by the pocketwatch direction, so it hasn't been fixed.
 
-- **Board stale (2026-10-14):** draw MCP was down. Not on the board yet: USB-C slot 14.0 x 8.3 (label lblrec says 10.0 x 4.3) and the pry notch at 10 o clock (commit 0796ba6).
+- **Board partly stale (2026-10-14 evening):** `lblrec` now says 14.0 x 8.3 and STATUS is current. Still not drawn: the pry notch at 10 o'clock (commit 0796ba6).
+- **Pendant queue (Aaron, 2026-10-14):** (1) USB-C sticks out: built, awaiting his print. (2) after (1) is verified: a battery-pocket version for the Makerfocus 1000 mAh (7.4 x 22.28 x 42.65). The cell's diagonal needs Ø48.1 inside and the pendant is Ø40.0 inside, and BOOT sits under the cell, so this needs a shape decision first. (3) once both print: a more prominent back button than the flush U-tab, for both versions.
+- **The pendant case has no pry notch** (built in `build_pendant.py`, not `build_pocketwatch_usb.build`). Its lock grooves sit in the same rim, so adding one needs a check against the channels.
