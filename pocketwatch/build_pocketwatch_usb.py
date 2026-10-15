@@ -59,10 +59,7 @@ def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR, button=False):
     case -= prism(circle(R_REAR), FLOOR, Z_CASE + 1)
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p
-    # pry notch: a slot through the back rim, cut PRY_DEPTH under the plate's edge, so a screwdriver or coin can
-    # lever a tight plate out without loosening the snap
-    pry = rect(R_BORE + 0.3, R_OUT + 1.0, -PRY_W/2, PRY_W/2).rotate(PRY_DEG)
-    case -= prism(pry, FLOOR - PRY_DEPTH, Z_CASE + 1)
+    case -= pry_cut(R_BORE, R_OUT, FLOOR, Z_CASE, PRY_DEG)
     case -= all_keep
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
@@ -95,6 +92,12 @@ def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR, button=False):
     if button:
         geo.update(tab=tab, slot=slot)
     return feats, case, plate, geo
+
+
+def pry_cut(R_BORE, R_OUT, FLOOR, z_back, deg):
+    """Pry notch: a slot through the back rim at deg, cut PRY_DEPTH under the plate's edge, so a screwdriver or
+    coin can lever a tight plate out without loosening the snap."""
+    return prism(rect(R_BORE + 0.3, R_OUT + 1.0, -PRY_W/2, PRY_W/2).rotate(deg), FLOOR - PRY_DEPTH, z_back + 1)
 
 
 def run_checks(b, c, feats, case, plate, geo):

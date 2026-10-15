@@ -98,6 +98,7 @@ class Pendant:
     HOOK_PLAY: float = 0.10     # hook below the ledge at rest (axial)
     LOCK_PAST: float = 5.0      # locked tooth ends this far past its entry channel (the latch sits in between)
     CHANNELS: tuple = (10.0, 150.0, 215.0, 290.0)   # entry channels, deg from +x seen from the back; the last takes the latch key
+    PRY_DEG: float = 345.0      # pry notch: middle of the one rim arc the lock grooves leave free (U's 120 is on the flat's corner)
     LATCH_W: float = 12.0       # latch: a radial tongue in the disc over the last channel, root inboard
     LATCH_L: float = 10.0
     LATCH_T: float = 1.0
@@ -192,9 +193,9 @@ def button_plate(b, c, p, clr):
     return feats, None, plate, geo
 
 
-def build(b: Badge, c: Case, p: Pendant, battery=None, disc_clr=U.PLATE_DISC_CLR):
-    feats, _, plate, geo = button_plate(b, c, p, disc_clr)
-    st = Stack.of(c, geo, battery)
+def case_body(b: Badge, c: Case, p: Pendant, feats, geo, z_back):
+    """The pendant case without the twist-lock: the USB-only circle and crown boss cut off at the flat, bore,
+    counterbore, snap groove, keepouts and the pry notch. Adds R_OUT, boss, groove_r_p and pry to geo."""
     bore_xy = feats[0].grown()
     R_BORE, R_REAR, FLOOR = geo["R_BORE"], geo["R_REAR"], geo["FLOOR"]
     R_OUT = R_REAR + c.CASE_WALL                                     # the USB-only outline: the circle ...
@@ -205,12 +206,25 @@ def build(b: Badge, c: Case, p: Pendant, battery=None, disc_clr=U.PLATE_DISC_CLR
     zb_p = FLOOR - c.SNAP_LIP - c.SNAP_CLR - (2*(c.FIT_CLR + c.SNAP_INT) + c.BEAD_FLAT)/2   # as build_pocketwatch_usb
     _, groove_p, _, groove_r_p = snap(c, R_BORE, zb_p)
     window = m3.Manifold.cylinder(c.LIP_T + 0.02, b.r - c.LIP_OVERLAP + c.LIP_BEVEL, b.r - c.LIP_OVERLAP, SEG)
-    case = chamfered([circle(R_OUT) ^ below, boss ^ below], -c.LIP_T, st.z_back, c.CHAMFER, U.BACK_CHAMFER)
-    case -= prism(bore_xy, 0.0, st.z_back + 1)
-    case -= prism(circle(R_REAR), FLOOR, st.z_back + 1)
+    case = chamfered([circle(R_OUT) ^ below, boss ^ below], -c.LIP_T, z_back, c.CHAMFER, U.BACK_CHAMFER)
+    case -= prism(bore_xy, 0.0, z_back + 1)
+    case -= prism(circle(R_REAR), FLOOR, z_back + 1)
     case -= window.rotate([0, 0, 90/SEG]).translate([0, 0, -c.LIP_T - 0.01])   # quarter segment off the bore's vertices, or one pinches
     case -= groove_p
     case -= union(keep.values())
+    pry = U.pry_cut(R_BORE, R_OUT, FLOOR, z_back, p.PRY_DEG)
+    case -= pry
+    geo.update(R_OUT=R_OUT, boss=boss, groove_r_p=groove_r_p, pry=pry)
+    return case
+
+
+def build(b: Badge, c: Case, p: Pendant, battery=None, disc_clr=U.PLATE_DISC_CLR):
+    feats, _, plate, geo = button_plate(b, c, p, disc_clr)
+    st = Stack.of(c, geo, battery)
+    case = case_body(b, c, p, feats, geo, st.z_back)
+    bore_xy = feats[0].grown()
+    R_REAR, FLOOR, R_OUT, boss = geo["R_REAR"], geo["FLOOR"], geo["R_OUT"], geo["boss"]
+    below = rect(-60, 60, -60, geo["y_flat"])
     batt = None
     if battery:
         T, Wb, Lb = battery
@@ -256,7 +270,7 @@ def build(b: Badge, c: Case, p: Pendant, battery=None, disc_clr=U.PLATE_DISC_CLR
     key = prism(sector(R_OUT - p.HOOK, tl["r_fi"] + p.T_T, cL - tl["a_t"], cL + tl["a_t"]), st.z_back - p.KEY_E, kz1 - p.LATCH_T + 0.01)
     kid = kid + (pads - prism(latch.offset(0.9, Round), -50, 50)) + latch_pad + nub + wings + teeth + key
 
-    geo.update(R_OUT=R_OUT, R_K=R_K, boss=boss, groove_r_p=groove_r_p, pad_xy=pad_xy, y_h=y_h,
+    geo.update(R_K=R_K, lock_cut=lock_cut, pad_xy=pad_xy, y_h=y_h,
                slope=slope, d_stop=d_stop, H=H, th_w=th_w, x_n=x_n, py=py, px=px, kz0=kz0, kz1=kz1, nub=nub,
                wings=wings, pads=pads, teeth=teeth, key=key, latch=latch, tl=tl, model=model, k_out=k_out, batt=batt)
     return feats, case, plate, kid, geo, st
@@ -481,8 +495,26 @@ def run_tab_checks(b, c, p, feats, plate, geo):
     print(f"      tab {p.TAB_L:g} long, {2*p.TAB_R:g} wide at the post widening to {p.TAB_W:g}, {p.TAB_T:g} thick")
 
 
+def run_pry_checks(n, c, p, case, plates, geo, lock_cut=None):
+    """plates: name -> (plate, its disc radius). A blade slides in radially along the notch floor."""
+    R_BORE, FLOOR, R_OUT = geo["R_BORE"], geo["FLOOR"], geo["R_OUT"]
+    half = math.degrees(math.atan2(U.PRY_W/2, R_OUT))
+    print(f"\n{n}. Pry notch at {p.PRY_DEG:g} deg (+-{half:.1f} at the rim), {U.PRY_W:g} wide, {U.PRY_DEPTH:g} under the plate's front face")
+    if lock_cut is not None:
+        g = geo["pry"].min_gap(lock_cut, 5.0)
+        check(g >= c.MIN_WALL, f"notch keeps >= {c.MIN_WALL} of case to every lock cut", f"{g:.2f}")
+    BLADE_T, BLADE_W = 0.5, 3.0                                    # a small flat screwdriver
+    r_tip = R_BORE + 0.35
+    blade = prism(rect(r_tip, R_OUT + 3, -BLADE_W/2, BLADE_W/2).rotate(p.PRY_DEG), FLOOR - 0.1 - BLADE_T, FLOOR - 0.1)
+    for nm, (pl, r_disc) in plates.items():
+        v = (blade ^ case).volume() + (blade ^ pl).volume()
+        check(v < 1e-3, f"a {BLADE_T} blade slides in under the {nm}'s edge, touching nothing", f"{r_disc - r_tip:.2f} under it")
+        v = (blade.translate([0, 0, 0.2]) ^ pl).volume()
+        check(v > 1e-3, f"lifted 0.2 it bears on the {nm}", f"{v:.3f} mm^3")
+
+
 def run_battery_checks(c, feats, case, plate, kid, geo, st):
-    print(f"\n13. Battery {st.battery}: pocket between the back plate and the kid button")
+    print(f"\n14. Battery {st.battery}: pocket between the back plate and the kid button")
     bt = geo["batt"]
     for nm, m in (("case", case), ("back plate", plate), ("kid button", kid), ("kid button pressed", rock(kid, geo, st, geo["slope"]))):
         v = (bt ^ m).volume()
@@ -570,6 +602,9 @@ def main():
     U.run_checks(b, c, feats, case, plate, geo)
     run_tab_checks(b, c, p, feats, plate, geo)
     run_pendant_checks(b, c, p, feats, case, plate, kid, geo, st)
+    _, _, plate_r, geo_r = button_plate(b, c, p, U.PLATE_DISC_CLR_ROOMY)
+    run_pry_checks(13, c, p, case, {"back plate": (plate, geo["R_DISC"]), "roomy back plate": (plate_r, geo_r["R_DISC"])},
+                   geo, geo["lock_cut"])
     if battery:
         run_battery_checks(c, feats, case, plate, kid, geo, st)
     else:
@@ -577,7 +612,6 @@ def main():
         export(case, STL + "Pendant - case.stl", lambda m: m.translate([0, 0, c.LIP_T]))
         flip = lambda z: (lambda m: m.rotate([0, 180, 0]).translate([0, 0, z]))
         export(plate, STL + "Pendant - back plate (button).stl", flip(st.z_plate))
-        _, _, plate_r, _ = button_plate(b, c, p, U.PLATE_DISC_CLR_ROOMY)
         export(plate_r, STL + "Pendant - back plate (button, roomy).stl", flip(st.z_plate))
         export(kid, STL + "Pendant - kid button.stl", flip(geo["kz1"]))
         if "--no-render" not in sys.argv:
