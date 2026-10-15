@@ -15,6 +15,16 @@ Template:
 
 ---
 
+## 2026-10-14 (night) — Pendant kid button (`Pendant - kid button.stl`)
+- material / presets: **PLA** (presumed)
+- result: **failed** "in a number of ways. For one, it didn't fit." Which
+  part didn't fit (teeth, disc, latch) not reported yet.
+- fit numbers to change: none. The twist-lock kid button is abandoned for the
+  pendant. Replaced by the **kids case** (`stl/pocketwatch/pendant/kids-case/`):
+  the back plate gets a big flap with the pole under it, and the flap's tip lands
+  on the case step after the click. No third part, no twist-lock.
+- photo: none
+
 ## 2026-10-14 (evening) — Pendant case + back plate (`Pendant - case.stl`, `Pendant - back plate (button).stl`)
 - material / presets: **PLA**
 - result: **printing** (the 14.0 × 8.3 slot from the entry below). Aaron, before
