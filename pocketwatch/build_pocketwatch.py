@@ -308,7 +308,7 @@ def check(ok, label, margin):
     if not ok: FAILS.append(label)
 
 
-def run_checks(b, c, feats, case, plate, lid, battery, geo):
+def run_checks(b, c, feats, case, plate, lid, battery, geo, recess=True):
     static = {"case": case, "plate": plate, "lid": lid, "battery": battery}
     target = f"{c.BUTTON} actuator"
 
@@ -385,8 +385,9 @@ def run_checks(b, c, feats, case, plate, lid, battery, geo):
              "guide walls": c.GUIDE_WALL, "skirt": c.SKIRT_WALL}
     for nm, t in walls.items():
         check(t >= c.MIN_WALL, f"{nm} >= {c.MIN_WALL}", f"{t:.2f}")
-    recess_floor = geo["R_OUT"] - b.tip_y
-    check(recess_floor < 10.0, "plug shell reaches the port through the recess", f"recess {recess_floor:.1f} deep")
+    if recess:
+        recess_floor = geo["R_OUT"] - b.tip_y
+        check(recess_floor < 10.0, "plug shell reaches the port through the recess", f"recess {recess_floor:.1f} deep")
 
 
 # ---- output ----------------------------------------------------------------

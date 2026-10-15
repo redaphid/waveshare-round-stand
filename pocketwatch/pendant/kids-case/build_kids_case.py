@@ -70,10 +70,12 @@ def tip_x(f, py, r_edge, W):
     return -math.sqrt(r_edge**2 - y_n**2) if x_w is None else x_w
 
 
-def flap_model(f, p, c, px, py, r_edge, E=MAT.E):
+def flap_model(f, p, c, px, py, r_edge, E=MAT.E, drop=None):
     """The flap as an Euler beam from its root, as wide as its chord. Three supports below it: the switch under the
     pole (a), pushing back F_SW until it bottoms STROKE down; the foot (d, its point farthest from the root),
-    landing g down; the far tip (d_tip) over the step, landing PLATE_T - F_T + RELIEF down."""
+    landing g down; the far tip (d_tip) over the step, landing drop + RELIEF down. drop is the flap's underside
+    above the surface the foot lands on: PLATE_T - F_T unless given."""
+    drop = c.PLATE_T - f.F_T if drop is None else drop
     x_tip = tip_x(f, py, r_edge, c.MIN_WALL)
     a, d, d_tip = f.F_ROOT - px, f.F_ROOT - max(x_tip, f.FOOT_X), f.F_ROOT - x_tip
     s = np.linspace(0, d_tip, 2401)
@@ -91,7 +93,7 @@ def flap_model(f, p, c, px, py, r_edge, E=MAT.E):
     def press(F, b, g):
         """F at b from the root, foot g above the step: switch force R, foot S, tip T, peak strain, shape.
         A support that has come its gap down is a rigid prop and its force is free; one that has not pushes its preload."""
-        gap = np.array([c.STROKE, g, c.PLATE_T - f.F_T + f.RELIEF])
+        gap = np.array([c.STROKE, g, drop + f.RELIEF])
         Fb = np.array([flex(i, b) for i in at])*F
         for on in map(np.array, contacts):
             Rs = pre.copy()
@@ -110,15 +112,15 @@ def flap_model(f, p, c, px, py, r_edge, E=MAT.E):
     return dict(a=a, d=d, d_tip=d_tip, faa=faa, fad=fad, fdd=fdd, P_click=P_click, yd_click=yd_click, press=press)
 
 
-def flap_cases(f, p, c, px, py, r_edge):
+def flap_cases(f, p, c, px, py, r_edge, drop=None):
     """g_stop, fixed at nominal E: the foot's travel at the click plus SPARE of pole push, scaled out to the foot.
     Then the outer end pressed onto the stop at E low / nominal / high, with the foot printed TOL early or late. A
     hard press at the foot goes into the stop, so the switch force is whatever it was when the foot landed."""
-    nom = flap_model(f, p, c, px, py, r_edge)
+    nom = flap_model(f, p, c, px, py, r_edge, drop=drop)
     g_stop = nom["yd_click"] + p.SPARE*nom["d"]/nom["a"]
     out = {}
     for tag, E in (("lo", MAT.E_lo), ("nom", MAT.E), ("hi", MAT.E_hi)):
-        m = flap_model(f, p, c, px, py, r_edge, E)
+        m = flap_model(f, p, c, px, py, r_edge, E, drop)
         land = {k: m["press"](p.F_PRESS, m["d"], g_stop + dg) for k, dg in (("early", -p.TOL), ("nom", 0.0), ("late", p.TOL))}
         out[tag] = dict(m=m, land=land, early=g_stop - p.TOL - m["yd_click"])
     return g_stop, out
@@ -214,11 +216,7 @@ def run_kids_checks(b, c, p, f, feats, case, plate, geo):
 
     print(f"\n7. Flap: {f.F_W:g} wide from x {f.F_ROOT:+g} out through the plate's edge, {f.F_T:g} thick, slits {U.TAB_GAP}")
     check(f.F_T >= W - 1e-9, f"flap >= {W} thick", f"{f.F_T:g}")
-    face, thinnest = plate.slice(Z_CASE - 0.15), W + 0.3
-    for y_e, sgn in slit_sides(f, geo["py"]):                        # probe across each slit edge wherever plate starts at it
-        for x in np.arange(-21.0, f.F_ROOT - 0.3, 0.1):
-            if (face ^ rect(x - 0.01, x + 0.01, *sorted((y_e + sgn*0.01, y_e + sgn*0.06)))).area() > 1e-4:
-                thinnest = min(thinnest, (face ^ rect(x - 0.01, x + 0.01, *sorted((y_e, y_e + sgn*(W + 0.3))))).area()/0.02)
+    thinnest = thinnest_beside_slits(plate.slice(Z_CASE - 0.15), f, geo["py"], W, -21.0)
     check(thinnest >= W - 0.02, f"plate beside each slit >= {W} wide wherever it continues", f"{thinnest:.2f}")
     h1 = next(h for h in geo["hdrs"] if h.name.startswith("header H1"))
     x0, y0, x1, y1 = h1.outline.bounds()
@@ -254,6 +252,29 @@ def run_kids_checks(b, c, p, f, feats, case, plate, geo):
     check((flap_t ^ fixed).volume() < 1e-3 and g > 0.05, "at the stop the flap clears the fixed plate", f"gap {g:.2f}")
 
     print(f"\n9. Forces and strains: {MAT.NAME}, E {MAT.E:g} +-{100*MAT.E_TOL:g}%, flexing parts <= {100*MAT.FLEX_MAX:g}%")
+    x_safe = f.F_ROOT - force_checks(f, p, c, cs, g_stop)
+    g_sl = c.PLATE_T - 0.3*round((c.PLATE_T - g_stop)/0.3)
+    R_sl = max(v["m"]["press"](p.F_PRESS, m["d"], g_sl)["R"] for v in cs.values())
+    print(f"      as sliced at 0.3 layers the foot's underside lands {g_sl:.2f} above FLOOR; switch force on the stop then <= {R_sl:.1f} N")
+    return dict(x_safe=x_safe)
+
+
+def thinnest_beside_slits(face, f, py, W, x_from):
+    """Narrowest strip of part beside each slit edge, probed across it every 0.1 from x_from to the root wherever the
+    part starts at the edge. face: the part's section, in the flap's frame (root at +x)."""
+    thinnest = W + 0.3
+    for y_e, sgn in slit_sides(f, py):
+        for x in np.arange(x_from, f.F_ROOT - 0.3, 0.1):
+            if (face ^ rect(x - 0.01, x + 0.01, *sorted((y_e + sgn*0.01, y_e + sgn*0.06)))).area() > 1e-4:
+                thinnest = min(thinnest, (face ^ rect(x - 0.01, x + 0.01, *sorted((y_e, y_e + sgn*(W + 0.3))))).area()/0.02)
+    return thinnest
+
+
+def force_checks(f, p, c, cs, g_stop, where=None):
+    """The model's limit checks and KNOWN WEAKNESS lines. where(s) names the point s from the root.
+    Returns the distance from the root past which a hard press keeps the switch under F_SW_MAX."""
+    where = where or (lambda s: f"x {f.F_ROOT - s:+.1f}")
+    m = cs["nom"]["m"]
     a, d, d_tip = m["a"], m["d"], m["d_tip"]
     print(f"      beam from the root: pole at {a:.1f}, stop at {d:.1f}, tip at {d_tip:.1f}; "
           f"g_stop {g_stop:.2f} = foot travel at the click {m['yd_click']:.2f} + SPARE {p.SPARE} x {d/a:.2f}")
@@ -270,19 +291,16 @@ def run_kids_checks(b, c, p, f, feats, case, plate, geo):
     lo = cs["lo"]["m"]
     for nm, bb in (("on the pole", a), ("mid-flap", d_tip/2)):
         R_n, R_lo = m["press"](p.F_PRESS, bb, g_stop)["R"], lo["press"](p.F_PRESS, bb, g_stop)["R"]
-        print(f"  [KNOWN WEAKNESS] {p.F_PRESS:g} N {nm} (x {f.F_ROOT - bb:+.1f}): no stop, switch takes {R_n:.1f} N ({R_lo:.1f} at low E)")
+        print(f"  [KNOWN WEAKNESS] {p.F_PRESS:g} N {nm} ({where(bb)}): no stop, switch takes {R_n:.1f} N ({R_lo:.1f} at low E)")
     bs = np.linspace(0, d_tip, 241)
     worst_R = [max(v["m"]["press"](p.F_PRESS, bb, g_stop + p.TOL)["R"] for v in cs.values()) for bb in bs]
     ok = [bb for bb, R in zip(bs, worst_R) if R > p.F_SW_MAX]
-    x_safe = f.F_ROOT - (max(ok) if ok else 0.0)
-    print(f"      a {p.F_PRESS:g} N press keeps {c.BUTTON} <= {p.F_SW_MAX:g} N (any E, foot late) only outboard of x {x_safe:+.1f}")
+    s_safe = max(ok) if ok else 0.0
+    print(f"      a {p.F_PRESS:g} N press keeps {c.BUTTON} <= {p.F_SW_MAX:g} N (any E, foot late) only outboard of {where(s_safe)}")
     for F in (p.F_EASY, p.F_PRESS):
         e = max(v["m"]["press"](F, d_tip, g_stop + dg)["eps"] for v in cs.values() for dg in (-p.TOL, p.TOL))
         print(f"      {F:g} N on the very tip, past the foot: flap strain {100*e:.2f}% (worst E and foot)")
-    g_sl = c.PLATE_T - 0.3*round((c.PLATE_T - g_stop)/0.3)
-    R_sl = max(v["m"]["press"](p.F_PRESS, d, g_sl)["R"] for v in cs.values())
-    print(f"      as sliced at 0.3 layers the foot's underside lands {g_sl:.2f} above FLOOR; switch force on the stop then <= {R_sl:.1f} N")
-    return dict(x_safe=x_safe)
+    return s_safe
 
 
 # ---- renders ---------------------------------------------------------------

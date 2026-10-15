@@ -495,11 +495,11 @@ def run_tab_checks(b, c, p, feats, plate, geo):
     print(f"      tab {p.TAB_L:g} long, {2*p.TAB_R:g} wide at the post widening to {p.TAB_W:g}, {p.TAB_T:g} thick")
 
 
-def run_pry_checks(n, c, p, case, plates, geo, lock_cut=None):
+def run_pry_checks(n, c, p, case, plates, geo, lock_cut=None, part="plate"):
     """plates: name -> (plate, its disc radius). A blade slides in radially along the notch floor."""
     R_BORE, FLOOR, R_OUT = geo["R_BORE"], geo["FLOOR"], geo["R_OUT"]
     half = math.degrees(math.atan2(U.PRY_W/2, R_OUT))
-    print(f"\n{n}. Pry notch at {p.PRY_DEG:g} deg (+-{half:.1f} at the rim), {U.PRY_W:g} wide, {U.PRY_DEPTH:g} under the plate's front face")
+    print(f"\n{n}. Pry notch at {p.PRY_DEG:g} deg (+-{half:.1f} at the rim), {U.PRY_W:g} wide, {U.PRY_DEPTH:g} under the {part}'s front face")
     if lock_cut is not None:
         g = geo["pry"].min_gap(lock_cut, 5.0)
         check(g >= c.MIN_WALL, f"notch keeps >= {c.MIN_WALL} of case to every lock cut", f"{g:.2f}")
