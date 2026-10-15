@@ -168,9 +168,9 @@ def run_checks(b, c, feats, case, plate, geo):
     for nm, t in walls.items():
         check(t >= c.MIN_WALL - 1e-9, f"{nm} >= {c.MIN_WALL}", f"{t:.2f}")
     wall = bbox(case)[1, 1] - b.tip_y
-    engaged = SHELL_LEN - wall
+    engaged = SHELL_LEN - max(wall, 0)
     check(engaged >= MIN_PLUG_ENGAGE, f"plug shell engages the port >= {MIN_PLUG_ENGAGE} (a guess)",
-          f"{engaged:.1f} of {SHELL_LEN}, {wall:.1f} of case in front of the port")
+          f"all {SHELL_LEN}, port sticks out {-wall:.1f}" if wall < 0 else f"{engaged:.1f} of {SHELL_LEN}, {wall:.1f} of case in front of the port")
     back = bbox(case)[1, 2]
     check(abs(back - bbox(plate)[1, 2]) < 1e-3, "plate is flush with the case back", f"z {back:.2f}")
 

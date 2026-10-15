@@ -2,9 +2,11 @@
 """
 Pendant for the 1.28 badge: the USB-only pocketwatch with nothing extra. Three printed parts.
 
-  case        one plain circle that wraps the USB-C tab, with a small flat at 12 o'clock so a
-              straight plug seats close enough to the port. Walls MIN_WALL: the rim is a hollow
-              ring (a channel open at the back) instead of solid plastic.
+  case        one plain circle that wraps the USB-C tab, cut off flat at 12 o'clock below the port:
+              the USB-C receptacle stands PORT_OUT past the flat even with the board pushed fully
+              down, so any cable's overmold seats on the port and touches nothing. The back plate and
+              kid button stop at the same flat. Walls MIN_WALL: the rim is a hollow ring (a channel
+              open at the back) instead of solid plastic.
   back plate  the USB-only button plate (U-slot flexure tab, post over BOOT), with a longer
               tab (TAB_L) so the kid button can push it partway along: past the click the tab
               bends instead of crushing the switch.
@@ -60,7 +62,7 @@ MAT = Material()
 
 @dataclass(frozen=True)
 class Pendant:
-    PORT_WALL: float = 3.0      # case in front of the port at the 12 o'clock flat (USB-only boss: 3.0, printed)
+    PORT_OUT: float = 0.5       # least the receptacle mouth stands past every part with the board pushed fully down
     FLAT_SOFT: float = 1.5      # radius where the flat meets the circle
     FRONT_R: float = 2.0        # outer front edge round
     BACK_R: float = 0.6         # outer back edge round (the rim is only MIN_WALL thick)
@@ -183,7 +185,10 @@ def button_plate(b, c, p, clr):
     tip_z = b.pcb_back_z + b.sw_cap_h + c.REST_CLR
     post_cyl = m3.Manifold.cylinder(geo['Z_CASE'] - p.TAB_T + 0.01 - tip_z, c.POST_D/2, c.POST_D/2, 64).translate([px, py, tip_z])
     plate += post_cyl - union(f.keepout(c.FLOAT) for f in feats if not f.name.startswith(c.BUTTON))
-    geo.update(tab=tab, slot=slot, post_cyl=post_cyl, R_DISC=geo["R_REAR"] - clr)
+    # every part stops at one flat: a plug pushes the floating board down RAD_CLR before it seats
+    y_flat = b.tip_y - c.RAD_CLR - p.PORT_OUT
+    plate = plate.trim_by_plane([0, -1, 0], -y_flat)
+    geo.update(tab=tab, slot=slot, post_cyl=post_cyl, R_DISC=geo["R_REAR"] - clr, y_flat=y_flat)
     return feats, None, plate, geo
 
 
@@ -193,14 +198,14 @@ def build(b: Badge, c: Case, p: Pendant, battery=None, disc_clr=U.PLATE_DISC_CLR
     bore_xy = feats[0].grown()
     R_BORE, R_REAR, FLOOR = geo["R_BORE"], geo["R_REAR"], geo["FLOOR"]
     R_OUT = R_REAR + c.CASE_WALL                                     # the USB-only outline: the circle ...
-    boss = (bore_xy.offset(c.CASE_WALL, Round) ^ rect(-40, 40, 10, 40)).hull()   # ... and its crown boss over the tab
-    y_flat = boss.bounds()[3]
+    boss = (bore_xy.offset(c.CASE_WALL, Round) ^ rect(-40, 40, 10, 40)).hull()   # ... and its crown boss beside the tab
+    below = rect(-60, 60, -60, geo["y_flat"])                        # clipped before chamfering, so the flat is chamfered too
 
     keep = {f.name: f.keepout(c.FLOAT) for f in feats}
     zb_p = FLOOR - c.SNAP_LIP - c.SNAP_CLR - (2*(c.FIT_CLR + c.SNAP_INT) + c.BEAD_FLAT)/2   # as build_pocketwatch_usb
     _, groove_p, _, groove_r_p = snap(c, R_BORE, zb_p)
     window = m3.Manifold.cylinder(c.LIP_T + 0.02, b.r - c.LIP_OVERLAP + c.LIP_BEVEL, b.r - c.LIP_OVERLAP, SEG)
-    case = chamfered([circle(R_OUT), boss], -c.LIP_T, st.z_back, c.CHAMFER, U.BACK_CHAMFER)
+    case = chamfered([circle(R_OUT) ^ below, boss ^ below], -c.LIP_T, st.z_back, c.CHAMFER, U.BACK_CHAMFER)
     case -= prism(bore_xy, 0.0, st.z_back + 1)
     case -= prism(circle(R_REAR), FLOOR, st.z_back + 1)
     case -= window.rotate([0, 0, 90/SEG]).translate([0, 0, -c.LIP_T - 0.01])   # quarter segment off the bore's vertices, or one pinches
@@ -225,7 +230,7 @@ def build(b: Badge, c: Case, p: Pendant, battery=None, disc_clr=U.PLATE_DISC_CLR
     d_stop = p.NUB_G + H                                             # nub travel when the wings land
     slope = (d_stop + p.RING_EXTRA) / (y_h - py)                     # ring pads: rotation when they land, rad
     R_K = R_OUT + p.T_CLR + p.T_T                                    # the teeth hang outside the case wall
-    k_out = (circle(R_K) + boss.offset(-p.K_CLR, m3.JoinType.Miter, 4.0)).hull()
+    k_out = (circle(R_K) + boss.offset(-p.K_CLR, m3.JoinType.Miter, 4.0)).hull() ^ below
     # one solid for the disc and its rim (separate pieces would share the outline's faces and pinch):
     # the rim follows the ring pads' tilt down to the case, the middle is recessed K_GAP over the plate
     kid = rounded(k_out, st.z_back - 2, kz1, 0.0, p.K_FACE_R)
@@ -251,7 +256,7 @@ def build(b: Badge, c: Case, p: Pendant, battery=None, disc_clr=U.PLATE_DISC_CLR
     key = prism(sector(R_OUT - p.HOOK, tl["r_fi"] + p.T_T, cL - tl["a_t"], cL + tl["a_t"]), st.z_back - p.KEY_E, kz1 - p.LATCH_T + 0.01)
     kid = kid + (pads - prism(latch.offset(0.9, Round), -50, 50)) + latch_pad + nub + wings + teeth + key
 
-    geo.update(R_OUT=R_OUT, R_K=R_K, y_flat=y_flat, boss=boss, groove_r_p=groove_r_p, pad_xy=pad_xy, y_h=y_h,
+    geo.update(R_OUT=R_OUT, R_K=R_K, boss=boss, groove_r_p=groove_r_p, pad_xy=pad_xy, y_h=y_h,
                slope=slope, d_stop=d_stop, H=H, th_w=th_w, x_n=x_n, py=py, px=px, kz0=kz0, kz1=kz1, nub=nub,
                wings=wings, pads=pads, teeth=teeth, key=key, latch=latch, tl=tl, model=model, k_out=k_out, batt=batt)
     return feats, case, plate, kid, geo, st
@@ -328,19 +333,22 @@ def rock(m, geo, st, th):
 # ---- checks ----------------------------------------------------------------
 def run_pendant_checks(b, c, p, feats, case, plate, kid, geo, st):
     W = c.MIN_WALL
-    bore_top = feats[0].grown().bounds()[3]
-    print("\n8. Case: the USB-only outline, snap ledge wall, plug seat")
+    print("\n8. Case: the USB-only outline, snap ledge wall, port sticking out")
     walls = {"case wall behind the lock grooves (vs the plate groove)": geo["R_OUT"] - p.GROOVE - geo["groove_r_p"],
              "case wall behind the entry channels (vs the counterbore)": geo["R_OUT"] - p.GROOVE - geo["R_REAR"],
-             "wall over the tab at 12 o'clock": geo["y_flat"] - bore_top, "kid button disc": p.K_T}
+             "kid button disc": p.K_T}
     for nm, t in walls.items():
         check(t >= W - 1e-6, f"{nm} >= {W}", f"{t:.2f}")
-    plug = prism(rect(-6.0, 6.0, geo["y_flat"] + 0.02, geo["y_flat"] + 22), b.port_z - 4, b.port_z + 4)
     d_n = geo["y_h"] - geo["py"]
     th_w = geo["th_w"]
-    for nm, m in (("case", case), ("back plate", plate), ("kid button", kid), ("kid button pressed", rock(kid, geo, st, th_w))):
-        v = (plug ^ m).volume()
-        check(v < 1e-3, f"12 x 8 x 22 plug body clears the {nm}", f"gap {plug.min_gap(m, 5):.2f}")
+    mouth = b.tip_y - c.RAD_CLR                                      # receptacle mouth with the board pushed fully down
+    overmold = prism(rect(-15, 15, mouth, mouth + 25), -10, 30)
+    print(f"      receptacle sticks out >= PORT_OUT {p.PORT_OUT} past every part with the board pushed down; any overmold seats")
+    for nm, m in (("case", case), ("back plate", plate), ("kid button", kid),
+                  ("kid button pressed to the stop", rock(kid, geo, st, th_w)),
+                  ("kid button rocked to the ring", rock(kid, geo, st, geo["slope"]))):
+        v, g = (overmold ^ m).volume(), overmold.min_gap(m, 5)
+        check(v < 1e-3 and g >= p.PORT_OUT - 0.01, f"overmold on the pushed-down port clears the {nm}", f"gap {g:.2f}")
 
     print("\n9. Kid button at rest")
     for nm, m in (("case", case), ("back plate", plate)):
@@ -489,12 +497,18 @@ def renders(b, c, p, feats, case, plate, kid, geo, st):
     colour = lambda n: dark if n == "disc + tab" else green if n.startswith(c.BUTTON) else white
     post = plate ^ geo["post_cyl"]
     plate_np = plate - geo["post_cyl"]
-    plug = prism(rect(-6.0, 6.0, geo["y_flat"] + 0.05, geo["y_flat"] + 22), b.port_z - 4, b.port_z + 4)
+    plug = prism(rect(-6.0, 6.0, b.tip_y, b.tip_y + 22), b.port_z - 4, b.port_z + 4)
     asm = [(case, shell), (plate_np, back_c), (post, violet), (kid, kid_c), (fs["disc + tab"], dark), (plug, (0.35, 0.35, 0.38))]
     render([(D(m), col) for m, col in asm], OUT + "hero-front.png", elev=18, azim=62,
            title=f"Pendant, Ø{2*geo['R_OUT']:.1f} x {bbox(case)[1, 2] - bbox(case)[0, 2]:.1f} (+{p.K_GAP + p.K_T:.1f} kid button), plug at 12 o'clock")
     render([(D(m), col) for m, col in asm], OUT + "hero-back.png", elev=18, azim=-118,
            title="From the back: the kid button (orange); the U-cut near 5 o'clock is the latch (coin under its tip)")
+    top = [(case, shell), (plate_np, back_c), (post, violet), (kid, kid_c)] + \
+          [(s, (0.72, 0.74, 0.78) if n == "USB-C receptacle" else colour(n)) for n, s in fs.items()]
+    crop = prism(rect(-14, 14, geo["y_flat"] - 6, 40), -10, 30)      # the top only, or the protrusion is too small to read
+    render([(D(m ^ crop), col) for m, col in top], OUT + "port-top.png", elev=25, azim=50,
+           title=f"12 o'clock: USB-C stands {b.tip_y - geo['y_flat']:.2f} past the flat, "
+                 f"{p.PORT_OUT} with the board pushed down: any overmold seats")
     open_ = kid.rotate([0, 0, -math.degrees(geo["tl"]["turn"])]).translate([0, 0, 5])
     render([(D(case), shell), (D(open_), kid_c)], OUT + "twist-lock.png", elev=-8, azim=-150,
            title=f"Twist-lock, opened: teeth over their entry channels; drop in, turn {math.degrees(geo['tl']['turn']):.0f} deg to lock")
@@ -552,7 +566,7 @@ def main():
     asm = bbox(case + plate + kid)
     mass = {k: m.volume()*MAT.RHO for k, m in (("case", case), ("back plate", plate), ("kid button", kid))}
     print(f"Pendant Ø{2*geo['R_OUT']:.2f}; case {bbox(case)[1, 2] - bbox(case)[0, 2]:.2f} thick, {asm[1, 2] - asm[0, 2]:.2f} with the kid button; "
-          f"flat at y {geo['y_flat']:.2f}; " + ", ".join(f"{k} {g:.1f} g" for k, g in mass.items()) + " (solid)")
+          f"flat at y {geo['y_flat']:.2f}, USB-C sticks out {b.tip_y - geo['y_flat']:.2f} ({p.PORT_OUT} pushed down); " + ", ".join(f"{k} {g:.1f} g" for k, g in mass.items()) + " (solid)")
     U.run_checks(b, c, feats, case, plate, geo)
     run_tab_checks(b, c, p, feats, plate, geo)
     run_pendant_checks(b, c, p, feats, case, plate, kid, geo, st)
