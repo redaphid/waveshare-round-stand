@@ -208,12 +208,35 @@ a 0.3 relief in the case step so the tip never lands before the foot.
 over BOOT puts the press force into the switch, as every earlier plate does.
 Rejected: the whole back piece rocking (what the kid button did).
 
+**Battery pendant: v2's case, cell turned 26°, BOOT flap in the lid** (10-15).
+Aaron has four of the same Makerfocus 1000 mAh cells (JST 1.25 plug, works with
+the badge). The cell needs Ø48.7 inside, so the case is v2's Ø52.3 × 23.4.
+Turning the cell 25.9° (the least that passes) lets the BOOT pole run beside it
+without a bigger case; two ribs stop it turning and key the lid. The port still
+sticks out: a 16-wide notch at 12 o'clock through the front, with the battery
+section as an arched hood behind it (plugs up to 12.6 thick). The kids-case flap
+moved into the lid, never over the cell; its Ø3 × 13.3 pole tips about 1 mm as
+the flap bends. Unprinted. Rejected for now: keeping the Ø43.6 face with a
+battery box behind (it would bulge past the circle).
+
 **Pry notch at 345° on both pendant cases** (10-14). The USB-only 120° lands on
 the corner of the 12 o'clock flat, where the kid button's fulcrum pad sits; 345°
 is the middle of the only rim arc the lock grooves leave free. One
 `U.pry_cut()` cuts every pry notch. Note: 120° is 10 o'clock seen from the
 **back** (the badge frame's +x is right seen from the back), so the USB-only
 notch is at 2 o'clock seen from the screen; the 10-14 print log says "front".
+
+**Screen window cut flat at 12 o'clock** (10-15). The printed pendant's lip
+bar over the USB-C tab (2.68 at its narrowest) was too thin. Aaron wanted it
+longer in the face plane, not thicker (a 2.1 lip was built and reverted), and
+chose to grow it down over the screen's black border rather than up past the
+port (which would have stopped plugs over ~9.4 thick). `Pendant.WIN_FLAT` 0.9:
+the window's top is a flat 0.9 below its circle, with the same bevel, so the
+bar is 3.58. It clears the active display (an estimate scaled from Waveshare's
+drawing) by 0.08 with the board centred; when the pendant hangs, the board
+rides 1.15 up and about 1.07 of the picture's top hides behind the bar (the
+round window already hid ~0.2). Pendant and kids case; the battery pendant's
+top is closed by its hood, so it keeps the round window.
 
 ## Not done / rejected
 

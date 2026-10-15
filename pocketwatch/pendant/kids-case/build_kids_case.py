@@ -18,7 +18,7 @@ from dataclasses import dataclass
 import numpy as np, manifold3d as m3
 import build_pocketwatch_usb as U
 from build_pocketwatch import Badge, Case, Round, circle, rect, prism, union, bbox, check, FAILS, export, render
-from build_pendant import Pendant, MAT, case_body, run_pry_checks
+from build_pendant import Pendant, MAT, case_body, run_pry_checks, run_bar_checks
 
 OUT = "pocketwatch/pendant/kids-case/renders/"
 STL = "stl/pocketwatch/pendant/kids-case/"
@@ -364,7 +364,8 @@ def main():
     print(f"Kids case Ø{2*geo['R_OUT']:.2f} x {bbox(case)[1, 2] - bbox(case)[0, 2]:.2f}; flap {f.F_W:g} wide from x {f.F_ROOT:+g}, "
           f"{f.F_T:g} thick; foot {geo['g_stop']:.2f} over the step; click {m['P_click']:.1f} N at the foot; "
           + ", ".join(f"{k} {g:.1f} g" for k, g in mass.items()) + " (solid)")
-    U.run_checks(b, c, feats, case, plate, geo)
+    U.run_checks(b, c, feats, case, plate, geo, p.WIN_MARGIN)
+    run_bar_checks(b, c, p, case, geo)
     run_kids_checks(b, c, p, f, feats, case, plate, geo)
     _, plate_r, geo_r = flap_plate(b, c, p, f, U.PLATE_DISC_CLR_ROOMY)
     run_pry_checks(10, c, p, case, {"back plate": (plate, geo["R_DISC"]), "roomy back plate": (plate_r, geo_r["R_DISC"])}, geo)

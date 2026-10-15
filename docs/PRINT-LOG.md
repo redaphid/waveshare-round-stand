@@ -15,6 +15,20 @@ Template:
 
 ---
 
+## 2026-10-15 — Pendant case, USB-C sticking out (`Pendant - case.stl` + back plate)
+- material / presets: **PLA** (presumed)
+- result: **"that pretty much worked."** But the bar over the USB-C tab at
+  12 o'clock, the only case joining the two sides there (bezel lip, 1.2 thick,
+  1.3 to 2.7 wide), is "a sorry excuse for the top half of the case. We need it
+  thicker. But no large changes." Then, correcting: "make it longer on the
+  horizontal axis, rather than thicker."
+- fit numbers to change: a thicker lip (2.1) was built and reverted unshipped.
+  He chose to grow the bar **down, over the screen's black edge**: new
+  `Pendant.WIN_FLAT` **0.9** cuts the screen window flat at 12 o'clock, so the
+  bar is **3.58** at its narrowest (was 2.68). Case only; the plate is unchanged.
+  Old case: `archive/pendant-v2 (USB-C out, round window)/`.
+- photo: none
+
 ## 2026-10-14 (night) — Pendant kid button (`Pendant - kid button.stl`)
 - material / presets: **PLA** (presumed)
 - result: **failed** "in a number of ways. For one, it didn't fit." Which

@@ -1,6 +1,6 @@
 # Pendant (1.28 badge)
 
-**Ø43.6 × 12.5 mm, cut flat at 12 o'clock so the USB-C port sticks out 1.65 mm and any cable's plug seats. USB-powered. 15.9 mm thick with the optional kid button (Ø47.4 across its lock teeth).** Designed for **PLA**. Three prints, no supports. This version is not printed yet; the 14.0 × 8.3 slot version before it was printing 2026-10-14 (`archive/pendant-v1 (14.0 x 8.3 USB-C slot)/`). **Reprint the case and the back plate together:** an old plate reaches past the new flat.
+**Ø43.6 × 12.5 mm, cut flat at 12 o'clock so the USB-C port sticks out 1.65 mm and any cable's plug seats. USB-powered. 15.9 mm thick with the optional kid button (Ø47.4 across its lock teeth).** Designed for **PLA**. Three prints, no supports. The version with the port sticking out **printed 2026-10-15 and "pretty much worked"**. Its bar over the USB-C tab was too thin, so the screen window now has a **flat top at 12 o'clock** that widens the bar from 2.68 to **3.58**. **Reprint only the case:** the back plate is unchanged. Old case: `archive/pendant-v2 (USB-C out, round window)/`.
 
 ![12 o'clock](renders/port-top.png)
 
@@ -84,7 +84,8 @@ The kid button has four thick teeth just outside the case wall. Each hooks a fla
 - **The 1 N·m child-twist figure is an assumption.** The key is at 8.8 of 10 MPa at that torque.
 - **Teeth show on the case side** (Ø47.4 across them), like a cap.
 - **The kid button rattles about 0.2 mm at 6 o'clock.** That's on purpose, so nothing holds BOOT down.
-- **The case alone is a C at 12 o'clock.** Over the USB-C tab only the bezel lip (1.2 thick, 2.7 wide at its narrowest) joins the two sides; the snapped-in back plate closes the ring at the back. Handle the bare case gently there, and the plate's snap may feel looser than on the slot version. A bridge behind the tab can't be added: it would be a 17.7 mm unsupported span or a roof a thick plug hits.
+- **The case alone is a C at 12 o'clock.** Over the USB-C tab only the bezel lip (1.2 thick, 3.58 wide at its narrowest since the window's flat top, was 2.68) joins the two sides; the snapped-in back plate closes the ring at the back. Handle the bare case gently there, and the plate's snap may feel looser than on the slot version. A bridge behind the tab can't be added: it would be a 17.7 mm unsupported span or a roof a thick plug hits.
+- **The window's flat top can hide the top of the picture.** None with the board centred. When the pendant hangs from its cable the board rides 1.15 up in its bore, and about 1.1 mm of the picture's top goes behind the bar. The active-display size is scaled from Waveshare's drawing, not measured.
 - **Still guesses:** BOOT position (±1 mm; the nub is checked landing on the tab ±0.7 off), switch force 2 N, switch height.
 
 ## Numbers

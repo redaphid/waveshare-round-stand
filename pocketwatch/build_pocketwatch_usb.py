@@ -100,7 +100,7 @@ def pry_cut(R_BORE, R_OUT, FLOOR, z_back, deg):
     return prism(rect(R_BORE + 0.3, R_OUT + 1.0, -PRY_W/2, PRY_W/2).rotate(deg), FLOOR - PRY_DEPTH, z_back + 1)
 
 
-def run_checks(b, c, feats, case, plate, geo):
+def run_checks(b, c, feats, case, plate, geo, win_margin=0.5):
     static = {"case": case, "plate": plate}
     target = f"{c.BUTTON} actuator"
 
@@ -152,10 +152,11 @@ def run_checks(b, c, feats, case, plate, geo):
             check(eng >= c.MIN_ENGAGE and span >= 5.0, f"{h.name} {wn}", f"engages {eng:.2f} deep over {span:.1f} of y")
 
     print("\n4. Bezel lip")
-    probe = m3.Manifold.cylinder(c.LIP_T + 2, (b.active_d + 1)/2, (b.active_d + 1)/2, SEG).translate([0, 0, -c.LIP_T - 1])
-    win_d = 2*(b.r - c.LIP_OVERLAP)
-    check((probe ^ case).volume() < 1e-4, f"window clears active display {b.active_d:.2f} + 1",
-          f"window {win_d:.2f}, margin {win_d - b.active_d - 1:.2f}")
+    r_p = b.active_d/2 + win_margin
+    probe = m3.Manifold.cylinder(c.LIP_T + 2, r_p, r_p, SEG).translate([0, 0, -c.LIP_T - 1])
+    gap = prism(circle(b.active_d/2), -c.LIP_T - 1, 0.0).min_gap(case, 3.0)
+    check((probe ^ case).volume() < 1e-4, f"window clears active display {b.active_d:.2f} + {2*win_margin:g}",
+          f"clear by {gap:.2f} a side at the closest")
     ring = prism(circle(b.r - 0.05) - circle(b.r - c.LIP_OVERLAP + 0.05), -0.05, 0.0)
     check((ring ^ case).volume() > 0.5, "lip overlaps the glass edge (retains it)", f"{c.LIP_OVERLAP:.2f} per side")
 

@@ -63,6 +63,8 @@ MAT = Material()
 @dataclass(frozen=True)
 class Pendant:
     PORT_OUT: float = 0.5       # least the receptacle mouth stands past every part with the board pushed fully down
+    WIN_FLAT: float = 0.9       # screen window cut flat at 12 o'clock this far in: widens the lip bar over the tab (2026-10-15)
+    WIN_MARGIN: float = 0.05    # that flat stays this far off the active display, board centred
     FLAT_SOFT: float = 1.5      # radius where the flat meets the circle
     FRONT_R: float = 2.0        # outer front edge round
     BACK_R: float = 0.6         # outer back edge round (the rim is only MIN_WALL thick)
@@ -206,15 +208,20 @@ def case_body(b: Badge, c: Case, p: Pendant, feats, geo, z_back):
     zb_p = FLOOR - c.SNAP_LIP - c.SNAP_CLR - (2*(c.FIT_CLR + c.SNAP_INT) + c.BEAD_FLAT)/2   # as build_pocketwatch_usb
     _, groove_p, _, groove_r_p = snap(c, R_BORE, zb_p)
     window = m3.Manifold.cylinder(c.LIP_T + 0.02, b.r - c.LIP_OVERLAP + c.LIP_BEVEL, b.r - c.LIP_OVERLAP, SEG)
+    window = window.rotate([0, 0, 90/SEG]).translate([0, 0, -c.LIP_T - 0.01])   # quarter segment off the bore's vertices, or one pinches
+    # flat top: y_win at the glass face, leaning out toward the front with the bevel (keep y + s z <= y_win)
+    y_win = b.r - c.LIP_OVERLAP - p.WIN_FLAT
+    n = np.array([0.0, -1.0, -c.LIP_BEVEL/c.LIP_T]); L = np.linalg.norm(n)
+    window = window.trim_by_plane(list(n/L), -y_win/L)
     case = chamfered([circle(R_OUT) ^ below, boss ^ below], -c.LIP_T, z_back, c.CHAMFER, U.BACK_CHAMFER)
     case -= prism(bore_xy, 0.0, z_back + 1)
     case -= prism(circle(R_REAR), FLOOR, z_back + 1)
-    case -= window.rotate([0, 0, 90/SEG]).translate([0, 0, -c.LIP_T - 0.01])   # quarter segment off the bore's vertices, or one pinches
+    case -= window
     case -= groove_p
     case -= union(keep.values())
     pry = U.pry_cut(R_BORE, R_OUT, FLOOR, z_back, p.PRY_DEG)
     case -= pry
-    geo.update(R_OUT=R_OUT, boss=boss, groove_r_p=groove_r_p, pry=pry)
+    geo.update(R_OUT=R_OUT, boss=boss, groove_r_p=groove_r_p, pry=pry, y_win=y_win)
     return case
 
 
@@ -345,6 +352,17 @@ def rock(m, geo, st, th):
 
 
 # ---- checks ----------------------------------------------------------------
+def run_bar_checks(b, c, p, case, geo):
+    """The lip bar over the USB-C tab: the only case joining the two sides at 12 o'clock."""
+    print("\n8a. Lip bar over the USB-C tab (the window's flat top widens it)")
+    cut = case ^ prism(rect(-0.05, 0.05, 0.0, 40.0), -0.05, 0.0)
+    w = bbox(cut)[1, 1] - bbox(cut)[0, 1] if not cut.is_empty() else 0.0
+    check(w >= 3.5, "bar at its narrowest (12 o'clock, glass face) >= 3.5", f"{w:.2f} (was 2.68 before the flat)")
+    hidden = b.active_d/2 + c.RAD_CLR - geo["y_win"]
+    print(f"      picture hidden at 12 o'clock: none with the board centred, {hidden:.2f} when it hangs from the cable "
+          f"(the board rides {c.RAD_CLR} up in its bore)")
+
+
 def run_pendant_checks(b, c, p, feats, case, plate, kid, geo, st):
     W = c.MIN_WALL
     print("\n8. Case: the USB-only outline, snap ledge wall, port sticking out")
@@ -599,7 +617,8 @@ def main():
     mass = {k: m.volume()*MAT.RHO for k, m in (("case", case), ("back plate", plate), ("kid button", kid))}
     print(f"Pendant Ø{2*geo['R_OUT']:.2f}; case {bbox(case)[1, 2] - bbox(case)[0, 2]:.2f} thick, {asm[1, 2] - asm[0, 2]:.2f} with the kid button; "
           f"flat at y {geo['y_flat']:.2f}, USB-C sticks out {b.tip_y - geo['y_flat']:.2f} ({p.PORT_OUT} pushed down); " + ", ".join(f"{k} {g:.1f} g" for k, g in mass.items()) + " (solid)")
-    U.run_checks(b, c, feats, case, plate, geo)
+    U.run_checks(b, c, feats, case, plate, geo, p.WIN_MARGIN)
+    run_bar_checks(b, c, p, case, geo)
     run_tab_checks(b, c, p, feats, plate, geo)
     run_pendant_checks(b, c, p, feats, case, plate, kid, geo, st)
     _, _, plate_r, geo_r = button_plate(b, c, p, U.PLATE_DISC_CLR_ROOMY)
