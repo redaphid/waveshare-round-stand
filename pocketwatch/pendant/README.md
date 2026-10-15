@@ -11,7 +11,7 @@
 | **case** | `stl/pocketwatch/pendant/Pendant - case.stl` | bezel face down, as exported | 4.8 g |
 | **back plate** | `stl/pocketwatch/pendant/Pendant - back plate (button).stl` | flat back down, as exported | 4.3 g |
 | back plate, if the first one is too tight | `… - back plate (button, roomy).stl` | same | 4.1 g |
-| **kid button** (optional) | `stl/pocketwatch/pendant/Pendant - kid button.stl` | flat face down, teeth up, as exported | 4.8 g |
+| kid button (**failed its first print: did not fit**; use the [kids case](kids-case/README.md) instead) | `stl/pocketwatch/pendant/Pendant - kid button.stl` | flat face down, teeth up, as exported | 4.8 g |
 
 \*Counted as solid PLA, so a real print with infill weighs less.
 
@@ -19,9 +19,9 @@
 
 ## What it is
 
-- **Case:** a Ø43.6 circle, **cut flat at 12 o'clock just below the USB-C port**, so the receptacle sticks out **1.65 mm** (still **0.5 mm** with the board pushed down by a plug, since the board floats 1.15 in the bore). The plug's overmold meets the port, never the case, whatever the cable. No plug slot. Added for the kid button: four L-shaped lock grooves on the outside of the wall.
+- **Case:** a Ø43.6 circle, **cut flat at 12 o'clock just below the USB-C port**, so the receptacle sticks out **1.65 mm** (still **0.5 mm** with the board pushed down by a plug, since the board floats 1.15 in the bore). The plug's overmold meets the port, never the case, whatever the cable. No plug slot. A **pry notch** at about 3:30 seen from the back (8:30 seen from the screen) lets a screwdriver lever out a tight plate. Added for the kid button: four L-shaped lock grooves on the outside of the wall.
 - **Back plate:** the USB-only plate with this pendant's own **BOOT tab: 21 long, 4.4 wide at the post widening to 8, 1.2 thick**. It snaps in flush. Push the U-shaped tab on its own to click BOOT.
-- **Kid button:** a disc over the whole back. Press it anywhere in the lower two-thirds and BOOT clicks. It twist-locks on, and only a coin releases it.
+- **Kid button (failed, see the [kids case](kids-case/README.md)):** a disc over the whole back. Press it anywhere in the lower two-thirds and BOOT clicks. It twist-locks on, and only a coin releases it.
 
 ## Assembly
 
@@ -111,4 +111,4 @@ The numbers are **thickness, width (across), length (along the USB axis)** in mm
 
 ## Rebuild
 
-`~/.venvs/cad/bin/python pocketwatch/pendant/build_pendant.py` from the repo root (114 checks, about 30 s). Add `--no-render` for a fast check run.
+`~/.venvs/cad/bin/python pocketwatch/pendant/build_pendant.py` from the repo root (119 checks, about 30 s). Add `--no-render` for a fast check run.

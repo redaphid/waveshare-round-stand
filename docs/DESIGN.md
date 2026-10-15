@@ -195,6 +195,26 @@ the tab sides in the slot; y and z from the disc in the bore and the lip.
 Rejected: a 10.3-tall slot (leaves ~1 mm of case front and back of it, and the
 next cable can still be bigger).
 
+**Kids case: a flap in the back plate replaces the kid button** (10-14). The
+twist-lock kid button did not fit on its first print. Aaron sketched the
+replacement on the board (frame "Kid's case"): a case variant, a gap where the
+post was, a pole that clicks BOOT, and a back piece that flexes. Built as two
+parts, not three: a separate outer piece had nothing to snap into (a rigid disc
+forced into the case would crack PLA; a skirt needs a wider pendant), so the flap
+lives in the back plate and its outer end lands on the case step after the
+click. An 8 x 26 flap, root at x +8, pole at BOOT, a 0.3 foot at its outer end,
+a 0.3 relief in the case step so the tip never lands before the foot.
+**Known weakness:** only a press at the flap's outer end is stopped; a press
+over BOOT puts the press force into the switch, as every earlier plate does.
+Rejected: the whole back piece rocking (what the kid button did).
+
+**Pry notch at 345° on both pendant cases** (10-14). The USB-only 120° lands on
+the corner of the 12 o'clock flat, where the kid button's fulcrum pad sits; 345°
+is the middle of the only rim arc the lock grooves leave free. One
+`U.pry_cut()` cuts every pry notch. Note: 120° is 10 o'clock seen from the
+**back** (the badge frame's +x is right seen from the back), so the USB-only
+notch is at 2 o'clock seen from the screen; the 10-14 print log says "front".
+
 ## Not done / rejected
 
 - **Headless slicing.** ElegooSlicer CLI: `type`/`from` fields and `inherits`
