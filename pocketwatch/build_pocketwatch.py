@@ -121,6 +121,7 @@ class Case:
     LEAD_HOLE: float = 6.0       # square hole in the plate over the JST for the battery lead
     MIN_WALL: float = 1.2
     MIN_ENGAGE: float = 1.5
+    STEP: float = 1.0            # chamber radius past the bore: the ledge the plate sits on
 
     @property
     def STROKE(self): return self.REST_CLR + self.SW_TRAVEL
@@ -244,7 +245,7 @@ def build(b: Badge, c: Case):
     feats, sw = features(b, c)
     R_BORE = b.r + c.RAD_CLR
     R_BATT = 0.5*math.hypot(c.BATT_W, c.BATT_L) + c.BAY_CLR
-    R_REAR = max(R_BATT, R_BORE + 1.0)            # battery chamber; always a step for the plate to sit on
+    R_REAR = max(R_BATT, R_BORE + c.STEP)         # battery chamber; always a step for the plate to sit on
     R_OUT = R_REAR + c.CASE_WALL
     FLOOR = b.hdr_top_z + c.FLOAT                 # the step = plate's front face
     batt_z0 = FLOOR + c.PLATE_T + c.BAY_CLR
