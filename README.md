@@ -63,7 +63,7 @@ numbers to edit.
 | **Pocketwatch case** | plates proven; cases need a reprint | [pocketwatch-case](docs/models/pocketwatch-case.md) |
 | **Telegraph key stand** | printed (40°); 50° concept | [telegraph-key](docs/models/telegraph-key.md) |
 | Hoop stand | printed; fixes unprinted | [hoop-stand](docs/models/hoop-stand.md) |
-| Pendant, kids case | pendant plate proven, case fix unprinted; kids case concept | [pendant](docs/models/pendant.md) |
+| Pendant, kids case | plate proven; kids case concept | [pendant](docs/models/pendant.md) |
 | Battery pendant | concept | [battery-pendant](docs/models/battery-pendant.md) |
 | Wearable pendants | concept | [wearable-pendants](docs/models/wearable-pendants.md) |
 | Monitor gauge pod | concept | [monitor-pod](docs/models/monitor-pod.md) |
