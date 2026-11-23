@@ -1,0 +1,396 @@
+# Every printable file in stl/, one row each. This is the source of truth:
+# build_catalog.py checks it against the files on disk and writes stl/README.md from it.
+#
+# family: name, dir (under stl/), about, board, material, script (repo-relative), edit (what to change
+#   in that script), readme, renders (the first is the hero image), featured, also (files from another
+#   family that this one needs). A part may override board, script, edit or material.
+# part: file (under stl/), what, status, log, fixed, print, note.
+#   status: proven | printed | needs-work | failed | unprinted. Superseded files are deleted, not kept.
+#   log: the date of the docs/PRINT-LOG.md entry that backs the status (required unless unprinted).
+#   fixed: needs-work only. true = the current file already has the requested change, unprinted since.
+# board: "1.28", "1.46 cover glass", "1.46 bare", "any", or a list of them.
+
+[[family]]
+id = "fit-gauges"
+name = "Fit gauges"
+dir = "fit-gauges"
+about = "Ten-minute prints that measure how your printer and your badge fit, before you commit to a case or stand. Print both first and tell the owner which slot and which ring fit."
+board = "any"
+material = "PLA or PETG"
+renders = ["renders/fit-gauge.png", "pocketwatch/renders/bore-gauge.png"]
+parts = [
+  { file = "fit-gauges/Slot fit gauge.stl", what = "Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.", sets = "1.28 rim thickness: `gap` in `build_stands.py` `BOARDS`", script = "build_fit_gauge.py", edit = "`WIDTHS`", status = "proven", log = "2026-09-18", print = "flat, as exported", note = "Owner's 1.28 seated in slot 5 (5.0 mm)." },
+  { file = "fit-gauges/Pocketwatch - bore fit gauge.stl", what = "The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore.", sets = "case bore clearance: `Case.RAD_CLR` in `pocketwatch/build_pocketwatch.py`", board = "1.28", script = "pocketwatch/build_bore_gauge.py", edit = "`CLRS`", status = "proven", log = "2026-10-13", print = "bezel down, about 10 minutes", note = "Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between." },
+]
+
+[[family]]
+id = "telegraph"
+name = "Telegraph key stand"
+featured = true
+dir = "pocketwatch/stands/hoop"
+about = "The badge, in the USB-only pocketwatch case, leans back 40 degrees in a brass-look hoop. Press the brass knob at the front: a lever on a pin tips its rear arm into the back plate's BOOT tab. BOOT clicks after 3.2 mm of knob travel at about 1.75 N, then the lever lands on an anvil, so a hard press goes into the base, never into the switch."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/stands/hoop/build_hoop_telegraph.py"
+edit = "`Key` (lever, pin, knob, lean); the hoop and mortise come from `Stand` in `build_hoop.py`"
+readme = "pocketwatch/stands/hoop/README.md"
+renders = ["pocketwatch/stands/hoop/renders/telegraph-01-hero.png", "pocketwatch/stands/hoop/renders/telegraph-section-pressed.png", "pocketwatch/stands/hoop/renders/telegraph-exploded.png", "pocketwatch/stands/hoop/renders/telegraph-angles.png", "pocketwatch/stands/hoop/renders/telegraph-print-layout.png"]
+also = ["pocketwatch/stands/hoop/Hoop stand - back plate (button).stl"]
+parts = [
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (40 deg).stl", what = "The case fused into the hoop, tenon cut for the 40 degree lean (the default).", status = "printed", log = "2026-11-22", print = "bezel down", note = "Inferred to be the printed angle: 40 degrees is the default, and the owner did not say." },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (40 deg).stl", what = "Base with the pin posts, the anvil and the back stop.", status = "printed", log = "2026-11-22", print = "flat, **100% infill**: it is the ballast" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (40 deg).stl", what = "The key lever, 2.1 g. Every arm and the hairpin spring bend along the layers.", status = "printed", log = "2026-11-22", print = "on its side, as exported" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - knob.stl", what = "Snaps onto the lever's split peg. Both angles use it.", status = "printed", log = "2026-11-22", print = "upright" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - pin.stl", what = "Ø3 pivot pin, a head on one end and a split, barbed end on the other. Both angles use it.", status = "printed", log = "2026-11-22", print = "on its flat" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (50 deg).stl", what = "Hoop and case for a 50 degree lean: lower (66 mm), and the plug sits 12 mm past the base rim.", status = "unprinted", print = "bezel down" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (50 deg).stl", what = "Base for the 50 degree lean.", status = "unprinted", print = "flat, 100% infill" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (50 deg).stl", what = "Lever for the 50 degree lean.", status = "unprinted", print = "on its side, as exported" },
+]
+
+[[family]]
+id = "pocketwatch"
+name = "Pocketwatch case"
+featured = true
+dir = "pocketwatch"
+about = "The 1.28 badge in a round watch case; the USB-C plug at 12 o'clock is the crown. **USB-only**: Ø43.6 × 12.5, two parts, powered through the cable; it is also the case every pocketwatch stand uses. **Battery** (v2): Ø52.3 × 23.4, three parts, room for a 1000 mAh LiPo. Back plates come in **roomy** versions for a printer that prints oversize."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/build_pocketwatch_usb.py"
+edit = "`Badge` and `Case` in `pocketwatch/build_pocketwatch.py` (shared by every pocketwatch design); `PLATE_DISC_CLR` and `PLATE_DISC_CLR_ROOMY` for the plate fit"
+readme = "pocketwatch/README.md"
+renders = ["pocketwatch/renders/front.png", "pocketwatch/renders/usb-exploded.png", "pocketwatch/renders/exploded.png", "pocketwatch/renders/usb-section-post.png"]
+parts = [
+  { file = "pocketwatch/Pocketwatch USB-only - case.stl", what = "USB-only case: bore, header grips, crown boss and a pry notch at 10 o'clock.", status = "needs-work", log = "2026-10-14", fixed = true, print = "bezel down", note = "10-13: 'Case is a great fit.' 10-14: too tight to pry the plate off, USB-C opening too small; the pry notch and a slot 2 mm bigger all round are in this file, unprinted." },
+  { file = "pocketwatch/Pocketwatch USB-only - plate.stl", what = "Back plate with the post that clicks BOOT when you press the screen.", status = "proven", log = "2026-10-13", print = "flat back down, guides and post up", note = "One print came out ~1 mm too large; the next print of this file fit." },
+  { file = "pocketwatch/Pocketwatch USB-only - plate (roomy).stl", what = "The same plate, 0.65 mm per side clearance instead of 0.18, for a printer that prints oversize.", status = "unprinted", print = "flat back down" },
+  { file = "pocketwatch/Pocketwatch USB-only - plate (button).stl", what = "Back plate with a U-slot flexure tab over BOOT: push the tab on the back to click.", status = "needs-work", log = "2026-10-13", fixed = true, print = "flat back down", note = "The finger dimple printed melted; it is removed. The rest was OK." },
+  { file = "pocketwatch/Pocketwatch USB-only - plate (button, roomy).stl", what = "Button plate, roomy fit.", status = "unprinted", print = "flat back down" },
+  { file = "pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl", what = "Back plate with a Ø3.4 hole straight onto BOOT: click it with a paperclip or SIM tool.", status = "unprinted", print = "flat back down" },
+  { file = "pocketwatch/Pocketwatch USB-only - plate (BOOT hole, roomy).stl", what = "BOOT-hole plate, roomy fit.", status = "unprinted", print = "flat back down" },
+  { file = "pocketwatch/Pocketwatch - case.stl", what = "Battery case (v2): badge in front, battery chamber behind.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "needs-work", log = "2026-10-13", fixed = true, print = "bezel down", note = "Reprint 'looking better'; the USB-C recess was too big. The smaller flat-roofed slot is in this file, unprinted." },
+  { file = "pocketwatch/Pocketwatch - plate.stl", what = "Battery case's back plate: header guides and the BOOT post.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "proven", log = "2026-10-12", print = "flat back down, guides and post up", note = "'The back plate is great!' (from memory; the print was lost)." },
+  { file = "pocketwatch/Pocketwatch - lid.stl", what = "Battery case's lid.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "unprinted", print = "flat" },
+]
+
+[[family]]
+id = "hoop"
+name = "Hoop stand"
+dir = "pocketwatch/stands/hoop"
+about = "The USB-only case in a gimbal-style hoop on a round base, face 20 degrees back, crown up. Two snap arms on the neck click into the base. Click BOOT with the button plate's tab on the back."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/stands/hoop/build_hoop.py"
+edit = "`Stand` (`FIT` is the mortise clearance per side)"
+readme = "pocketwatch/stands/hoop/README.md"
+renders = ["pocketwatch/stands/hoop/renders/01-hero.png", "pocketwatch/stands/hoop/renders/07-exploded.png"]
+parts = [
+  { file = "pocketwatch/stands/hoop/Hoop stand - hoop and case.stl", what = "The USB-only case fused into the hoop.", status = "needs-work", log = "2026-10-13", fixed = true, print = "bezel down", note = "Loose on the base: the fix is the base's 0.08 mortise. The 0.4 mm wider USB-C hole is in this file." },
+  { file = "pocketwatch/stands/hoop/Hoop stand - base.stl", what = "Base, mortise clearance 0.08 per side (the default since the 0.12 printed loose).", status = "unprinted", print = "flat, **100% infill**: it is the ballast" },
+  { file = "pocketwatch/stands/hoop/Hoop stand - base (looser, 0.12).stl", what = "Base at 0.12 per side, for a printer that prints tight.", status = "printed", log = "2026-10-13", print = "flat, 100% infill", note = "The case was loose in it on the owner's printer." },
+  { file = "pocketwatch/stands/hoop/Hoop stand - base (roomier, 0.18).stl", what = "Base at 0.18 per side, for a printer that prints very tight.", status = "unprinted", print = "flat, 100% infill" },
+  { file = "pocketwatch/stands/hoop/Hoop stand - back plate (button).stl", what = "Button back plate (push the tab to click BOOT). The telegraph needs this one.", status = "needs-work", log = "2026-10-13", fixed = true, print = "flat back down", note = "The melted finger dimple is removed." },
+  { file = "pocketwatch/stands/hoop/Hoop stand - back plate (button, roomy).stl", what = "Button plate, roomy fit.", status = "unprinted", print = "flat back down" },
+  { file = "pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole).stl", what = "Back plate with a hole onto BOOT, for a pin.", status = "unprinted", print = "flat back down" },
+]
+
+[[family]]
+id = "pendant"
+name = "Pendant"
+dir = "pocketwatch/pendant"
+about = "A USB-powered Ø43.6 case cut flat at 12 o'clock so the USB-C port sticks out and any plug seats. A button back plate clicks BOOT."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/pendant/build_pendant.py"
+edit = "`Pendant` (`PORT_OUT`, `WIN_FLAT`), `Stack`, `Material`"
+readme = "pocketwatch/pendant/README.md"
+renders = ["pocketwatch/pendant/renders/hero-front.png", "pocketwatch/pendant/renders/exploded.png"]
+parts = [
+  { file = "pocketwatch/pendant/Pendant - case.stl", what = "The case, port out at 12 o'clock.", status = "needs-work", log = "2026-10-15", fixed = true, print = "bezel down", note = "'That pretty much worked', but the bar over the USB-C tab was too thin. The window's flat top (bar 2.68 to 3.58 mm) is in this file, unprinted." },
+  { file = "pocketwatch/pendant/Pendant - back plate (button).stl", what = "Back plate with the BOOT button tab.", status = "proven", log = "2026-10-15", print = "flat back down" },
+  { file = "pocketwatch/pendant/Pendant - back plate (button, roomy).stl", what = "Back plate, roomy fit.", status = "unprinted", print = "flat back down" },
+]
+
+[[family]]
+id = "desk-1.28"
+name = "Desk stands for the 1.28 (bare badge)"
+dir = "small"
+about = "The first designs: the bare badge leans back in a groove, no case. Sized with the slot fit gauge."
+board = "1.28"
+material = "PETG"
+script = "build_stands.py"
+edit = "the `\"1.28\"` entry in `BOARDS` (`gap`, `lean`, `depth`, `rear_lip`)"
+renders = ["preview-stands.png", "renders/stand-1.28-BOOT-post-front.png"]
+parts = [
+  { file = "small/Stand - BOOT button.stl", what = "Stand plus a post behind the badge: press the screen and it clicks BOOT.", script = "build_stand_button.py", edit = "`POST_R`, `REST_CLR`, `SWITCH`; the groove comes from `build_stands.py`", status = "proven", log = "2026-09-20", print = "flat, as exported", note = "'Ok, works well enough' after the rear wall was cut short for the switch housings." },
+  { file = "small/Stand.stl", what = "Plain stand, 5.4 mm groove, USB-C at the top.", status = "unprinted", print = "flat, as exported", note = "Same groove as the BOOT stand." },
+  { file = "small/Stand - RESET button.stl", what = "Stand with the post on RESET instead of BOOT.", script = "build_stand_button.py", edit = "`POST_R`, `REST_CLR`, `SWITCH`", status = "unprinted", print = "flat, as exported" },
+  { file = "small/Dock for right-angle cable - USB-C down.stl", what = "The badge turned over, USB-C down, for an L-shaped cable; rotate the screen in firmware.", edit = "the `\"1.28-usbdown\"` entry in `BOARDS`", status = "unprinted", print = "flat, as exported", note = "Built from drawing numbers that calipers later corrected. The owner dropped the right-angle cable plan on 10-03." },
+]
+
+[[family]]
+id = "desk-1.46"
+name = "Desk stands for the 1.46"
+dir = "large"
+about = "The same groove stand for the 1.46 Touch. It ships in two thicknesses that are **not interchangeable**: with cover glass (12.30 mm) or bare (10.65 mm). Each file says which. The docks leave 27 mm under the rim for a straight USB-C plug in the bottom port."
+board = "1.46 cover glass"
+material = "PETG"
+script = "build_stands.py"
+edit = "the `\"1.46-glass\"` and `\"1.46-bare\"` entries in `BOARDS`"
+renders = ["preview-stands.png", "preview-docks.png"]
+parts = [
+  { file = "large/Stand - cover glass.stl", what = "Desk stand for the cover-glass 1.46.", status = "proven", log = "2026-09-18", print = "flat, as exported", note = "Seats cleanly; a straight cable in the bottom port does not fit, hence the docks." },
+  { file = "large/Dock for straight cable - cover glass.stl", what = "Taller stand with 27 mm under the rim for a straight plug.", edit = "the `\"1.46-glass-dock\"` entry in `BOARDS`", status = "unprinted", print = "flat, as exported" },
+  { file = "large/Stand - no cover glass.stl", what = "Desk stand for the bare 1.46.", board = "1.46 bare", status = "unprinted", print = "flat, as exported" },
+  { file = "large/Dock for straight cable - no cover glass.stl", what = "Dock for the bare 1.46.", board = "1.46 bare", edit = "the `\"1.46-bare-dock\"` entry in `BOARDS`", status = "unprinted", print = "flat, as exported" },
+]
+
+[[family]]
+id = "pod"
+name = "Monitor gauge pod"
+dir = "pod"
+about = "An instrument cluster that clips to the side of a monitor: one 1.46 on top, two 1.28s below. Print the cup test and the trim rings first."
+board = ["1.28", "1.46 cover glass"]
+material = "PETG"
+script = "pod/build_pod.py"
+edit = "`FIT`, `CANT`, `CUP_WALL`, `RING_PRESS` at the top; the gap between gauges is the first argument (12 or 26)"
+readme = "pod/README.md"
+renders = ["pod/renders/01-pod-gap12-front-quarter.png", "pod/renders/03-clip-exploded.png"]
+parts = [
+  { file = "pod/Pod cup test - small.stl", what = "One 1.28 cup on a desk base, ~16 g against ~40 g for the pod. Print it before the pod.", board = "1.28", script = "pod/build_cup_stand.py", edit = "`LEAN`, `BASE_W`; the cup itself is `build_pod.py`'s", status = "unprinted", print = "face up as exported, then stand it on its feet" },
+  { file = "pod/Trim ring - small.stl", what = "Presses into a 1.28 cup to hold the badge. The pod needs 2.", board = "1.28", status = "unprinted", print = "flat" },
+  { file = "pod/Trim ring - large.stl", what = "Presses into the 1.46 cup. The pod needs 1.", board = "1.46 cover glass", status = "unprinted", print = "flat" },
+  { file = "pod/Pod - right-angle cables.stl", what = "The pod with 12 mm between gauges, for right-angle USB-C cables. 181 mm tall.", status = "unprinted", print = "as exported" },
+  { file = "pod/Pod - straight cables.stl", what = "The pod with 26 mm gaps for straight plugs. 209 mm tall.", status = "unprinted", print = "as exported" },
+  { file = "pod/Clip - fixed jaw.stl", what = "Clamps to the monitor edge (8 to 32 mm). Print 2.", board = "any", status = "unprinted", print = "as exported" },
+  { file = "pod/Clip - slider.stl", what = "The clip's sliding jaw, locked with an M3 × 12. Print 2.", board = "any", status = "unprinted", print = "as exported" },
+]
+
+[[family]]
+id = "battery-pendant"
+name = "Battery pendant"
+dir = "pocketwatch/pendant/battery"
+about = "The v2 battery pocketwatch with the pendant's port sticking out and a BOOT flap in the lid. Ø52.3 × 23.4, 1000 mAh cell."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/pendant/battery/build_battery_pendant.py"
+edit = "`Battery`, `Frame`"
+readme = "pocketwatch/pendant/battery/README.md"
+renders = ["pocketwatch/pendant/battery/renders/exploded.png"]
+parts = [
+  { file = "pocketwatch/pendant/battery/Battery pendant - case.stl", what = "Case.", status = "unprinted", print = "bezel down" },
+  { file = "pocketwatch/pendant/battery/Battery pendant - plate.stl", what = "Plate between the badge and the cell.", status = "unprinted", print = "back face down" },
+  { file = "pocketwatch/pendant/battery/Battery pendant - lid (flap).stl", what = "Lid with the BOOT flap.", status = "unprinted", print = "back face down, pole up; on the same bed as the case" },
+  { file = "pocketwatch/pendant/battery/Battery pendant - plate (roomy).stl", what = "Plate, roomy fit.", status = "unprinted", print = "back face down" },
+  { file = "pocketwatch/pendant/battery/Battery pendant - lid (flap, roomy).stl", what = "Lid, roomy fit.", status = "unprinted", print = "back face down, pole up" },
+]
+
+[[family]]
+id = "kids-case"
+name = "Kids case"
+dir = "pocketwatch/pendant/kids-case"
+about = "The pendant with a big flap on the back plate that clicks BOOT. It replaced the failed twist-lock kid button."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/pendant/kids-case/build_kids_case.py"
+edit = "`Flap`; the case is the pendant's (`Pendant` in `build_pendant.py`)"
+readme = "pocketwatch/pendant/kids-case/README.md"
+renders = ["pocketwatch/pendant/kids-case/renders/exploded.png"]
+parts = [
+  { file = "pocketwatch/pendant/kids-case/Kids case - case.stl", what = "Case.", status = "unprinted", print = "bezel down" },
+  { file = "pocketwatch/pendant/kids-case/Kids case - back plate (flap).stl", what = "Back plate with the BOOT flap.", status = "unprinted", print = "flat back face down" },
+  { file = "pocketwatch/pendant/kids-case/Kids case - back plate (flap, roomy).stl", what = "Back plate, roomy fit.", status = "unprinted", print = "flat back face down" },
+]
+
+[[family]]
+id = "wearable"
+name = "Wearable pendants"
+dir = "pocketwatch/pendant/wearable"
+about = "Thin-bezel pendants with two cord ears at 12 o'clock, for a 150 mAh (EEMB LP401730) or 500 mAh (503035) cell. The 500 mAh cell's size is assumed: measure one."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/pendant/wearable/build_wearable.py"
+edit = "`Cell`, `Slim`, `Bail`"
+readme = "pocketwatch/pendant/wearable/README.md"
+renders = ["pocketwatch/pendant/wearable/renders/150mAh/three-quarter.png", "pocketwatch/pendant/wearable/renders/500mAh/three-quarter.png"]
+parts = [
+  { file = "pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - case.stl", what = "150 mAh case, Ø43.2 × 19.8.", status = "unprinted", print = "bezel down" },
+  { file = "pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - plate.stl", what = "150 mAh plate.", status = "unprinted", print = "back face down" },
+  { file = "pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - lid (flap).stl", what = "150 mAh lid with the BOOT flap.", status = "unprinted", print = "back face down, pole up; on the same bed as the case" },
+  { file = "pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - plate (roomy).stl", what = "150 mAh plate, roomy fit.", status = "unprinted", print = "back face down" },
+  { file = "pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - lid (flap, roomy).stl", what = "150 mAh lid, roomy fit.", status = "unprinted", print = "back face down, pole up" },
+  { file = "pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - case.stl", what = "500 mAh case, Ø52.2 × 20.8; press the screen to click BOOT.", status = "unprinted", print = "bezel down" },
+  { file = "pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - plate.stl", what = "500 mAh plate.", status = "unprinted", print = "back face down" },
+  { file = "pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - lid.stl", what = "500 mAh lid.", status = "unprinted", print = "flat" },
+]
+
+[[family]]
+id = "hood"
+name = "Hood stand"
+dir = "pocketwatch/stands/hood"
+about = "The USB-only case under a hood on one pillar, printed on its front face."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/stands/hood/build_hood.py"
+edit = "`Hood`"
+readme = "pocketwatch/stands/hood/README.md"
+renders = ["pocketwatch/stands/hood/renders/hero.png"]
+parts = [
+  { file = "pocketwatch/stands/hood/Hood stand.stl", what = "Stand and case in one piece.", status = "unprinted", print = "on its front face, as exported" },
+  { file = "pocketwatch/stands/hood/Hood stand - back plate (BOOT hole).stl", what = "Back plate with a hole onto BOOT.", status = "unprinted", print = "flat back down" },
+]
+
+[[family]]
+id = "kickstand"
+name = "Kickstand case"
+dir = "pocketwatch/stands/kickstand"
+about = "A slim case with a hinged leg that folds flat into a puck."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/stands/kickstand/build_kickstand.py"
+edit = "`Kick`"
+readme = "pocketwatch/stands/kickstand/README.md"
+renders = ["pocketwatch/stands/kickstand/renders/01-hero.png"]
+parts = [
+  { file = "pocketwatch/stands/kickstand/Kickstand - case.stl", what = "Case with the hinge cheeks.", status = "unprinted", print = "bezel down" },
+  { file = "pocketwatch/stands/kickstand/Kickstand - back plate (BOOT hole).stl", what = "Back plate with a hole onto BOOT.", status = "unprinted", print = "back face down" },
+  { file = "pocketwatch/stands/kickstand/Kickstand - leg.stl", what = "The folding leg.", status = "unprinted", print = "back face down, barrel up" },
+  { file = "pocketwatch/stands/kickstand/Kickstand - hinge pin.stl", what = "Hinge pin, Ø2.2 × 25.4.", status = "unprinted", print = "on its flat" },
+]
+
+[[family]]
+id = "pedestal"
+name = "Pedestal"
+dir = "pocketwatch/stands/pedestal"
+about = "The watch as a round puck on its crown stem, on a low plinth square to the face."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/stands/pedestal/build_pedestal.py"
+edit = "`THETA` (lean), `SHAPES`, `FINAL`"
+readme = "pocketwatch/stands/pedestal/README.md"
+renders = ["pocketwatch/stands/pedestal/renders/01-hero.png"]
+parts = [
+  { file = "pocketwatch/stands/pedestal/Pedestal - body.stl", what = "Stand and case in one piece.", status = "unprinted", print = "front face down, as exported" },
+  { file = "pocketwatch/stands/pedestal/Pedestal - back plate (BOOT hole).stl", what = "Back plate with a hole onto BOOT.", status = "unprinted", print = "flat" },
+]
+
+[[family]]
+id = "scissor"
+name = "Scissor stand"
+dir = "pocketwatch/stands/scissor"
+about = "Crossing scissor legs that fold flat behind the case."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/stands/scissor/build_scissor.py"
+edit = "`LEAN`, `A_FRONT`, `B_REAR`, `ARM_T` at the top"
+readme = "pocketwatch/stands/scissor/README.md"
+renders = ["pocketwatch/stands/scissor/renders/hero.png"]
+parts = [
+  { file = "pocketwatch/stands/scissor/Scissor stand - case.stl", what = "Case with the leg hinges.", status = "unprinted", print = "bezel down" },
+  { file = "pocketwatch/stands/scissor/Scissor stand - back plate (BOOT hole).stl", what = "Back plate with a hole onto BOOT.", status = "unprinted", print = "flat back down" },
+  { file = "pocketwatch/stands/scissor/Scissor stand - front legs.stl", what = "Front legs.", status = "unprinted", print = "flat face down, arms on edge" },
+  { file = "pocketwatch/stands/scissor/Scissor stand - rear legs.stl", what = "Rear legs.", status = "unprinted", print = "flat face down, arms on edge" },
+]
+
+[[family]]
+id = "lowprofile"
+name = "Low-profile monitor clip"
+dir = "pocketwatch/clips/lowprofile"
+about = "A thin housing on a flexure clip for a monitor edge. One clip per edge thickness band."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/clips/lowprofile/build_lowprofile.py"
+edit = "`Mount`, `SIZES`"
+readme = "pocketwatch/clips/lowprofile/README.md"
+renders = ["pocketwatch/clips/lowprofile/renders/01-hero.png"]
+parts = [
+  { file = "pocketwatch/clips/lowprofile/Lowprofile - housing.stl", what = "Housing.", status = "unprinted", print = "face down" },
+  { file = "pocketwatch/clips/lowprofile/Lowprofile - back plate (BOOT hole).stl", what = "Back plate with a hole onto BOOT.", status = "unprinted", print = "flat back down" },
+  { file = "pocketwatch/clips/lowprofile/Lowprofile - clip S (8-16 mm edge).stl", what = "Clip for an 8 to 16 mm monitor edge.", status = "unprinted", print = "top face down" },
+  { file = "pocketwatch/clips/lowprofile/Lowprofile - clip M (16-24 mm edge).stl", what = "Clip for a 16 to 24 mm edge.", status = "unprinted", print = "top face down" },
+  { file = "pocketwatch/clips/lowprofile/Lowprofile - clip L (24-32 mm edge).stl", what = "Clip for a 24 to 32 mm edge.", status = "unprinted", print = "top face down" },
+]
+
+[[family]]
+id = "sidepod"
+name = "Side pod monitor clip"
+dir = "pocketwatch/clips/sidepod"
+about = "A gauge pod on a pillar that clamps to the side of a monitor with a knob."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/clips/sidepod/build_sidepod.py"
+edit = "`CANT`, `HOOD_D0`, `LIP` at the top"
+readme = "pocketwatch/clips/sidepod/README.md"
+renders = ["pocketwatch/clips/sidepod/renders/01-hero.png"]
+parts = [
+  { file = "pocketwatch/clips/sidepod/Sidepod - pillar and pod.stl", what = "Pillar and pod in one piece.", status = "unprinted", print = "standing up, as exported, with a brim" },
+  { file = "pocketwatch/clips/sidepod/Sidepod - back plate (BOOT hole).stl", what = "Back plate with a hole onto BOOT.", status = "unprinted", print = "face down" },
+  { file = "pocketwatch/clips/sidepod/Sidepod - knob.stl", what = "Clamp knob.", status = "unprinted", print = "flat" },
+  { file = "pocketwatch/clips/sidepod/Sidepod - pad.stl", what = "Clamp pad.", status = "unprinted", print = "flat" },
+  { file = "pocketwatch/clips/sidepod/Sidepod - trim ring (optional).stl", what = "Optional trim ring; print it in silver.", status = "unprinted", print = "front down" },
+]
+
+[[family]]
+id = "stalk"
+name = "Stalk gauge monitor clip"
+dir = "pocketwatch/clips/stalk"
+about = "A gauge cup on a stalk that clamps to the left or right edge of a monitor and aims at you."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/clips/stalk/build_stalk.py"
+edit = "`R_C`, `CUP_WALL`, `DEPTH` at the top"
+readme = "pocketwatch/clips/stalk/README.md"
+renders = ["pocketwatch/clips/stalk/renders/01-hero.png"]
+parts = [
+  { file = "pocketwatch/clips/stalk/Stalk gauge - cup (right edge of monitor).stl", what = "Cup for the right edge.", status = "unprinted", print = "face down, ear standing" },
+  { file = "pocketwatch/clips/stalk/Stalk gauge - cup (left edge of monitor).stl", what = "Cup for the left edge.", status = "unprinted", print = "face down, ear standing" },
+  { file = "pocketwatch/clips/stalk/Stalk gauge - back plate (BOOT hole).stl", what = "Back plate with a hole onto BOOT.", status = "unprinted", print = "flat back down" },
+  { file = "pocketwatch/clips/stalk/Stalk gauge - trim ring and visor.stl", what = "Trim ring and visor.", status = "unprinted", print = "visor up" },
+  { file = "pocketwatch/clips/stalk/Stalk gauge - clip (right edge of monitor).stl", what = "Clip for the right edge.", status = "unprinted", print = "standing, toothed top up" },
+  { file = "pocketwatch/clips/stalk/Stalk gauge - clip (left edge of monitor).stl", what = "Clip for the left edge.", status = "unprinted", print = "standing, toothed top up" },
+  { file = "pocketwatch/clips/stalk/Stalk gauge - clamp pad.stl", what = "Clamp pad.", status = "unprinted", print = "flat" },
+  { file = "pocketwatch/clips/stalk/Stalk gauge - knob (print 2).stl", what = "Knob. Print 2.", status = "unprinted", print = "flat" },
+]
+
+[[family]]
+id = "braun"
+name = "Braun-style stand and clip"
+dir = "pocketwatch/styles/braun"
+about = "A styling study: grey body, orange ring, as a desk stand or a monitor clip."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/styles/braun/build_braun.py"
+edit = "`FACE`, `DEPTH`, `WELL_CLR` at the top"
+readme = "pocketwatch/styles/braun/README.md"
+renders = ["pocketwatch/styles/braun/renders/family.png"]
+parts = [
+  { file = "pocketwatch/styles/braun/Braun stand - body.stl", what = "Desk stand body.", status = "unprinted", print = "face down, 30% infill" },
+  { file = "pocketwatch/styles/braun/Braun clip - body.stl", what = "Clip body.", status = "unprinted", print = "face down" },
+  { file = "pocketwatch/styles/braun/Braun clip - clamp.stl", what = "Clip clamp; add an M4 × 40 bolt and nut.", status = "unprinted", print = "flat" },
+  { file = "pocketwatch/styles/braun/Braun clip - knob.stl", what = "Clip knob.", status = "unprinted", print = "pocket up" },
+  { file = "pocketwatch/styles/braun/Braun clip - pad.stl", what = "Clip pad.", status = "unprinted", print = "hole up" },
+  { file = "pocketwatch/styles/braun/Braun - orange ring.stl", what = "Face ring, one per body, in orange.", status = "unprinted", print = "flat" },
+  { file = "pocketwatch/styles/braun/Braun - back plate (BOOT hole).stl", what = "Back plate, one per body.", status = "unprinted", print = "as exported" },
+]
+
+[[family]]
+id = "te"
+name = "TE-style stand and clip"
+dir = "pocketwatch/styles/te"
+about = "A styling study after Teenage Engineering: slab body, orange accents, as a desk stand or a monitor clip."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/styles/te/build_te.py"
+edit = "`HW`, `FIT`, `COVER_T` at the top"
+readme = "pocketwatch/styles/te/README.md"
+renders = ["pocketwatch/styles/te/renders/family.png"]
+parts = [
+  { file = "pocketwatch/styles/te/TE stand - body.stl", what = "Desk stand body.", status = "unprinted", print = "as exported" },
+  { file = "pocketwatch/styles/te/TE stand - foot (orange, print 4).stl", what = "Foot, in orange. Print 4.", status = "unprinted", print = "as exported" },
+  { file = "pocketwatch/styles/te/TE clip - body.stl", what = "Clip body.", status = "unprinted", print = "as exported" },
+  { file = "pocketwatch/styles/te/TE clip - rear jaw.stl", what = "Clip rear jaw.", status = "unprinted", print = "as exported" },
+  { file = "pocketwatch/styles/te/TE clip - knob (orange).stl", what = "Clip knob, in orange.", status = "unprinted", print = "as exported" },
+  { file = "pocketwatch/styles/te/TE - back plate.stl", what = "Back plate.", status = "unprinted", print = "as exported" },
+  { file = "pocketwatch/styles/te/TE - back cover.stl", what = "Back cover.", status = "unprinted", print = "as exported" },
+  { file = "pocketwatch/styles/te/TE - BOOT cap (orange).stl", what = "BOOT plunger cap, in orange.", status = "unprinted", print = "as exported" },
+  { file = "pocketwatch/styles/te/TE - trim ring (orange).stl", what = "Trim ring, in orange.", status = "unprinted", print = "as exported" },
+]

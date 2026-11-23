@@ -15,6 +15,16 @@ Template:
 
 ---
 
+## 2026-11-22 — Telegraph key stand (`Hoop stand telegraph - *.stl`)
+- source: the owner's message of 2026-11-22, verbatim: "The pocketwatch and
+  telegraph are at least somewhat verified."
+- result: **printed, works at least partly.** No print report with fit details
+  was found in the conversation index: which lean (40° or 50°), the click
+  travel and any fit problems are not recorded. The catalog assumes the 40°
+  default.
+- fit numbers to change: none reported.
+- photo: none
+
 ## 2026-10-15 — Pendant case, USB-C sticking out (`Pendant - case.stl` + back plate)
 - material / presets: **PLA** (presumed)
 - result: **"that pretty much worked."** But the bar over the USB-C tab at
@@ -62,6 +72,18 @@ Template:
   USB-only-family case. New `Case.RECESS_GROW` **2.0** cuts the slot 2 mm bigger
   all round (10.0 × 4.3 → **14.0 × 8.3**, measured 14.0 in the STL), with 45°
   roof corners (`RECESS_CH` 2.4) so the roof still bridges under 10 mm.
+- photo: none
+
+## 2026-10-13 (night) — front-BOOT v2 lever (`Hoop stand front-BOOT - rocker.stl`)
+- source: from mindmeld session 78354 (owner's words, messages 3868415 to 3868510)
+- material / presets: **PLA** ("It's PLA, not petg")
+- result: "I printed the new lever... I tried the new lever in the older
+  stand/case. The lever could not actuate the button easily, even now." Then:
+  "the lever for the hoop case still needs to move much more" and "The lever
+  is flexing."
+- fit numbers to change: none. The flexure rocker was replaced the same morning
+  by the **telegraph key** (a lever on a pin with a hard stop). The front-BOOT
+  STLs were deleted on 2026-11-22; the last commit with them is `1580ce5`.
 - photo: none
 
 ## 2026-10-13 — hoop stand front-BOOT, base + rocker (`Hoop stand front-BOOT - base.stl`, `- rocker.stl`)
@@ -152,6 +174,14 @@ Template:
 - fit numbers to change: none yet. Printed `Pocketwatch - bore fit gauge.stl`
   first: four rings at `RAD_CLR` 0.25 / 0.55 / 0.85 / 1.15. The tightest ring
   that lets the glass sit flat on the lip sets `RAD_CLR`.
+
+## 2026-09-20 (later) — 1.28 BOOT button stand, after the rear-wall fix (`small/Stand - BOOT button.stl`)
+- source: from mindmeld session 57988 (owner's words, message 3163462)
+- result: **"Ok, works well enough."** Said after the groove's rear wall was cut
+  short for the switch housings (commit 77c7894, entry below). The conversation
+  does not say whether he reprinted with that change or reseated the first print.
+- fit numbers to change: none.
+- photo: none
 
 ## 2026-09-20 — 1.28 BOOT button stand, 5.4 mm groove (`small/Stand - BOOT button.stl`)
 - material / presets: black filament — not the usual blue; presets not stated

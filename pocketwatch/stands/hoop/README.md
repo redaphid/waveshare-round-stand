@@ -52,8 +52,8 @@ Printed with the screw joint: the case wobbled in the mortise at 0.25 mm per sid
 | print (`stl/pocketwatch/stands/hoop/`) | notes |
 |---|---|
 | `Hoop stand - hoop and case.stl`, `Hoop stand - back plate (button).stl` | unchanged. **Must be the button plate**: the BOOT-hole plate won't work |
-| `Hoop stand front-BOOT - base.stl` | replaces the base: adds the rocker slot and pocket. 100% infill |
-| `Hoop stand front-BOOT - rocker.stl` | 2.3 g, on its side as exported, no supports. Every arm bends along its layers |
+| ~~`Hoop stand front-BOOT - base`~~ (deleted, in `1580ce5`) | replaced the base: adds the rocker slot and pocket. 100% infill |
+| ~~`Hoop stand front-BOOT - rocker`~~ (deleted, in `1580ce5`) | 2.3 g, on its side as exported, no supports. Every arm bends along its layers |
 
 **Assembly:** (1) drop the rocker's foot into its pocket 2 mm forward of home, then slide it back so the heel hooks under the ledge. (2) Fit the badge and button plate into the hoop. (3) Push the hoop down its neck until it clicks. The plate slides past the nub at 0.5 mm (0.2 at worst). Once the hoop is in, the rocker can't come out forward or up. **To take the plate off, lift the hoop out first.** From behind, pushing the top of the rocker arm still clicks BOOT.
 
