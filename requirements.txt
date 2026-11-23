@@ -1,0 +1,7 @@
+# The CAD stack every build script needs. Python 3.11 or newer.
+# ./setup.sh installs this into .venv/. Versions are the ones the committed STLs were built with.
+manifold3d==3.5.3
+trimesh==5.1.0
+matplotlib==3.11.2
+numpy==2.5.3; python_version >= "3.12"
+numpy==2.4.6; python_version < "3.12"
