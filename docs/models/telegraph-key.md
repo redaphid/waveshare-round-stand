@@ -53,7 +53,7 @@ More renders: [angles](../../pocketwatch/stands/hoop/renders/telegraph-angles.pn
 | `Hoop stand telegraph - lever (40 deg).stl` | **printed**; prints on its side |
 | `Hoop stand telegraph - knob.stl` | **printed** |
 | `Hoop stand telegraph - pin.stl` | **printed** |
-| the three `(50 deg)` files | unprinted |
+| the three `(50 deg)` files | no print recorded; the printed lean is unknown |
 | `Hoop stand - back plate (button).stl` | needs work, fix applied; **the telegraph needs this plate** |
 
 **Evidence:** the owner, 2026-11-22, verbatim: "The pocketwatch and telegraph

@@ -63,7 +63,7 @@ numbers to edit.
 |---|---|---|
 | **Fit gauges** | proven | [fit-gauges](docs/models/fit-gauges.md) |
 | **Pocketwatch case** | plates proven; cases need a reprint | [pocketwatch-case](docs/models/pocketwatch-case.md) |
-| **Telegraph key stand** | printed; 50° concept | [telegraph-key](docs/models/telegraph-key.md) |
+| **Telegraph key stand** | printed, lean not recorded (40° or 50°, same script) | [telegraph-key](docs/models/telegraph-key.md) |
 | Hoop stand | printed; fixes unprinted | [hoop-stand](docs/models/hoop-stand.md) |
 | Pendant, kids case | plate proven; kids case concept | [pendant](docs/models/pendant.md) |
 | Battery pendant | concept | [battery-pendant](docs/models/battery-pendant.md) |
