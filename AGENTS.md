@@ -108,10 +108,11 @@ Needs **Python 3.11+** and bash (Linux, macOS, or Windows in Git Bash or WSL).
 
 ## The catalog
 
-`stl/catalog.toml` lists every STL in four sections, in this order: **fit
+`stl/catalog.toml` lists every STL in five sections, in this order: **fit
 gauges**, **featured** (the pocketwatch case, then the telegraph key),
-**other current designs**, **concepts** (never printed). Each part has a
-status:
+**other current designs**, **concepts** (never printed), **earlier designs**
+(retired: the wedge desk stands and docks, print-proven but they "didn't
+protect the device enough"). Each part has a status:
 
 | status | means |
 |---|---|
