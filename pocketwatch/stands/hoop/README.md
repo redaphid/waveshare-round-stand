@@ -43,6 +43,8 @@ No supports on any part, and no hardware. The default mortise is 0.08 per side (
 Printed with the screw joint: the case wobbled in the mortise at 0.25 mm per side. The snap version replaces the screw: two 1.5 mm arms on the tenon, a 0.45 mm barb each, 8.3 mm of flex length (1.1% strain, push-in about 2 N before friction, pull-out about 29 N, above a 20 N plug pull). The mortise is 0.12 per side. The screw version is in `archive/hoop-screw-v1/`. Not printed yet.
 
 ## Front-BOOT: press a key on the base (2026-10-13; v2 after the first print)
+**Replaced by the telegraph key below.** Its two STLs were removed on 2026-11-22; the last commit with them is `1580ce5`. `build_hoop_frontboot.py` stays: the telegraph and the board schematics import it, and it still runs its checks.
+
 **Press the ivory key at the front right of the base straight down. BOOT clicks after 2.1 mm of travel at about 3.1 N, and the key bottoms on the lower tier at 3.4 mm.**
 
 **v2, after the first print** ("close to good"; the lever and the hoop flex more than the model says, so the click came too late): the key stop is 0.7 mm deeper (1.0 mm of key to spare after the click at the worst gap, was 0.25), and the nub is bigger, Ø4.4 and 2.0 proud (was Ø3.2, 1.4). Reprint the **base and the rocker** only. A one-piece rocker (`renders/frontboot-*.png`) pivots on a flexure in the tier. Its arm rises behind the case to a nub 0.5 mm off the button plate's flush flexure tab, and the nub pushes that tab, so nothing touches the glass. Rebuild: `~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_frontboot.py` (103 checks).
@@ -50,8 +52,8 @@ Printed with the screw joint: the case wobbled in the mortise at 0.25 mm per sid
 | print (`stl/pocketwatch/stands/hoop/`) | notes |
 |---|---|
 | `Hoop stand - hoop and case.stl`, `Hoop stand - back plate (button).stl` | unchanged. **Must be the button plate**: the BOOT-hole plate won't work |
-| `Hoop stand front-BOOT - base.stl` | replaces the base: adds the rocker slot and pocket. 100% infill |
-| `Hoop stand front-BOOT - rocker.stl` | 2.3 g, on its side as exported, no supports. Every arm bends along its layers |
+| ~~`Hoop stand front-BOOT - base`~~ (deleted, in `1580ce5`) | replaced the base: adds the rocker slot and pocket. 100% infill |
+| ~~`Hoop stand front-BOOT - rocker`~~ (deleted, in `1580ce5`) | 2.3 g, on its side as exported, no supports. Every arm bends along its layers |
 
 **Assembly:** (1) drop the rocker's foot into its pocket 2 mm forward of home, then slide it back so the heel hooks under the ledge. (2) Fit the badge and button plate into the hoop. (3) Push the hoop down its neck until it clicks. The plate slides past the nub at 0.5 mm (0.2 at worst). Once the hoop is in, the rocker can't come out forward or up. **To take the plate off, lift the hoop out first.** From behind, pushing the top of the rocker arm still clicks BOOT.
 

@@ -9,7 +9,7 @@
 | **body** | `Pedestal - body.stl` | **front face down**, as exported | none |
 | **back plate** | `Pedestal - back plate (BOOT hole).stl` (= the USB-only BOOT-hole plate) | flat, as exported | none |
 
-PETG 260/85, 0.6 nozzle, 0.3 layers. Front face down puts the fused case on the bed **bezel-down, exactly as the USB-only case that fits** ([layout](renders/07-print-layout.png)). The textured sheet gives a matte face. Alternate shape: `Pedestal (alternate, wedge) - body.stl` ([render](renders/alt-wedge-01-hero.png)).
+PETG 260/85, 0.6 nozzle, 0.3 layers. Front face down puts the fused case on the bed **bezel-down, exactly as the USB-only case that fits** ([layout](renders/07-print-layout.png)). The textured sheet gives a matte face. The losing alternate shape, the wedge ([render](renders/alt-wedge-01-hero.png)), is no longer exported; its STL is in commit `1580ce5`.
 
 **Assembly** ([exploded](renders/06-exploded.png)): 1. **Plug a straight USB-C cable into the badge first.** 2. Lay the body face down on a cloth. Drop the badge in from the back, glass first; the plug lies in the trough below it and the cable goes into the groove under the plinth. 3. Snap the plate in. 4. Stand it up and rotate the display 180° in firmware (crown down).
 **BOOT:** a Ø2 stylus or SIM tool through the plate's hole, upper right seen from behind, 4.7 deep ([back](renders/05-back-boot.png)). **To take it apart:** lever the plate out at the notch on the top of its rim, then pull gently on the cable and the badge comes out with it.

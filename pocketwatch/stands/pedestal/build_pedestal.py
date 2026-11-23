@@ -523,8 +523,8 @@ def main():
         print(f"\n  {shape}: {bw[3] - bw[0]:.0f} wide x {bw[4] - bw[1]:.0f} deep x {bw[5]:.0f} tall; "
               f"face centre at {H:.1f}; print height {size[2]:.0f}")
         print()
-        name = "Pedestal - body" if shape == FINAL else f"Pedestal (alternate, {shape}) - body"
-        export(body, STL + f"{name}.stl", lambda m: m.translate([0, 0, -gs["z_f"]]))
+        if shape == FINAL:
+            export(body, STL + "Pedestal - body.stl", lambda m: m.translate([0, 0, -gs["z_f"]]))
         results[shape] = (body, gs, st)
     export(plate_h, STL + "Pedestal - back plate (BOOT hole).stl",
            lambda m: m.rotate([0, 180, 0]).translate([0, 0, geo["Z_CASE"]]))

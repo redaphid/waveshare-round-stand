@@ -11,7 +11,7 @@
 | **case** | `stl/pocketwatch/pendant/Pendant - case.stl` | bezel face down, as exported | 4.8 g |
 | **back plate** | `stl/pocketwatch/pendant/Pendant - back plate (button).stl` | flat back down, as exported | 4.3 g |
 | back plate, if the first one is too tight | `… - back plate (button, roomy).stl` | same | 4.1 g |
-| kid button (**failed its first print: did not fit**; use the [kids case](kids-case/README.md) instead) | `stl/pocketwatch/pendant/Pendant - kid button.stl` | flat face down, teeth up, as exported | 4.8 g |
+| kid button (**failed its first print: did not fit**; use the [kids case](kids-case/README.md) instead) | STL removed 2026-11-22; last in commit `1580ce5` | flat face down, teeth up, as exported | 4.8 g |
 
 \*Counted as solid PLA, so a real print with infill weighs less.
 

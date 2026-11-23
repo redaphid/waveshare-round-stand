@@ -632,7 +632,7 @@ def main():
         flip = lambda z: (lambda m: m.rotate([0, 180, 0]).translate([0, 0, z]))
         export(plate, STL + "Pendant - back plate (button).stl", flip(st.z_plate))
         export(plate_r, STL + "Pendant - back plate (button, roomy).stl", flip(st.z_plate))
-        export(kid, STL + "Pendant - kid button.stl", flip(geo["kz1"]))
+        # the kid button is built for its checks but not exported: it failed its print (PRINT-LOG 2026-10-14)
         if "--no-render" not in sys.argv:
             renders(b, c, p, feats, case, plate, kid, geo, st)
     if FAILS:

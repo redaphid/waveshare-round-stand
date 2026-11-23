@@ -25,6 +25,9 @@ echo "== pod (venv) =="
 "$CAD" pod/build_pod.py 26 | grep -E "^pod"
 "$CAD" pod/build_cup_stand.py | grep -E "^Pod cup test"
 
+echo "== catalog: every STL has a row in stl/catalog.toml; regenerate stl/README.md =="
+python3 build_catalog.py
+
 echo "== docs: relative links and images =="
 python3 - <<'PY'
 import re, os, sys

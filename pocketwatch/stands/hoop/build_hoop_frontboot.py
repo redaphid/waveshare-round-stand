@@ -511,10 +511,8 @@ def main():
     K3 = np.array([r.X0 + r.PAD_W/2, g["K"][0], g["K"][1]])
     stability(r, s, b, F, case, plate_b, base_fb, geo, rock, m_r, cable_exit, max(res["G-tol"][3][1], 6.0), K3)
 
-    print()
-    export(base_fb, STL + "base.stl", lambda m: m)
-    export(rock, STL + "rocker.stl",
-           lambda m: m.transform(np.array([[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, -r.X0]], float)))
+    # No STLs: the telegraph key (build_hoop_telegraph.py) replaced this rocker. The script stays as the
+    # library the telegraph and board_schematics.py import, and still runs its checks.
     if "--no-render" not in sys.argv:
         renders(r, s, b, c, F, feats, case, plate_b, geo_b, base_fb, g, phi_c, phi_s, (body, shell, boot), cable,
                 res["G"][2][0])

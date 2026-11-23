@@ -33,7 +33,7 @@ Headers' y position is not measured, and the design doesn't need it. The guides 
 
 ## Bore fit gauge (print this before the case)
 
-v2's badge stopped on the plate step instead of reaching the bezel lip. `stl/pocketwatch/Pocketwatch - bore fit gauge.stl` is the front of the case only, as four rings. Print it bezel down, about 10 minutes.
+v2's badge stopped on the plate step instead of reaching the bezel lip. `stl/fit-gauges/Pocketwatch - bore fit gauge.stl` is the front of the case only, as four rings. Print it bezel down, about 10 minutes.
 
 | ring | dots | bore | `RAD_CLR` |
 |---|---|---|---|
