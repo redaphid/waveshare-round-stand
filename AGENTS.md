@@ -34,8 +34,9 @@ gauge or print that settles each.
    from the back, screen first. **The tightest ring where the glass sits flat
    on the lip is your `Case.RAD_CLR`** in `pocketwatch/build_pocketwatch.py`.
    On the owner's printer only ring 4 (1.15) fit, which is today's value. The
-   gauge is read with the badge in hand; if you do not have one, the owner
-   reads it.
+   gauge is read with the badge in hand. **No badge?** Print the gauge anyway
+   and hand it to the owner with the case; he reads it, and you reprint only
+   if his answer is not ring 4. Meanwhile, print the case as is.
 2. **Pocketwatch case, USB-only** (featured #1: the simplest design and the one
    most likely to succeed). If your gauge said ring 4, print as is:
    - `stl/pocketwatch/Pocketwatch USB-only - plate.stl`: **proven** (print log
@@ -157,9 +158,16 @@ print-log entry or the owner's own words.
 - **What does not work:** `FINGER_CLR` +2 changes nothing (the foot-ring
   term is the one that binds). `RATIO` 2.2 adds only 0.5 mm and fails the
   travel check (`knob travel to the click 2.4-3.3 mm`: 3.46).
-- **What works:** move the knob forward. Add a field `KNOB_FWD: float = 0.0`
-  to `Key`, and subtract it at the end of the `K_Y = min(...)` line in
-  `lever_geometry()`. Set it to `2.0`.
+- **What "2 mm longer" means here:** the knob sits 2 mm further forward.
+  The pin follows so the ratio stays 2.0, so the lever grows about 2.2 mm
+  from nub to knob and the feel of the click does not change.
+- **What works:** two edits in that file.
+  ```
+  # in class Key, under RATIO:
+      KNOB_FWD: float = 2.0     # knob this much further forward than the hoop requires
+  # in lever_geometry(), the line that starts `K_Y = min(`, add `- k.KNOB_FWD` at its end:
+      K_Y = min(front(k.FINGER_R, z_kb + k.KNOB_H + 0.5) - k.FINGER_CLR, front(k.KNOB_RS + k.CLR, z_kb) - 0.3) - k.KNOB_FWD
+  ```
 - **Check:** `tools/py pocketwatch/stands/hoop/build_hoop_telegraph.py
   --no-render`. Tried: knob arm 23.1 → 24.6, nub arm 12.1 → 12.8 (pin to
   knob about 2.2 mm longer), ratio still 2.00, click still at 3.17 mm of knob
@@ -168,8 +176,11 @@ print-log entry or the owner's own words.
   `telegraph-01-hero.png` in `pocketwatch/stands/hoop/renders/`: the knob is
   further in front of the hoop. Tried: the lever, base, knob and pin STLs
   change (both leans); the hoop-and-case STLs do not. The changed parts are
-  no longer the printed ones: set their catalog `status` to `unprinted`
-  until someone prints them.
+  no longer the printed ones: in `stl/catalog.toml`, family `telegraph`, set
+  `status = "unprinted"` (and drop `log`) on the rows whose `file` ends in
+  `- base (40 deg).stl`, `- lever (40 deg).stl`, `- knob.stl` and
+  `- pin.stl` (the 50° rows already are). Then `tools/py build_catalog.py`
+  and a dated entry in `docs/DESIGN.md`.
 
 ## Where the unknowns are
 
