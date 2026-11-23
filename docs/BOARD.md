@@ -20,6 +20,10 @@ claude mcp add --transport http pocketwatch-board https://draw.hypnodroid.com/vi
 Then ask Claude to "open the pocketwatch board and take me to the start".
 In a browser: <https://draw.hypnodroid.com/b/pocketwatch-schematics>.
 
+The camera tour starts at the front door:
+
+[![The board's front door: the pocketwatch case, the telegraph, and four doors: Print it, Change it, Prove it, Talk to us. Tap to take the tour.](img/board/tour-poster.png)](https://draw.hypnodroid.com/b/pocketwatch-schematics/p/golden-path)
+
 **To draw on the board, ask Aaron to add you.** Editors connect to
 `https://draw.hypnodroid.com/b/pocketwatch-schematics/mcp` instead, which
 needs a signed-in, allowed account. The draw plugin for Claude Code is
