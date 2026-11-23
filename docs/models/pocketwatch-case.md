@@ -28,7 +28,7 @@ travel.
 | `Pocketwatch USB-only - plate (roomy).stl` | unprinted | 0.65 per side instead of 0.18, for a printer that runs oversize |
 | `Pocketwatch USB-only - plate (button).stl` | needs work, fix applied | PRINT-LOG 2026-10-13: the finger dimple melted; removed |
 | `Pocketwatch USB-only - plate (BOOT hole).stl` | unprinted | press BOOT with a pin from the back; the glass takes no load |
-| `Pocketwatch - plate.stl` (battery) | **proven** | PRINT-LOG 2026-10-12: "the back plate is great!" |
+| `Pocketwatch - plate.stl` (battery) | **proven**, weakly | PRINT-LOG 2026-10-12: "the back plate is great!", from memory; the print was lost |
 | `Pocketwatch - case.stl` (battery) | needs work, fix applied | PRINT-LOG 2026-10-13: "looking better"; USB-C slot cut down to the plug's metal shell |
 | `Pocketwatch - lid.stl` (battery) | unprinted | |
 

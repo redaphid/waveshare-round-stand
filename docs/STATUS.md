@@ -11,8 +11,8 @@ summary.
 | family | built | printed | result | next step |
 |---|---|---|---|---|
 | **Pocketwatch case, USB-only** | yes | case and plate, 2026-10-13 and 10-14 | plate **proven**; case "a great fit", then too tight to pry off and USB-C slot too small | print the fixed case (pry notch, slot 2 mm bigger) |
-| Pocketwatch case, battery (v2) | yes | case and plate, 2026-10-12 and 10-13 | plate **proven** ("great"); case "looking better", slot cut down | print the fixed case and the lid |
-| **Telegraph key stand** | yes, 40° and 50° | 40° parts, by 2026-11-22 | "at least somewhat verified" (owner); no fit details | ask the owner which lean, the click travel, any fit problems; log it |
+| Pocketwatch case, battery (v2) | yes | case and plate, 2026-10-12 and 10-13 | plate **proven** ("great", from memory; the print was lost); case "looking better", slot cut down | print the fixed case and the lid |
+| **Telegraph key stand** | yes, 40° and 50° | by 2026-11-22; lean not recorded | "at least somewhat verified" (owner); no fit details | ask the owner which lean, the click travel, any fit problems; log it |
 | Bore fit gauge | yes | 2026-10-13 | **proven**: ring 4 (1.15) fits | have contributors print it on their printers |
 | Hoop stand | yes | base, hoop, plate, 2026-10-13 | case loose in the mortise; dimple melted | print the snap-tenon hoop and the 0.08 base |
 | Pendant | yes | case and plate, 2026-10-14 and 10-15 | plate **proven** ("that pretty much worked"); bar over the tab too thin | print the case with the flat-top window |

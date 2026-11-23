@@ -1,8 +1,9 @@
 # Measurements
 
 Every dimension of the hardware the models are built around: the 1.28"
-badge, the batteries, the USB-C plug. **Three kinds, in three tables:
-measured on real hardware, read from a vendor drawing, and still a guess.**
+badge, the batteries, the USB-C plug. **Four kinds, in four tables:
+measured on real hardware, read off a photo, read from a vendor drawing,
+and still a guess.**
 Each row names the constant that uses it. Units are mm.
 
 [![The board's Measurements frame: the battery pocketwatch cut through its centre, with every measured number](img/board/measurements.png)](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=USQNRCETo-sCUMNKHuD6p)
@@ -24,17 +25,26 @@ when the board and the code disagree.
 | USB-C port centre, behind the glass | **5.0** | owner, calipers | `Badge.port_z` |
 | header sockets | **13.25 × 3.0**, outside span **30.0** | owner, calipers; the sockets were a photo discovery | `Badge.hdr_len`, `hdr_w`, `hdr_span` |
 | badge thickness at the rim (PCB + display) | **about 4.7** | slot fit gauge print, 2026-09-18: drops into the 5.0 slot | `"1.28"` `thick` in `build_stands.py` |
-| BOOT and RESET switch centres, back view | **(∓11.45, −10.51)**, r 15.5, ±0.4 | agent, from the owner's photo, 2026-09-20 | `SWITCH` in `build_stand_button.py` only |
 | bore that lets the glass sit flat | **Ø37.6** (`RAD_CLR` 1.15); Ø37.0 did not | bore fit gauge print, 2026-10-13 | `Case.RAD_CLR` |
 | Makerfocus 1000 mAh LiPo | **7.4 × 22.28 × 42.65** | owner, calipers | `Case.BATT_T`, `BATT_W`, `BATT_L` |
 
 The caliper measurements, and the photos behind them, are in
-`reference/pictures/`. The switch overlay is
-`reference/esp32-s3-lcd-1.28-switch-positions-photo.png`.
+`reference/pictures/`.
 
 **Derived:** between the two header sockets there is a pocket **24.0** wide
 (30.0 − 2 × 3.0) and **3.62** deep (8.15 − 4.53). A 4.3 mm cell does not fit
 it.
+
+## Read off a photo
+
+Scaled from a photo, not measured with calipers. Treat as a good guess.
+
+| what | value | who, how, when | constant |
+|---|---|---|---|
+| BOOT and RESET switch centres, back view | **(∓11.45, −10.51)**, r 15.5, ±0.4 | agent, from the owner's photo, 2026-09-20 | `SWITCH` in `build_stand_button.py` only |
+
+The photo overlay is
+`reference/esp32-s3-lcd-1.28-switch-positions-photo.png`.
 
 ## From a vendor drawing
 

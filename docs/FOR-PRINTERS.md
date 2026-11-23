@@ -8,6 +8,9 @@ numbers are still open.** No particular printer or slicer is assumed.
 for everything in the pocketwatch family. The clearances below are tuned to
 that. Yours may differ, which is why the gauge comes first.
 
+When you are done, [Settle with Aaron](#settle-with-aaron) lists what to
+tell the owner.
+
 ## 1. Calibrate: the bore fit gauge
 
 Print [`stl/fit-gauges/Pocketwatch - bore fit gauge.stl`](<../stl/fit-gauges/Pocketwatch - bore fit gauge.stl>),

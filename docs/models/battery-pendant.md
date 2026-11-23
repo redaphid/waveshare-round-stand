@@ -11,6 +11,10 @@ the lid.
 | `Battery pendant - case.stl`, `- plate.stl`, `- lid (flap).stl` | unprinted |
 | `- plate (roomy).stl`, `- lid (flap, roomy).stl` | unprinted |
 
+The plate here is new. The battery pocketwatch's own plate is marked
+proven, but only on the owner's word from memory: that print was lost
+(PRINT-LOG 2026-10-12).
+
 The cell is the Makerfocus 1000 mAh LiPo, measured at 7.4 × 22.28 × 42.65.
 
 **Change it:**

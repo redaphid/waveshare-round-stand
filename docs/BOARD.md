@@ -22,9 +22,12 @@ In a browser: <https://draw.hypnodroid.com/b/pocketwatch-schematics>.
 
 **To draw on the board, ask Aaron to add you.** Editors connect to
 `https://draw.hypnodroid.com/b/pocketwatch-schematics/mcp` instead, which
-needs a signed-in, allowed account. The Claude Code mod for draw is
-[redaphid/draw-mod](https://github.com/redaphid/draw-mod), a private repo:
-ask Aaron for access.
+needs a signed-in, allowed account. The draw plugin for Claude Code is
+[redaphid/draw-mod](https://github.com/redaphid/draw-mod):
+
+```
+claude plugin install draw --marketplace redaphid/draw-mod
+```
 
 ## What it holds
 

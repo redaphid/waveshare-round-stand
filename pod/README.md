@@ -47,7 +47,7 @@ lands in the gap below that cup, so the gap is sized by the plug.
 
 ![gap26 for comparison](renders/01-pod-gap26-front-quarter.png)
 
-Both fit the Centauri Carbon 2 bed (256 mm).
+Both fit a 256 mm bed.
 
 ## How the gauges are held
 

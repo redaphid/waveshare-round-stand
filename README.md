@@ -18,14 +18,15 @@ designs lead: the **pocketwatch case** and the **telegraph key stand**.
 
 **Proven** means printed and logged as working in
 [docs/PRINT-LOG.md](docs/PRINT-LOG.md). **Concept** means it passes its
-script's checks and has never been printed.
+script's checks and has never been printed. **Printed** means it came off
+a printer with the result partial or not recorded. **Needs work** means it
+printed with a problem; the current file may already have the fix.
 
 ## 1. Pocketwatch case
 
-<p>
-<img src="pocketwatch/renders/usb-exploded.png" width="49%" alt="USB-only pocketwatch case, exploded from the back: case, badge, plate">
-<img src="docs/img/board/measurements.png" width="49%" alt="The board's measured side section and front view of the pocketwatch case">
-</p>
+![USB-only pocketwatch case, exploded from the back: case, badge, plate](pocketwatch/renders/usb-exploded.png)
+
+![The board's measured side section and front view of the pocketwatch case](docs/img/board/measurements.png)
 
 The badge drops into a round watch case, screen first; the USB-C plug at
 12 o'clock is the crown and the cable is the chain. The **USB-only** version
@@ -38,10 +39,9 @@ and [`- case.stl`](<stl/pocketwatch/Pocketwatch USB-only - case.stl>).
 
 ## 2. Telegraph key stand
 
-<p>
-<img src="pocketwatch/stands/hoop/renders/telegraph-01-hero.png" width="49%" alt="Render of the telegraph key stand: the case in a brass hoop leaning back 40 degrees, a brass knob in front">
-<img src="docs/img/board/telegraph-side.png" width="49%" alt="Side section of the telegraph key: a 2:1 lever on a pin, click at 3.2 mm of knob travel">
-</p>
+![Render of the telegraph key stand: the case in a brass hoop leaning back 40 degrees, a brass knob in front](pocketwatch/stands/hoop/renders/telegraph-01-hero.png)
+
+![Side section of the telegraph key: a 2:1 lever on a pin, click at 3.2 mm of knob travel](docs/img/board/telegraph-side.png)
 
 The same case leans back 40° in a brass-look hoop. Press the knob in front:
 a **2:1 lever on a pin** tips its short arm into the BOOT button. It clicks
@@ -63,7 +63,7 @@ numbers to edit.
 |---|---|---|
 | **Fit gauges** | proven | [fit-gauges](docs/models/fit-gauges.md) |
 | **Pocketwatch case** | plates proven; cases need a reprint | [pocketwatch-case](docs/models/pocketwatch-case.md) |
-| **Telegraph key stand** | printed (40°); 50° concept | [telegraph-key](docs/models/telegraph-key.md) |
+| **Telegraph key stand** | printed; 50° concept | [telegraph-key](docs/models/telegraph-key.md) |
 | Hoop stand | printed; fixes unprinted | [hoop-stand](docs/models/hoop-stand.md) |
 | Pendant, kids case | plate proven; kids case concept | [pendant](docs/models/pendant.md) |
 | Battery pendant | concept | [battery-pendant](docs/models/battery-pendant.md) |
@@ -113,18 +113,19 @@ claude mcp add --transport http pocketwatch-board https://draw.hypnodroid.com/vi
 ```
 
 Then ask Claude to open the board's tour. To draw on the board, ask Aaron to
-add you. The draw mod for Claude Code is
-[redaphid/draw-mod](https://github.com/redaphid/draw-mod), a private repo:
-ask Aaron for access. More: [docs/BOARD.md](docs/BOARD.md).
+add you. The draw plugin for Claude Code is
+[redaphid/draw-mod](https://github.com/redaphid/draw-mod):
+
+```
+claude plugin install draw --marketplace redaphid/draw-mod
+```
+
+More: [docs/BOARD.md](docs/BOARD.md).
 
 ## Printer trouble
 
-> Since June 2026 most prints on the owner's Centauri Carbon 2 (CC2) with the
-> CANVAS multi-filament unit have failed. The first layer does not stick,
-> curls onto the nozzle, or the job stops with a filament error at the
-> toolhead (1243, 1252, 1265).
-
-What has been tried and what to check next:
+Since June 2026 most prints on the owner's printer have failed at the first
+layer or with a filament error. What has been tried and what to check next:
 [docs/PRINTER-TROUBLE.md](docs/PRINTER-TROUBLE.md). Help is welcome.
 
 ## More
