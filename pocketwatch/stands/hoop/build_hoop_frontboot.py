@@ -19,7 +19,7 @@ foot's back holds its heel. The hoop (once clicked in) traps the rocker: lifting
 the plate. Assembly: rocker first, then the hoop slides down past the nub, parallel to the plate.
 
 World frame as build_hoop.py: z up, viewer at -Y, BOOT at world X = +11.1 (the viewer's right).
-Run from the repo root: ~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_frontboot.py [--no-render]
+Run from the repo root: ~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_frontboot.py
 """
 import sys, math
 from dataclasses import dataclass
@@ -30,7 +30,6 @@ import build_pocketwatch_usb as U
 import build_hoop as H
 
 STL = H.STL + "Hoop stand front-BOOT - "
-OUT = H.OUT + "frontboot-"
 Miter = m3.JoinType.Miter
 REST, STROKE = Case().REST_CLR, Case().STROKE
 REST_CLR_TXT = f"{Case().REST_CLR:.2f}"      # post 0.20 off the switch, + 0.25 of switch travel
@@ -512,10 +511,7 @@ def main():
     stability(r, s, b, F, case, plate_b, base_fb, geo, rock, m_r, cable_exit, max(res["G-tol"][3][1], 6.0), K3)
 
     # No STLs: the telegraph key (build_hoop_telegraph.py) replaced this rocker. The script stays as the
-    # library the telegraph and board_schematics.py import, and still runs its checks.
-    if "--no-render" not in sys.argv:
-        renders(r, s, b, c, F, feats, case, plate_b, geo_b, base_fb, g, phi_c, phi_s, (body, shell, boot), cable,
-                res["G"][2][0])
+    # library the telegraph and board_schematics.py import, and still runs its checks. No renders either.
     if FAILS:
         sys.exit("FAILED: " + "; ".join(FAILS))
     print("all checks passed")
@@ -529,77 +525,6 @@ def side_by_side(paths, out, title):
     fig.suptitle(title, fontsize=11)
     fig.subplots_adjust(0, 0, 1, 0.93, 0.0); fig.savefig(out, facecolor="white"); plt.close(fig)
     print("wrote", out)
-
-
-def renders(r, s, b, c, F, feats, case, plate_b, geo_b, base_fb, g, phi_c, phi_s, plug, cable, click_mm):
-    import os, tempfile
-    tmp = tempfile.mkdtemp()
-    rf = lambda m, L=1.0: m.refine_to_length(L)
-    brass, plate_c, dark, white, red, steel, walnut, black, cream, ivory, green, violet = (
-        (0.84, 0.67, 0.33), (0.66, 0.50, 0.24), (0.07, 0.07, 0.09), (0.95, 0.95, 0.90), (0.88, 0.22, 0.18),
-        (0.75, 0.77, 0.80), (0.36, 0.22, 0.13), (0.15, 0.15, 0.16), (0.96, 0.92, 0.80), (0.94, 0.90, 0.80),
-        (0.25, 0.70, 0.35), (0.62, 0.30, 0.80))
-    rock = rocker_solid(r, g)
-    disc_tab = next(f for f in feats if f.name == "disc + tab").solid()
-    ticks, hands, sec_, hub = H.dial(b)
-    body, shell, boot = plug
-    face = [(rf(F.W(disc_tab)), dark), (rf(F.W(ticks), 0.6), cream), (rf(F.W(hands), 0.6), cream),
-            (rf(F.W(sec_), 0.6), red), (rf(F.W(hub), 0.6), brass)]
-    gear = [(rf(body), black), (rf(shell, 0.6), steel), (rf(boot), black), (rf(cable, 1.5), black)]
-    stand = [(rf(F.W(case)), brass), (rf(F.W(plate_b)), plate_c), (rf(base_fb, 1.6), walnut), (rf(rock, 0.8), ivory)]
-    render(stand + face + gear, OUT + "01-hero.png", elev=16, azim=-50, zoom=1.2,
-           title="Front-BOOT hoop: press the ivory key on the base, BOOT clicks. Nothing touches the glass.")
-    render(stand + gear, OUT + "02-back.png", elev=22, azim=55, zoom=1.2, light=(0.45, 0.75, 0.5),
-           title="From behind: the rocker's arm rises to a nub just off the plate's flush BOOT tab")
-
-    # sections on the nub's middle plane, at rest and at the click (rigid pose: nub on the tab pushed a full stroke)
-    xs = r.X0 + r.NUB_W/2
-    tab_reg = prism(geo_b["tab"].offset(0.02, Round), -2, geo_b["Z_CASE"] + 2)
-    post = plate_b ^ geo_b["post_cyl"]
-    plate_np = plate_b - geo_b["post_cyl"]
-    fs = [(f.solid(), dark if f.name == "disc + tab" else green if f.name.startswith(c.BUTTON) else white)
-          for f in feats if not f.name.startswith("plug")]
-    D = g["D"]
-    box = m3.Manifold.cube([30, 16, 16]).translate([0, D[0] - 8, D[1] - 8])
-    for tag, phi, push in (("rest", 0.0, 0.0), ("pressed", phi_c, STROKE)):
-        moved = lambda m: F.W(m - tab_reg) + F.W((m ^ tab_reg).translate([0, 0, -push]))
-        parts = [(F.W(case), brass), (moved(plate_np), plate_c), (moved(post), violet), (base_fb, walnut),
-                 (rot3(rock, g["P"], phi), ivory)] + [(F.W(m), col) for m, col in fs]
-        cut, det = [], []
-        for m, col in parts:
-            m = m.trim_by_plane([1, 0, 0], xs)
-            if m.is_empty(): continue
-            cut.append((rf(m, 1.2), col))
-            d = m ^ box
-            if not d.is_empty(): det.append((rf(d, 0.4), col))
-        render(cut, os.path.join(tmp, "full.png"), elev=0, azim=180, zoom=1.15)
-        render(det, os.path.join(tmp, "det.png"), elev=0, azim=180, zoom=1.0)
-        if tag == "rest":
-            ttl = (f"Section on the nub (X {xs:.1f}), at rest: nub {r.G:g} off the tab, post {REST_CLR_TXT} off BOOT (green), "
-                   f"key {g['pad_bot'] - H.Stand().BASE_T:.1f} above its stop")
-        else:
-            ttl = (f"Pressed (true scale): the nub has pushed the tab {STROKE:.2f}, the post (violet) is on BOOT. "
-                   f"Key travel {click_mm:.1f} mm to the click, stop at {g['pad_bot'] - H.Stand().BASE_T:.1f}")
-        side_by_side([os.path.join(tmp, "full.png"), os.path.join(tmp, "det.png")], OUT + f"section-{tag}.png", ttl)
-
-    up, back = F.vec([0, 1, 0]), F.vec([0, 0, 1])
-    mv = lambda m, v: m.translate(list(v))
-    hoop_up = 40*up
-    ex = [(rf(mv(F.W(case), hoop_up)), brass), (rf(mv(F.W(disc_tab), hoop_up + 24*back)), dark),
-          (rf(mv(F.W(plate_b), hoop_up + 42*back)), plate_c), (rf(base_fb, 1.6), walnut),
-          (rf(rock.translate([0, -r.TONGUE_L - 0.3, 16]), 0.8), ivory)]
-    render(ex, OUT + "exploded.png", elev=14, azim=-35, zoom=1.0,
-           title="Assembly: rocker into the base (drop, slide back) -> badge and plate into the hoop -> hoop down its neck")
-
-    lay_h = case.translate([0, 0, c.LIP_T])
-    pl = plate_b.rotate([0, 180, 0]).translate([0, 0, geo_b["Z_CASE"]])
-    rk = rock.transform(np.array([[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, -r.X0]], float))
-    rb = bbox(rk)
-    lay = [(rf(lay_h), brass), (rf(pl.translate([62, 4, 0])), plate_c),
-           (rf(base_fb.translate([0, -96, 0]), 1.6), walnut),
-           (rf(rk.translate([58 - rb[0, 0], -70 - rb[0, 1], 0]), 0.8), ivory)]
-    render(lay, OUT + "print-layout.png", elev=38, azim=-70, zoom=1.1,
-           title="Print: hoop + case bezel down, plate flat, new base flat (100% infill), rocker on its side. No supports.")
 
 
 if __name__ == "__main__":

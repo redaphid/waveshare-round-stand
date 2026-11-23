@@ -25,30 +25,6 @@ parts = [
 ]
 
 [[family]]
-id = "telegraph"
-name = "Telegraph key stand"
-featured = true
-dir = "pocketwatch/stands/hoop"
-about = "The badge, in the USB-only pocketwatch case, leans back 40 degrees in a brass-look hoop. Press the brass knob at the front: a lever on a pin tips its rear arm into the back plate's BOOT tab. BOOT clicks after 3.2 mm of knob travel at about 1.75 N, then the lever lands on an anvil, so a hard press goes into the base, never into the switch."
-board = "1.28"
-material = "PLA"
-script = "pocketwatch/stands/hoop/build_hoop_telegraph.py"
-edit = "`Key` (lever, pin, knob, lean); the hoop and mortise come from `Stand` in `build_hoop.py`"
-readme = "pocketwatch/stands/hoop/README.md"
-renders = ["pocketwatch/stands/hoop/renders/telegraph-01-hero.png", "pocketwatch/stands/hoop/renders/telegraph-section-pressed.png", "pocketwatch/stands/hoop/renders/telegraph-exploded.png", "pocketwatch/stands/hoop/renders/telegraph-angles.png", "pocketwatch/stands/hoop/renders/telegraph-print-layout.png"]
-also = ["pocketwatch/stands/hoop/Hoop stand - back plate (button).stl"]
-parts = [
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (40 deg).stl", what = "The case fused into the hoop, tenon cut for the 40 degree lean (the default).", status = "printed", log = "2026-11-22", print = "bezel down", note = "Inferred to be the printed angle: 40 degrees is the default, and the owner did not say." },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (40 deg).stl", what = "Base with the pin posts, the anvil and the back stop.", status = "printed", log = "2026-11-22", print = "flat, **100% infill**: it is the ballast" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (40 deg).stl", what = "The key lever, 2.1 g. Every arm and the hairpin spring bend along the layers.", status = "printed", log = "2026-11-22", print = "on its side, as exported" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - knob.stl", what = "Snaps onto the lever's split peg. Both angles use it.", status = "printed", log = "2026-11-22", print = "upright" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - pin.stl", what = "Ø3 pivot pin, a head on one end and a split, barbed end on the other. Both angles use it.", status = "printed", log = "2026-11-22", print = "on its flat" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (50 deg).stl", what = "Hoop and case for a 50 degree lean: lower (66 mm), and the plug sits 12 mm past the base rim.", status = "unprinted", print = "bezel down" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (50 deg).stl", what = "Base for the 50 degree lean.", status = "unprinted", print = "flat, 100% infill" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (50 deg).stl", what = "Lever for the 50 degree lean.", status = "unprinted", print = "on its side, as exported" },
-]
-
-[[family]]
 id = "pocketwatch"
 name = "Pocketwatch case"
 featured = true
@@ -71,6 +47,30 @@ parts = [
   { file = "pocketwatch/Pocketwatch - case.stl", what = "Battery case (v2): badge in front, battery chamber behind.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "needs-work", log = "2026-10-13", fixed = true, print = "bezel down", note = "Reprint 'looking better'; the USB-C recess was too big. The fix: a smaller slot with a flat roof." },
   { file = "pocketwatch/Pocketwatch - plate.stl", what = "Battery case's back plate: header guides and the BOOT post.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "proven", log = "2026-10-12", print = "flat back down, guides and post up", note = "'The back plate is great!' (from memory; the print was lost)." },
   { file = "pocketwatch/Pocketwatch - lid.stl", what = "Battery case's lid.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "unprinted", print = "flat" },
+]
+
+[[family]]
+id = "telegraph"
+name = "Telegraph key stand"
+featured = true
+dir = "pocketwatch/stands/hoop"
+about = "The badge, in the USB-only pocketwatch case, leans back 40 degrees in a brass-look hoop. Press the brass knob at the front: a lever on a pin tips its rear arm into the back plate's BOOT tab. BOOT clicks after 3.2 mm of knob travel at about 1.75 N, then the lever lands on an anvil, so a hard press goes into the base, never into the switch."
+board = "1.28"
+material = "PLA"
+script = "pocketwatch/stands/hoop/build_hoop_telegraph.py"
+edit = "`Key` (lever, pin, knob, lean); the hoop and mortise come from `Stand` in `build_hoop.py`"
+readme = "pocketwatch/stands/hoop/README.md"
+renders = ["pocketwatch/stands/hoop/renders/telegraph-01-hero.png", "pocketwatch/stands/hoop/renders/telegraph-section-pressed.png", "pocketwatch/stands/hoop/renders/telegraph-exploded.png", "pocketwatch/stands/hoop/renders/telegraph-angles.png", "pocketwatch/stands/hoop/renders/telegraph-print-layout.png"]
+also = ["pocketwatch/stands/hoop/Hoop stand - back plate (button).stl"]
+parts = [
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (40 deg).stl", what = "The case fused into the hoop, tenon cut for the 40 degree lean (the default).", status = "printed", log = "2026-11-22", print = "bezel down", note = "Inferred to be the printed angle: 40 degrees is the default, and the owner did not say." },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (40 deg).stl", what = "Base with the pin posts, the anvil and the back stop.", status = "printed", log = "2026-11-22", print = "flat, **100% infill**: it is the ballast" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (40 deg).stl", what = "The key lever, 2.1 g. Every arm and the hairpin spring bend along the layers.", status = "printed", log = "2026-11-22", print = "on its side, as exported" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - knob.stl", what = "Snaps onto the lever's split peg. Both angles use it.", status = "printed", log = "2026-11-22", print = "upright" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - pin.stl", what = "Ø3 pivot pin, a head on one end and a split, barbed end on the other. Both angles use it.", status = "printed", log = "2026-11-22", print = "on its flat" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (50 deg).stl", what = "Hoop and case for a 50 degree lean: lower (66 mm), and the plug sits 12 mm past the base rim.", status = "unprinted", print = "bezel down" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (50 deg).stl", what = "Base for the 50 degree lean.", status = "unprinted", print = "flat, 100% infill" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (50 deg).stl", what = "Lever for the 50 degree lean.", status = "unprinted", print = "on its side, as exported" },
 ]
 
 [[family]]
@@ -125,7 +125,6 @@ parts = [
   { file = "small/Stand - BOOT button.stl", what = "Stand plus a post behind the badge: press the screen and it clicks BOOT.", script = "build_stand_button.py", edit = "`POST_R`, `REST_CLR`, `SWITCH`; the groove comes from `build_stands.py`", status = "proven", log = "2026-09-20", print = "flat, as exported", note = "'Ok, works well enough' after the rear wall was cut short for the switch housings." },
   { file = "small/Stand.stl", what = "Plain stand, 5.4 mm groove, USB-C at the top.", status = "unprinted", print = "flat, as exported", note = "Same groove as the BOOT stand." },
   { file = "small/Stand - RESET button.stl", what = "Stand with the post on RESET instead of BOOT.", script = "build_stand_button.py", edit = "`POST_R`, `REST_CLR`, `SWITCH`", status = "unprinted", print = "flat, as exported" },
-  { file = "small/Dock for right-angle cable - USB-C down.stl", what = "The badge turned over, USB-C down, for an L-shaped cable; rotate the screen in firmware.", edit = "the `\"1.28-usbdown\"` entry in `BOARDS`", status = "unprinted", print = "flat, as exported", note = "Built from drawing numbers that calipers later corrected. The owner dropped the right-angle cable plan on 10-03." },
 ]
 
 [[family]]

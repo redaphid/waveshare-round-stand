@@ -13,14 +13,11 @@ RENDER=
 
 echo "== desk stands + docks (retired designs, still checked) =="
 "$PY" build_stands.py | grep -E "===|checks|Error" || true
-for f in stl/small/Stand.stl stl/small/Dock*.stl stl/large/Stand*.stl stl/large/Dock*.stl; do "$PY" check_stl.py "$f" | tail -1 | sed "s|^|  $(basename "$f"): |"; done
+for f in stl/small/Stand.stl stl/large/Stand*.stl stl/large/Dock*.stl; do "$PY" check_stl.py "$f" | tail -1 | sed "s|^|  $(basename "$f"): |"; done
 "$PY" preview.py
 
 echo "== button-post stands =="
 for b in BOOT RESET; do "$PY" build_stand_button.py "$b" | grep -E "stl/|assert|Error"; done
-
-echo "== USB-C down dock: badge, tab, plug and back parts vs the stand =="
-"$PY" build_stand_usbdown.py | grep -E "overlap|plug bottom|cm\^3|assert|Error"
 
 echo "== slot fit gauge =="
 "$PY" build_fit_gauge.py | grep -E "stl/"

@@ -178,21 +178,21 @@ if __name__ == "__main__":
         ring_parts.append((cant(ring, z), (0.80, 0.80, 0.78)))
 
     body, fixed_c, slider_c, mon = (0.60, 0.62, 0.66), (0.42, 0.44, 0.48), (0.90, 0.42, 0.22), (0.13, 0.13, 0.15)
-    render([(P, body)] + pucks + ring_parts, f"renders/01-pod-{tag}-front-quarter.png", elev=8, azim=-58,
+    render([(P, body)] + pucks + ring_parts, f"pod/renders/01-pod-{tag}-front-quarter.png", elev=8, azim=-58,
            title=f"Pod v3 — {GAP:.0f} mm gaps ({'straight' if GAP>=24 else 'right-angle'} USB-C), trim rings, {CANT:.0f}° cant · {body_h:.0f} mm tall")
-    render([(P, body)] + pucks + ring_parts, f"renders/01b-pod-{tag}-front.png", elev=0, azim=-90,
+    render([(P, body)] + pucks + ring_parts, f"pod/renders/01b-pod-{tag}-front.png", elev=0, azim=-90,
            title=f"Pod v3 — straight on, {GAP:.0f} mm gaps")
     if GAP < 24:    # the shared parts only need rendering once (default run)
-        render([(P, body)], "renders/02-pod-back-and-rail.png", elev=16, azim=128,
+        render([(P, body)], "pod/renders/02-pod-back-and-rail.png", elev=16, azim=128,
                title="Pod v3 from behind — wiring channel down the spine, full-height dovetail rail on the monitor side")
-        render([(F, fixed_c), (S.translate([0, 12, 0]), slider_c)], "renders/03-clip-exploded.png", elev=28, azim=140,
+        render([(F, fixed_c), (S.translate([0, 12, 0]), slider_c)], "pod/renders/03-clip-exploded.png", elev=28, azim=140,
                title=f"Clip v3, slider pulled out — edge {EDGE_MIN:.0f}–{EDGE_MAX:.0f} mm, M3 lock in the top slot. Print two.")
         cutter = boxat(-20, 40, -10, 80, -40, 0)
-        render([(F - cutter, fixed_c), (slider_set_to(S, 20.0) - cutter, slider_c)], "renders/03b-clip-section.png",
+        render([(F - cutter, fixed_c), (slider_set_to(S, 20.0) - cutter, slider_c)], "pod/renders/03b-clip-section.png",
                elev=88, azim=-90, title="Clip v3 sectioned at mid-height, set to 20 mm — looking down: tongue in channel, lock slot, dovetail socket at right")
         top = cups[0]["z"]; crop = boxat(-40, 40, -40, 40, top - 40, top + 40)
         render([(m ^ crop, c) for m, c in ring_parts] + [(P ^ crop, (0.60, 0.62, 0.66))] + [(m ^ crop, c) for m, c in pucks],
-               "renders/05-trim-ring-detail.png", elev=22, azim=-50,
+               "pod/renders/05-trim-ring-detail.png", elev=22, azim=-50,
                title="Top cup — gauge seated on the shoulder, trim ring pressed in flush (retains it, hides the PCB edge)")
     shift = [SPINE_X - BB_X0 - 0.25, SOCK_Y - (BB_Y0 + BB_D/2), 0]
     for edge_t in (10.0, 20.0, 30.0):
@@ -202,5 +202,5 @@ if __name__ == "__main__":
             clips += [(F.translate([0, 0, zc]), fixed_c), (slider_set_to(S, edge_t).translate([0, 0, zc]), slider_c)]
         render([(monitor, mon)] + clips + [(P.translate(shift), body)] +
                [(m.translate(shift), c) for m, c in pucks + ring_parts],
-               f"renders/04-assembly-{tag}-edge-{edge_t:.0f}mm.png", elev=10, azim=-64,
+               f"pod/renders/04-assembly-{tag}-edge-{edge_t:.0f}mm.png", elev=10, azim=-64,
                title=f"Pod on two clips, {edge_t:.0f} mm monitor edge (dark slab), {GAP:.0f} mm gaps — you sit bottom-left")
