@@ -35,24 +35,30 @@ out ~1 mm large.
 
 ### Ceiling: the case bore
 
-A tight case takes **one step, +0.10 per side: `RAD_CLR` 1.15 → 1.25**, and
-that is about the limit. Measured against every check:
+The USB-only case and the telegraph take **two steps, +0.20 per side:
+`RAD_CLR` 1.15 → 1.35**. Past 1.35 the USB-C plug engages the port less than
+3.5 mm, and clearance cannot fix that. Measured against every check, in
+0.01 steps:
 
-| `RAD_CLR` | USB-only case | the rest |
+| `RAD_CLR` | what fails | why |
 |---|---|---|
-| 1.15 (today) | ok | all ok |
-| 1.16 | ok | telegraph fails (hoop-and-case watertight) |
-| 1.17 to 1.20 | ok | telegraph and hoop (plug body hits the hoop), wearable fail |
-| 1.25 | ok | nine scripts fail (sidepod, stalk, pendant, kids case, hoop, telegraph, kickstand, braun, te) |
-| 1.30 | fails watertight | |
-| 1.45 | fails `plug shell engages the port >= 3.5` (3.4) | |
+| 1.15 to 1.20 | nothing | |
+| 1.21 | pedestal (watertight) | a mesh pinch at this one value |
+| 1.22, 1.23 | lowprofile (watertight) | a mesh pinch at these two values |
+| 1.24 and up | pendant, kids case | the bar above the glass drops under 3.5 |
+| 1.32 and up | scissor, te | screw and peg holes come within 1.2 of the bore |
+| 1.35 | sidepod, braun | plug engagement reads 3.50, under 3.5 after rounding |
+| 1.36 and up | every design that checks plug engagement | plug engagement under 3.5 |
 
-So: for the case alone, set 1.25, build `pocketwatch/build_pocketwatch_usb.py`,
-and keep the change on your branch or add a roomy-bore variant (like the
-`roomy` plates). Past 1.25, clearance cannot fix it: the plug-engagement
-geometry (the crown boss and the USB-C recess in `Case`) must change, which
-is a design change to agree with the owner. The telegraph has no headroom
-at all above 1.15 today.
+The hoop, telegraph, battery case, wearable and gauge pass every check to
+1.45. The hoop and telegraph hold the same crown as the USB-only case and
+have no engagement check of their own, so treat 1.35 as their ceiling too.
+
+`RAD_CLR` is shared: set it for the design you print, rebuild everything,
+and keep the change on your branch, or add a roomy-bore variant (like the
+`roomy` plates). Past 1.35, the plug-engagement geometry (the crown boss and
+the USB-C recess in `Case`) must change, which is a design change to agree
+with the owner.
 
 ## 3. Rebuild, check, render, compare
 
