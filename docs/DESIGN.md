@@ -243,7 +243,8 @@ top is closed by its hood, so it keeps the round window.
 ## Not done / rejected
 
 - **Headless slicing.** ElegooSlicer CLI: `type`/`from` fields and `inherits`
-  resolution solved (`flatten_presets.py`), then exit 239 with no diagnostic.
+  resolution solved (`flatten_presets.py`, now in `tools/elegoo/`; see
+  `docs/ELEGOO.md`), then exit 239 with no diagnostic.
   Dropped on Aaron's say-so; he slices in the GUI.
 - **M2 screw retention for the 1.46** in the pod. Would be more robust than the
   ring; needs the three hole coordinates, which the drawing gives only

@@ -261,11 +261,12 @@ read-only: the guide, proven vs concept art, the measurements, and the open
 guesses. Connect it to your Claude:
 
 ```
-claude mcp add --transport http pocketwatch-board https://draw.hypnodroid.com/b/pocketwatch-schematics/mcp
+claude mcp add --transport http pocketwatch-board https://draw.hypnodroid.com/view/pocketwatch-schematics/mcp
 ```
 
-Sign in when Claude asks. Reading works for anyone; drawing on it needs the
-owner to grant edit access. **The board is documentation, not a source of
+That address is read-only and needs no sign-in. To draw on the board, ask
+the owner to add you; editors use `/b/` in place of `/view/`, which needs a
+signed-in, allowed account. **The board is documentation, not a source of
 truth:** the code and `docs/PRINT-LOG.md` win when they disagree. The
 `update-the-board` skill covers its frames, widgets and rules; `docs/BOARD.md`
 has screenshots. Claude Code mod for draw: `claude plugin install draw
