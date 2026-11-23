@@ -1,22 +1,21 @@
 ---
 name: rebuild-and-ship
-description: Rebuild every part of waveshare-round-stand, validate meshes, re-render, link-check docs, then commit, push and mirror to the Windows folder. Use after any change to geometry, parameters, or docs in this repo.
+description: OWNER ONLY (Aaron's own sessions). Rebuild every part, look at the renders, commit as the owner, push, and mirror the tree to his Windows slicing folder. Use after a geometry or docs change in the owner's checkout. A contributor uses change-a-model and opens a PR instead.
 ---
 
-# Rebuild and ship
+# Rebuild and ship (owner only)
 
-Run from the repo root (`~/Projects/waveshare-round-stand`).
+**If you are not working in Aaron's checkout for Aaron, stop.** Use
+`change-a-model` and open a PR. The paths below exist only on his machines;
+`CLAUDE.md` (section *Owner's workflow*) has the facts.
 
-1. `./build_all.sh` — stops on the first failure. Fix, re-run.
-2. **Open the renders and look as a skeptic** before writing anything:
-   `preview-stands.png`, `preview-docks.png`, `renders/*.png`,
-   `pod/renders/*.png`. Ask of each: does the board sit where the numbers
-   say? Is anything hidden, floating, buried, below the desk? Three real
-   errors in this project were invisible in reports and obvious in renders.
-3. If a number changed because of a print, `docs/PRINT-LOG.md` gets its entry
-   **first**; if a design choice changed, `docs/DESIGN.md` gets a new dated
-   entry (never edit old ones).
-4. Commit as Aaron and push:
+1. `./build_all.sh`. It stops on the first failure. Fix, rerun.
+2. **Open the renders of what changed and look as a skeptic** before writing
+   anything: does the badge sit where the numbers say? Is anything hidden,
+   floating, buried, below the desk?
+3. A number changed because of a print: `docs/PRINT-LOG.md` gets its entry
+   **first**. A design choice changed: a new dated entry in `docs/DESIGN.md`.
+4. Commit as the owner and push:
    ```
    git add -A
    git -c user.name="Aaron Herres" -c user.email="iam@hypnodroid.com" commit -F - <<'MSG'
@@ -24,19 +23,18 @@ Run from the repo root (`~/Projects/waveshare-round-stand`).
 
    Co-Authored-By: <the attribution line this session specifies>
    MSG
-   git push origin main
+   git push
    ```
-5. Mirror to Windows — he slices from there:
+5. Mirror to Windows after a merge (he slices from there):
    ```
    S=~/Projects/waveshare-round-stand; D=/mnt/d/Projects/waveshare-round-stand
-   for f in "$D"/*; do b=$(basename "$f"); [ -f "$f" ] && [ ! -e "$S/$b" ] && [ ! -e "$S/archive/$b" ] && echo "NOT MINE: $b"; done
+   for f in "$D"/*; do b=$(basename "$f"); [ -f "$f" ] && [ ! -e "$S/$b" ] && echo "NOT MINE: $b"; done
    ```
-   Anything printed as NOT MINE is his (`stand.3mf` always is) — leave it.
-   Then `cp` the tree over: `*.md *.py *.sh *.scad preview-*.png LICENSE`,
-   `stl/`, `renders/`, `reference/`, `archive/`, `pod/` (py, md, `stl/`,
-   `renders/`). Verify with `md5sum` that STLs match.
-6. Tell him: what to print, one decision if there is one, and what is still
-   unprinted. Terse — he reads on a phone.
+   Anything printed as NOT MINE is his (`stand.3mf` always is): leave it.
+   Then copy the tracked tree over and verify with `md5sum` that the STLs
+   match.
+6. Tell him: what to print, one decision if there is one, what is still
+   unprinted. Terse; he reads on a phone.
 
-Never delete a superseded STL or render: `mv` to `archive/` and add a line to
-`archive/NOTE.md`.
+Superseded STLs leave the tree: `git rm` them and add a line to
+`archive/NOTE.md` naming the last commit that has them.
