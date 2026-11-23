@@ -6,7 +6,13 @@
 
 **Layout rule:** everything you print for one design is in one folder under `stl/`. `fit-gauges/` holds the calibration prints. The first desk stands are split by badge: `small/` is the 1.28, `large/` the 1.46.
 
-**Every design is a Python script** you can change and rerun: the *Change it* line under each design names the script and the class or constants to edit. Pocketwatch designs share `Badge` and `Case` in [pocketwatch/build_pocketwatch.py](<../pocketwatch/build_pocketwatch.py>). Run a script from the repo root with the CAD venv, for example `~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_telegraph.py`. Setup is in [docs/TOOLCHAIN.md](<../docs/TOOLCHAIN.md>); print results go in [docs/PRINT-LOG.md](<../docs/PRINT-LOG.md>), which every status below cites by date.
+**Every design is a Python script** you can change and rerun: the *Change it* line under each design names the script and the class or constants to edit. Pocketwatch designs share `Badge` and `Case` in [build_pocketwatch.py](<../pocketwatch/build_pocketwatch.py>). Run a script from the repo root with the CAD venv; it rewrites its STLs here and prints its checks:
+
+```sh
+~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_telegraph.py --no-render
+```
+
+Setup is in [TOOLCHAIN.md](<../docs/TOOLCHAIN.md>). Print results go in [PRINT-LOG.md](<../docs/PRINT-LOG.md>), which every status below cites by date.
 
 | status | files | means |
 |---|---|---|
@@ -20,15 +26,27 @@ Old and superseded models were deleted; [archive/NOTE.md](<../archive/NOTE.md>) 
 
 ## 1. Print these first: fit gauges
 
-![Fit gauges](<../renders/fit-gauge.png>)
-![Fit gauges](<../pocketwatch/renders/bore-gauge.png>)
-
 Ten-minute prints that measure how your printer and your badge fit, before you commit to a case or stand. Print both first and tell the owner which slot and which ring fit.
 
-| gauge | what it sets | result |
-|---|---|---|
-| [Slot fit gauge](<fit-gauges/Slot fit gauge.stl>)<br>Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove. *Print:* flat, as exported. | 1.28 rim thickness: `gap` in `build_stands.py` `BOARDS`. *Change it:* [build_fit_gauge.py](<../build_fit_gauge.py>) `WIDTHS`. | **proven**<br>2026-09-18<br>Owner's 1.28 seated in slot 5 (5.0 mm). |
-| [Pocketwatch - bore fit gauge](<fit-gauges/Pocketwatch - bore fit gauge.stl>)<br>The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore. *Print:* bezel down, about 10 minutes. | case bore clearance: `Case.RAD_CLR` in `pocketwatch/build_pocketwatch.py`. *Change it:* [pocketwatch/build_bore_gauge.py](<../pocketwatch/build_bore_gauge.py>) `CLRS`. | **proven**<br>2026-10-13<br>Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between. |
+### [Slot fit gauge](<fit-gauges/Slot fit gauge.stl>)
+
+![Fit gauges](<../renders/fit-gauge.png>)
+
+**proven.** *Log 2026-09-18:* Owner's 1.28 seated in slot 5 (5.0 mm).
+
+Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.
+
+**Sets:** the groove width, `gap` in `BOARDS` in `build_stands.py`. **Print:** flat, as exported. **Change it:** [build_fit_gauge.py](<../build_fit_gauge.py>), `WIDTHS`.
+
+### [Pocketwatch - bore fit gauge](<fit-gauges/Pocketwatch - bore fit gauge.stl>)
+
+![Fit gauges](<../pocketwatch/renders/bore-gauge.png>)
+
+**proven.** *Log 2026-10-13:* Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between.
+
+The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore.
+
+**Sets:** the case bore clearance, `Case.RAD_CLR` in `build_pocketwatch.py`. **Print:** bezel down, about 10 minutes. **Change it:** [build_bore_gauge.py](<../pocketwatch/build_bore_gauge.py>), `CLRS`.
 
 ## 2. Featured
 
@@ -40,22 +58,22 @@ The badge, in the USB-only pocketwatch case, leans back 40 degrees in a brass-lo
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/stands/hoop/](<pocketwatch/stands/hoop>)
 
-**Change it:** [pocketwatch/stands/hoop/build_hoop_telegraph.py](<../pocketwatch/stands/hoop/build_hoop_telegraph.py>), `Key` (lever, pin, knob, lean); the hoop and mortise come from `Stand` in `build_hoop.py`.
+**Change it:** [build_hoop_telegraph.py](<../pocketwatch/stands/hoop/build_hoop_telegraph.py>), `Key` (lever, pin, knob, lean); the hoop and mortise come from `Stand` in `build_hoop.py`.
 
 **More:** [design notes](<../pocketwatch/stands/hoop/README.md>), [telegraph-section-pressed](<../pocketwatch/stands/hoop/renders/telegraph-section-pressed.png>), [telegraph-exploded](<../pocketwatch/stands/hoop/renders/telegraph-exploded.png>), [telegraph-angles](<../pocketwatch/stands/hoop/renders/telegraph-angles.png>), [telegraph-print-layout](<../pocketwatch/stands/hoop/renders/telegraph-print-layout.png>)
 
 **Also print:** [Hoop stand - back plate (button)](<pocketwatch/stands/hoop/Hoop stand - back plate (button).stl>)
 
-| status | file | notes |
-|---|---|---|
-| **printed**<br>2026-11-22 | [Hoop stand telegraph - hoop and case (40 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (40 deg).stl>) | The case fused into the hoop, tenon cut for the 40 degree lean (the default). Inferred to be the printed angle: 40 degrees is the default, and the owner did not say. *Print:* bezel down. |
-| **printed**<br>2026-11-22 | [Hoop stand telegraph - base (40 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - base (40 deg).stl>) | Base with the pin posts, the anvil and the back stop. *Print:* flat, **100% infill**: it is the ballast. |
-| **printed**<br>2026-11-22 | [Hoop stand telegraph - lever (40 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - lever (40 deg).stl>) | The key lever, 2.1 g. Every arm and the hairpin spring bend along the layers. *Print:* on its side, as exported. |
-| **printed**<br>2026-11-22 | [Hoop stand telegraph - knob](<pocketwatch/stands/hoop/Hoop stand telegraph - knob.stl>) | Snaps onto the lever's split peg. Both angles use it. *Print:* upright. |
-| **printed**<br>2026-11-22 | [Hoop stand telegraph - pin](<pocketwatch/stands/hoop/Hoop stand telegraph - pin.stl>) | Ø3 pivot pin, a head on one end and a split, barbed end on the other. Both angles use it. *Print:* on its flat. |
-| **unprinted** | [Hoop stand telegraph - hoop and case (50 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (50 deg).stl>) | Hoop and case for a 50 degree lean: lower (66 mm), and the plug sits 12 mm past the base rim. *Print:* bezel down. |
-| **unprinted** | [Hoop stand telegraph - base (50 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - base (50 deg).stl>) | Base for the 50 degree lean. *Print:* flat, 100% infill. |
-| **unprinted** | [Hoop stand telegraph - lever (50 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - lever (50 deg).stl>) | Lever for the 50 degree lean. *Print:* on its side, as exported. |
+| status | file |
+|---|---|
+| **printed** | **[Hoop stand telegraph - hoop and case (40 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (40 deg).stl>)**<br>The case fused into the hoop, tenon cut for the 40 degree lean (the default). *Log 2026-11-22:* Inferred to be the printed angle: 40 degrees is the default, and the owner did not say. *Print:* bezel down. |
+| **printed** | **[Hoop stand telegraph - base (40 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - base (40 deg).stl>)**<br>Base with the pin posts, the anvil and the back stop. *Log 2026-11-22.* *Print:* flat, **100% infill**: it is the ballast. |
+| **printed** | **[Hoop stand telegraph - lever (40 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - lever (40 deg).stl>)**<br>The key lever, 2.1 g. Every arm and the hairpin spring bend along the layers. *Log 2026-11-22.* *Print:* on its side, as exported. |
+| **printed** | **[Hoop stand telegraph - knob](<pocketwatch/stands/hoop/Hoop stand telegraph - knob.stl>)**<br>Snaps onto the lever's split peg. Both angles use it. *Log 2026-11-22.* *Print:* upright. |
+| **printed** | **[Hoop stand telegraph - pin](<pocketwatch/stands/hoop/Hoop stand telegraph - pin.stl>)**<br>Ø3 pivot pin, a head on one end and a split, barbed end on the other. Both angles use it. *Log 2026-11-22.* *Print:* on its flat. |
+| **unprinted** | **[Hoop stand telegraph - hoop and case (50 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (50 deg).stl>)**<br>Hoop and case for a 50 degree lean: lower (66 mm), and the plug sits 12 mm past the base rim. *Print:* bezel down. |
+| **unprinted** | **[Hoop stand telegraph - base (50 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - base (50 deg).stl>)**<br>Base for the 50 degree lean. *Print:* flat, 100% infill. |
+| **unprinted** | **[Hoop stand telegraph - lever (50 deg)](<pocketwatch/stands/hoop/Hoop stand telegraph - lever (50 deg).stl>)**<br>Lever for the 50 degree lean. *Print:* on its side, as exported. |
 
 ### Pocketwatch case
 
@@ -65,22 +83,22 @@ The 1.28 badge in a round watch case; the USB-C plug at 12 o'clock is the crown.
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/](<pocketwatch>)
 
-**Change it:** [pocketwatch/build_pocketwatch_usb.py](<../pocketwatch/build_pocketwatch_usb.py>), `Badge` and `Case` in `pocketwatch/build_pocketwatch.py` (shared by every pocketwatch design); `PLATE_DISC_CLR` and `PLATE_DISC_CLR_ROOMY` for the plate fit.
+**Change it:** [build_pocketwatch_usb.py](<../pocketwatch/build_pocketwatch_usb.py>), `Badge` and `Case` in `pocketwatch/build_pocketwatch.py` (shared by every pocketwatch design); `PLATE_DISC_CLR` and `PLATE_DISC_CLR_ROOMY` for the plate fit.
 
 **More:** [design notes](<../pocketwatch/README.md>), [usb-exploded](<../pocketwatch/renders/usb-exploded.png>), [exploded](<../pocketwatch/renders/exploded.png>), [usb-section-post](<../pocketwatch/renders/usb-section-post.png>)
 
-| status | file | notes |
-|---|---|---|
-| **proven**<br>2026-10-13 | [Pocketwatch USB-only - plate](<pocketwatch/Pocketwatch USB-only - plate.stl>) | Back plate with the post that clicks BOOT when you press the screen. One print came out ~1 mm too large; the next print of this file fit. *Print:* flat back down, guides and post up. |
-| **proven**<br>2026-10-12 | [Pocketwatch - plate](<pocketwatch/Pocketwatch - plate.stl>) | Battery case's back plate: header guides and the BOOT post. 'The back plate is great!' (from memory; the print was lost). *Print:* flat back down, guides and post up. *Change it:* `pocketwatch/build_pocketwatch.py`, `Badge` and `Case`. |
-| **needs-work**<br>2026-10-14<br>fix in file | [Pocketwatch USB-only - case](<pocketwatch/Pocketwatch USB-only - case.stl>) | USB-only case: bore, header grips, crown boss and a pry notch at 10 o'clock. 10-13: 'Case is a great fit.' 10-14: too tight to pry the plate off, USB-C opening too small; the pry notch and a slot 2 mm bigger all round are in this file, unprinted. *Print:* bezel down. |
-| **needs-work**<br>2026-10-13<br>fix in file | [Pocketwatch USB-only - plate (button)](<pocketwatch/Pocketwatch USB-only - plate (button).stl>) | Back plate with a U-slot flexure tab over BOOT: push the tab on the back to click. The finger dimple printed melted; it is removed. The rest was OK. *Print:* flat back down. Same file as `pocketwatch/stands/hoop/Hoop stand - back plate (button).stl`. |
-| **needs-work**<br>2026-10-13<br>fix in file | [Pocketwatch - case](<pocketwatch/Pocketwatch - case.stl>) | Battery case (v2): badge in front, battery chamber behind. Reprint 'looking better'; the USB-C recess was too big. The smaller flat-roofed slot is in this file, unprinted. *Print:* bezel down. *Change it:* `pocketwatch/build_pocketwatch.py`, `Badge` and `Case`. |
-| **unprinted** | [Pocketwatch USB-only - plate (roomy)](<pocketwatch/Pocketwatch USB-only - plate (roomy).stl>) | The same plate, 0.65 mm per side clearance instead of 0.18, for a printer that prints oversize. *Print:* flat back down. |
-| **unprinted** | [Pocketwatch USB-only - plate (button, roomy)](<pocketwatch/Pocketwatch USB-only - plate (button, roomy).stl>) | Button plate, roomy fit. *Print:* flat back down. Same file as `pocketwatch/stands/hoop/Hoop stand - back plate (button, roomy).stl`. |
-| **unprinted** | [Pocketwatch USB-only - plate (BOOT hole)](<pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl>) | Back plate with a Ø3.4 hole straight onto BOOT: click it with a paperclip or SIM tool. *Print:* flat back down. Same file as `pocketwatch/clips/lowprofile/Lowprofile - back plate (BOOT hole).stl`, `pocketwatch/clips/stalk/Stalk gauge - back plate (BOOT hole).stl`, `pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole).stl`, `pocketwatch/stands/pedestal/Pedestal - back plate (BOOT hole).stl`, `pocketwatch/stands/scissor/Scissor stand - back plate (BOOT hole).stl`. |
-| **unprinted** | [Pocketwatch USB-only - plate (BOOT hole, roomy)](<pocketwatch/Pocketwatch USB-only - plate (BOOT hole, roomy).stl>) | BOOT-hole plate, roomy fit. *Print:* flat back down. |
-| **unprinted** | [Pocketwatch - lid](<pocketwatch/Pocketwatch - lid.stl>) | Battery case's lid. *Print:* flat. *Change it:* `pocketwatch/build_pocketwatch.py`, `Badge` and `Case`. |
+| status | file |
+|---|---|
+| **proven** | **[Pocketwatch USB-only - plate](<pocketwatch/Pocketwatch USB-only - plate.stl>)**<br>Back plate with the post that clicks BOOT when you press the screen. *Log 2026-10-13:* One print came out ~1 mm too large; the next print of this file fit. *Print:* flat back down, guides and post up. |
+| **proven** | **[Pocketwatch - plate](<pocketwatch/Pocketwatch - plate.stl>)**<br>Battery case's back plate: header guides and the BOOT post. *Log 2026-10-12:* 'The back plate is great!' (from memory; the print was lost). *Print:* flat back down, guides and post up. *Change it:* [build_pocketwatch.py](<../pocketwatch/build_pocketwatch.py>), `Badge` and `Case`. |
+| **needs-work** | **[Pocketwatch USB-only - case](<pocketwatch/Pocketwatch USB-only - case.stl>)**<br>USB-only case: bore, header grips, crown boss and a pry notch at 10 o'clock. *Log 2026-10-14:* 10-13: 'Case is a great fit.' 10-14: too tight to pry the plate off, USB-C opening too small. The fix: a pry notch and a slot 2 mm bigger all round. **The requested change is in this file, unprinted.** *Print:* bezel down. |
+| **needs-work** | **[Pocketwatch USB-only - plate (button)](<pocketwatch/Pocketwatch USB-only - plate (button).stl>)**<br>Back plate with a U-slot flexure tab over BOOT: push the tab on the back to click. *Log 2026-10-13:* The finger dimple printed melted; it is removed. The rest was OK. **The requested change is in this file, unprinted.** *Print:* flat back down. Same file as Hoop stand - back plate (button). |
+| **needs-work** | **[Pocketwatch - case](<pocketwatch/Pocketwatch - case.stl>)**<br>Battery case (v2): badge in front, battery chamber behind. *Log 2026-10-13:* Reprint 'looking better'; the USB-C recess was too big. The fix: a smaller slot with a flat roof. **The requested change is in this file, unprinted.** *Print:* bezel down. *Change it:* [build_pocketwatch.py](<../pocketwatch/build_pocketwatch.py>), `Badge` and `Case`. |
+| **unprinted** | **[Pocketwatch USB-only - plate (roomy)](<pocketwatch/Pocketwatch USB-only - plate (roomy).stl>)**<br>The same plate, 0.65 mm per side clearance instead of 0.18, for a printer that prints oversize. *Print:* flat back down. |
+| **unprinted** | **[Pocketwatch USB-only - plate (button, roomy)](<pocketwatch/Pocketwatch USB-only - plate (button, roomy).stl>)**<br>Button plate, roomy fit. *Print:* flat back down. Same file as Hoop stand - back plate (button, roomy). |
+| **unprinted** | **[Pocketwatch USB-only - plate (BOOT hole)](<pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl>)**<br>Back plate with a Ø3.4 hole straight onto BOOT: click it with a paperclip or SIM tool. *Print:* flat back down. Same file as Lowprofile - back plate (BOOT hole), Stalk gauge - back plate (BOOT hole), Hoop stand - back plate (BOOT hole), Pedestal - back plate (BOOT hole), Scissor stand - back plate (BOOT hole). |
+| **unprinted** | **[Pocketwatch USB-only - plate (BOOT hole, roomy)](<pocketwatch/Pocketwatch USB-only - plate (BOOT hole, roomy).stl>)**<br>BOOT-hole plate, roomy fit. *Print:* flat back down. |
+| **unprinted** | **[Pocketwatch - lid](<pocketwatch/Pocketwatch - lid.stl>)**<br>Battery case's lid. *Print:* flat. *Change it:* [build_pocketwatch.py](<../pocketwatch/build_pocketwatch.py>), `Badge` and `Case`. |
 
 ## 3. Other current designs
 
@@ -92,19 +110,19 @@ The USB-only case in a gimbal-style hoop on a round base, face 20 degrees back, 
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/stands/hoop/](<pocketwatch/stands/hoop>)
 
-**Change it:** [pocketwatch/stands/hoop/build_hoop.py](<../pocketwatch/stands/hoop/build_hoop.py>), `Stand` (`FIT` is the mortise clearance per side).
+**Change it:** [build_hoop.py](<../pocketwatch/stands/hoop/build_hoop.py>), `Stand` (`FIT` is the mortise clearance per side).
 
 **More:** [design notes](<../pocketwatch/stands/hoop/README.md>), [01-hero](<../pocketwatch/stands/hoop/renders/01-hero.png>), [07-exploded](<../pocketwatch/stands/hoop/renders/07-exploded.png>)
 
-| status | file | notes |
-|---|---|---|
-| **printed**<br>2026-10-13 | [Hoop stand - base (looser, 0.12)](<pocketwatch/stands/hoop/Hoop stand - base (looser, 0.12).stl>) | Base at 0.12 per side, for a printer that prints tight. The case was loose in it on the owner's printer. *Print:* flat, 100% infill. |
-| **needs-work**<br>2026-10-13<br>fix in file | [Hoop stand - hoop and case](<pocketwatch/stands/hoop/Hoop stand - hoop and case.stl>) | The USB-only case fused into the hoop. Loose on the base: the fix is the base's 0.08 mortise. The 0.4 mm wider USB-C hole is in this file. *Print:* bezel down. |
-| **needs-work**<br>2026-10-13<br>fix in file | [Hoop stand - back plate (button)](<pocketwatch/stands/hoop/Hoop stand - back plate (button).stl>) | Button back plate (push the tab to click BOOT). The telegraph needs this one. The melted finger dimple is removed. *Print:* flat back down. Same file as `pocketwatch/Pocketwatch USB-only - plate (button).stl`. |
-| **unprinted** | [Hoop stand - base](<pocketwatch/stands/hoop/Hoop stand - base.stl>) | Base, mortise clearance 0.08 per side (the default since the 0.12 printed loose). *Print:* flat, **100% infill**: it is the ballast. |
-| **unprinted** | [Hoop stand - base (roomier, 0.18)](<pocketwatch/stands/hoop/Hoop stand - base (roomier, 0.18).stl>) | Base at 0.18 per side, for a printer that prints very tight. *Print:* flat, 100% infill. |
-| **unprinted** | [Hoop stand - back plate (button, roomy)](<pocketwatch/stands/hoop/Hoop stand - back plate (button, roomy).stl>) | Button plate, roomy fit. *Print:* flat back down. Same file as `pocketwatch/Pocketwatch USB-only - plate (button, roomy).stl`. |
-| **unprinted** | [Hoop stand - back plate (BOOT hole)](<pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole).stl>) | Back plate with a hole onto BOOT, for a pin. *Print:* flat back down. Same file as `pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl`, `pocketwatch/clips/lowprofile/Lowprofile - back plate (BOOT hole).stl`, `pocketwatch/clips/stalk/Stalk gauge - back plate (BOOT hole).stl`, `pocketwatch/stands/pedestal/Pedestal - back plate (BOOT hole).stl`, `pocketwatch/stands/scissor/Scissor stand - back plate (BOOT hole).stl`. |
+| status | file |
+|---|---|
+| **printed** | **[Hoop stand - base (looser, 0.12)](<pocketwatch/stands/hoop/Hoop stand - base (looser, 0.12).stl>)**<br>Base at 0.12 per side, for a printer that prints tight. *Log 2026-10-13:* The case was loose in it on the owner's printer. *Print:* flat, 100% infill. |
+| **needs-work** | **[Hoop stand - hoop and case](<pocketwatch/stands/hoop/Hoop stand - hoop and case.stl>)**<br>The USB-only case fused into the hoop. *Log 2026-10-13:* Loose on the base: the fix is the base's 0.08 mortise. The USB-C hole is also 0.4 mm wider. **The requested change is in this file, unprinted.** *Print:* bezel down. |
+| **needs-work** | **[Hoop stand - back plate (button)](<pocketwatch/stands/hoop/Hoop stand - back plate (button).stl>)**<br>Button back plate (push the tab to click BOOT). The telegraph needs this one. *Log 2026-10-13:* The melted finger dimple is removed. **The requested change is in this file, unprinted.** *Print:* flat back down. Same file as Pocketwatch USB-only - plate (button). |
+| **unprinted** | **[Hoop stand - base](<pocketwatch/stands/hoop/Hoop stand - base.stl>)**<br>Base, mortise clearance 0.08 per side (the default since the 0.12 printed loose). *Print:* flat, **100% infill**: it is the ballast. |
+| **unprinted** | **[Hoop stand - base (roomier, 0.18)](<pocketwatch/stands/hoop/Hoop stand - base (roomier, 0.18).stl>)**<br>Base at 0.18 per side, for a printer that prints very tight. *Print:* flat, 100% infill. |
+| **unprinted** | **[Hoop stand - back plate (button, roomy)](<pocketwatch/stands/hoop/Hoop stand - back plate (button, roomy).stl>)**<br>Button plate, roomy fit. *Print:* flat back down. Same file as Pocketwatch USB-only - plate (button, roomy). |
+| **unprinted** | **[Hoop stand - back plate (BOOT hole)](<pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole).stl>)**<br>Back plate with a hole onto BOOT, for a pin. *Print:* flat back down. Same file as Pocketwatch USB-only - plate (BOOT hole), Lowprofile - back plate (BOOT hole), Stalk gauge - back plate (BOOT hole), Pedestal - back plate (BOOT hole), Scissor stand - back plate (BOOT hole). |
 
 ### Pendant
 
@@ -112,15 +130,15 @@ A USB-powered Ø43.6 case cut flat at 12 o'clock so the USB-C port sticks out an
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/pendant/](<pocketwatch/pendant>)
 
-**Change it:** [pocketwatch/pendant/build_pendant.py](<../pocketwatch/pendant/build_pendant.py>), `Pendant` (`PORT_OUT`, `WIN_FLAT`), `Stack`, `Material`.
+**Change it:** [build_pendant.py](<../pocketwatch/pendant/build_pendant.py>), `Pendant` (`PORT_OUT`, `WIN_FLAT`), `Stack`, `Material`.
 
 **More:** [design notes](<../pocketwatch/pendant/README.md>), [hero-front](<../pocketwatch/pendant/renders/hero-front.png>), [exploded](<../pocketwatch/pendant/renders/exploded.png>)
 
-| status | file | notes |
-|---|---|---|
-| **proven**<br>2026-10-15 | [Pendant - back plate (button)](<pocketwatch/pendant/Pendant - back plate (button).stl>) | Back plate with the BOOT button tab. *Print:* flat back down. |
-| **needs-work**<br>2026-10-15<br>fix in file | [Pendant - case](<pocketwatch/pendant/Pendant - case.stl>) | The case, port out at 12 o'clock. 'That pretty much worked', but the bar over the USB-C tab was too thin. The window's flat top (bar 2.68 to 3.58 mm) is in this file, unprinted. *Print:* bezel down. |
-| **unprinted** | [Pendant - back plate (button, roomy)](<pocketwatch/pendant/Pendant - back plate (button, roomy).stl>) | Back plate, roomy fit. *Print:* flat back down. |
+| status | file |
+|---|---|
+| **proven** | **[Pendant - back plate (button)](<pocketwatch/pendant/Pendant - back plate (button).stl>)**<br>Back plate with the BOOT button tab. *Log 2026-10-15.* *Print:* flat back down. |
+| **needs-work** | **[Pendant - case](<pocketwatch/pendant/Pendant - case.stl>)**<br>The case, port out at 12 o'clock. *Log 2026-10-15:* 'That pretty much worked', but the bar over the USB-C tab was too thin. The fix: the window's flat top makes the bar 3.58 mm (was 2.68). **The requested change is in this file, unprinted.** *Print:* bezel down. |
+| **unprinted** | **[Pendant - back plate (button, roomy)](<pocketwatch/pendant/Pendant - back plate (button, roomy).stl>)**<br>Back plate, roomy fit. *Print:* flat back down. |
 
 ### Desk stands for the 1.28 (bare badge)
 
@@ -132,12 +150,12 @@ The first designs: the bare badge leans back in a groove, no case. Sized with th
 
 **More:** [preview-stands](<../preview-stands.png>), [stand-1.28-BOOT-post-front](<../renders/stand-1.28-BOOT-post-front.png>)
 
-| status | file | notes |
-|---|---|---|
-| **proven**<br>2026-09-20 | [Stand - BOOT button](<small/Stand - BOOT button.stl>) | Stand plus a post behind the badge: press the screen and it clicks BOOT. 'Ok, works well enough' after the rear wall was cut short for the switch housings. *Print:* flat, as exported. *Change it:* `build_stand_button.py`, `POST_R`, `REST_CLR`, `SWITCH`; the groove comes from `build_stands.py`. |
-| **unprinted** | [Stand](<small/Stand.stl>) | Plain stand, 5.4 mm groove, USB-C at the top. Same groove as the BOOT stand. *Print:* flat, as exported. |
-| **unprinted** | [Stand - RESET button](<small/Stand - RESET button.stl>) | Stand with the post on RESET instead of BOOT. *Print:* flat, as exported. *Change it:* `build_stand_button.py`, `POST_R`, `REST_CLR`, `SWITCH`. |
-| **unprinted** | [Dock for right-angle cable - USB-C down](<small/Dock for right-angle cable - USB-C down.stl>) | The badge turned over, USB-C down, for an L-shaped cable; rotate the screen in firmware. Built from drawing numbers that calipers later corrected. The owner dropped the right-angle cable plan on 10-03. *Print:* flat, as exported. *Change it:* `build_stands.py`, the `"1.28-usbdown"` entry in `BOARDS`. |
+| status | file |
+|---|---|
+| **proven** | **[Stand - BOOT button](<small/Stand - BOOT button.stl>)**<br>Stand plus a post behind the badge: press the screen and it clicks BOOT. *Log 2026-09-20:* 'Ok, works well enough' after the rear wall was cut short for the switch housings. *Print:* flat, as exported. *Change it:* [build_stand_button.py](<../build_stand_button.py>), `POST_R`, `REST_CLR`, `SWITCH`; the groove comes from `build_stands.py`. |
+| **unprinted** | **[Stand](<small/Stand.stl>)**<br>Plain stand, 5.4 mm groove, USB-C at the top. Same groove as the BOOT stand. *Print:* flat, as exported. |
+| **unprinted** | **[Stand - RESET button](<small/Stand - RESET button.stl>)**<br>Stand with the post on RESET instead of BOOT. *Print:* flat, as exported. *Change it:* [build_stand_button.py](<../build_stand_button.py>), `POST_R`, `REST_CLR`, `SWITCH`. |
+| **unprinted** | **[Dock for right-angle cable - USB-C down](<small/Dock for right-angle cable - USB-C down.stl>)**<br>The badge turned over, USB-C down, for an L-shaped cable; rotate the screen in firmware. Built from drawing numbers that calipers later corrected. The owner dropped the right-angle cable plan on 10-03. *Print:* flat, as exported. *Change it:* [build_stands.py](<../build_stands.py>), the `"1.28-usbdown"` entry in `BOARDS`. |
 
 ### Desk stands for the 1.46
 
@@ -149,12 +167,12 @@ The same groove stand for the 1.46 Touch. It ships in two thicknesses that are *
 
 **More:** [preview-stands](<../preview-stands.png>), [preview-docks](<../preview-docks.png>)
 
-| status | file | notes |
-|---|---|---|
-| **proven**<br>2026-09-18 | [Stand - cover glass](<large/Stand - cover glass.stl>) | Desk stand for the cover-glass 1.46. Seats cleanly; a straight cable in the bottom port does not fit, hence the docks. *Print:* flat, as exported. |
-| **unprinted** | [Dock for straight cable - cover glass](<large/Dock for straight cable - cover glass.stl>) | Taller stand with 27 mm under the rim for a straight plug. *Print:* flat, as exported. *Change it:* `build_stands.py`, the `"1.46-glass-dock"` entry in `BOARDS`. |
-| **unprinted** | [Stand - no cover glass](<large/Stand - no cover glass.stl>) | Desk stand for the bare 1.46. *Print:* flat, as exported. *Board:* 1.46 bare. |
-| **unprinted** | [Dock for straight cable - no cover glass](<large/Dock for straight cable - no cover glass.stl>) | Dock for the bare 1.46. *Print:* flat, as exported. *Change it:* `build_stands.py`, the `"1.46-bare-dock"` entry in `BOARDS`. *Board:* 1.46 bare. |
+| status | file |
+|---|---|
+| **proven** | **[Stand - cover glass](<large/Stand - cover glass.stl>)**<br>Desk stand for the cover-glass 1.46. *Log 2026-09-18:* Seats cleanly; a straight cable in the bottom port does not fit, hence the docks. *Print:* flat, as exported. |
+| **unprinted** | **[Dock for straight cable - cover glass](<large/Dock for straight cable - cover glass.stl>)**<br>Taller stand with 27 mm under the rim for a straight plug. *Print:* flat, as exported. *Change it:* [build_stands.py](<../build_stands.py>), the `"1.46-glass-dock"` entry in `BOARDS`. |
+| **unprinted** | **[Stand - no cover glass](<large/Stand - no cover glass.stl>)**<br>Desk stand for the bare 1.46. *Print:* flat, as exported. *Board:* 1.46 bare. |
+| **unprinted** | **[Dock for straight cable - no cover glass](<large/Dock for straight cable - no cover glass.stl>)**<br>Dock for the bare 1.46. *Print:* flat, as exported. *Change it:* [build_stands.py](<../build_stands.py>), the `"1.46-bare-dock"` entry in `BOARDS`. *Board:* 1.46 bare. |
 
 ## 4. Concepts: never printed
 
@@ -166,19 +184,19 @@ An instrument cluster that clips to the side of a monitor: one 1.46 on top, two 
 
 **Board:** 1.28 + 1.46 cover glass · **Material:** PETG · **Folder:** [pod/](<pod>)
 
-**Change it:** [pod/build_pod.py](<../pod/build_pod.py>), `FIT`, `CANT`, `CUP_WALL`, `RING_PRESS` at the top; the gap between gauges is the first argument (12 or 26).
+**Change it:** [build_pod.py](<../pod/build_pod.py>), `FIT`, `CANT`, `CUP_WALL`, `RING_PRESS` at the top; the gap between gauges is the first argument (12 or 26).
 
 **More:** [design notes](<../pod/README.md>), [01-pod-gap12-front-quarter](<../pod/renders/01-pod-gap12-front-quarter.png>), [03-clip-exploded](<../pod/renders/03-clip-exploded.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Pod cup test - small](<pod/Pod cup test - small.stl>) | One 1.28 cup on a desk base, ~16 g against ~40 g for the pod. Print it before the pod. *Print:* face up as exported, then stand it on its feet. *Change it:* `pod/build_cup_stand.py`, `LEAN`, `BASE_W`; the cup itself is `build_pod.py`'s. *Board:* 1.28. |
-| **unprinted** | [Trim ring - small](<pod/Trim ring - small.stl>) | Presses into a 1.28 cup to hold the badge. The pod needs 2. *Print:* flat. *Board:* 1.28. |
-| **unprinted** | [Trim ring - large](<pod/Trim ring - large.stl>) | Presses into the 1.46 cup. The pod needs 1. *Print:* flat. *Board:* 1.46 cover glass. |
-| **unprinted** | [Pod - right-angle cables](<pod/Pod - right-angle cables.stl>) | The pod with 12 mm between gauges, for right-angle USB-C cables. 181 mm tall. *Print:* as exported. |
-| **unprinted** | [Pod - straight cables](<pod/Pod - straight cables.stl>) | The pod with 26 mm gaps for straight plugs. 209 mm tall. *Print:* as exported. |
-| **unprinted** | [Clip - fixed jaw](<pod/Clip - fixed jaw.stl>) | Clamps to the monitor edge (8 to 32 mm). Print 2. *Print:* as exported. *Board:* any. |
-| **unprinted** | [Clip - slider](<pod/Clip - slider.stl>) | The clip's sliding jaw, locked with an M3 × 12. Print 2. *Print:* as exported. *Board:* any. |
+| status | file |
+|---|---|
+| **unprinted** | **[Pod cup test - small](<pod/Pod cup test - small.stl>)**<br>One 1.28 cup on a desk base, ~16 g against ~40 g for the pod. Print it before the pod. *Print:* face up as exported, then stand it on its feet. *Change it:* [build_cup_stand.py](<../pod/build_cup_stand.py>), `LEAN`, `BASE_W`; the cup itself is `build_pod.py`'s. *Board:* 1.28. |
+| **unprinted** | **[Trim ring - small](<pod/Trim ring - small.stl>)**<br>Presses into a 1.28 cup to hold the badge. The pod needs 2. *Print:* flat. *Board:* 1.28. |
+| **unprinted** | **[Trim ring - large](<pod/Trim ring - large.stl>)**<br>Presses into the 1.46 cup. The pod needs 1. *Print:* flat. *Board:* 1.46 cover glass. |
+| **unprinted** | **[Pod - right-angle cables](<pod/Pod - right-angle cables.stl>)**<br>The pod with 12 mm between gauges, for right-angle USB-C cables. 181 mm tall. *Print:* as exported. |
+| **unprinted** | **[Pod - straight cables](<pod/Pod - straight cables.stl>)**<br>The pod with 26 mm gaps for straight plugs. 209 mm tall. *Print:* as exported. |
+| **unprinted** | **[Clip - fixed jaw](<pod/Clip - fixed jaw.stl>)**<br>Clamps to the monitor edge (8 to 32 mm). Print 2. *Print:* as exported. *Board:* any. |
+| **unprinted** | **[Clip - slider](<pod/Clip - slider.stl>)**<br>The clip's sliding jaw, locked with an M3 × 12. Print 2. *Print:* as exported. *Board:* any. |
 
 ### Battery pendant
 
@@ -186,17 +204,17 @@ The v2 battery pocketwatch with the pendant's port sticking out and a BOOT flap 
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/pendant/battery/](<pocketwatch/pendant/battery>)
 
-**Change it:** [pocketwatch/pendant/battery/build_battery_pendant.py](<../pocketwatch/pendant/battery/build_battery_pendant.py>), `Battery`, `Frame`.
+**Change it:** [build_battery_pendant.py](<../pocketwatch/pendant/battery/build_battery_pendant.py>), `Battery`, `Frame`.
 
 **More:** [design notes](<../pocketwatch/pendant/battery/README.md>), [exploded](<../pocketwatch/pendant/battery/renders/exploded.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Battery pendant - case](<pocketwatch/pendant/battery/Battery pendant - case.stl>) | Case. *Print:* bezel down. |
-| **unprinted** | [Battery pendant - plate](<pocketwatch/pendant/battery/Battery pendant - plate.stl>) | Plate between the badge and the cell. *Print:* back face down. |
-| **unprinted** | [Battery pendant - lid (flap)](<pocketwatch/pendant/battery/Battery pendant - lid (flap).stl>) | Lid with the BOOT flap. *Print:* back face down, pole up; on the same bed as the case. |
-| **unprinted** | [Battery pendant - plate (roomy)](<pocketwatch/pendant/battery/Battery pendant - plate (roomy).stl>) | Plate, roomy fit. *Print:* back face down. |
-| **unprinted** | [Battery pendant - lid (flap, roomy)](<pocketwatch/pendant/battery/Battery pendant - lid (flap, roomy).stl>) | Lid, roomy fit. *Print:* back face down, pole up. |
+| status | file |
+|---|---|
+| **unprinted** | **[Battery pendant - case](<pocketwatch/pendant/battery/Battery pendant - case.stl>)**<br>Case. *Print:* bezel down. |
+| **unprinted** | **[Battery pendant - plate](<pocketwatch/pendant/battery/Battery pendant - plate.stl>)**<br>Plate between the badge and the cell. *Print:* back face down. |
+| **unprinted** | **[Battery pendant - lid (flap)](<pocketwatch/pendant/battery/Battery pendant - lid (flap).stl>)**<br>Lid with the BOOT flap. *Print:* back face down, pole up; on the same bed as the case. |
+| **unprinted** | **[Battery pendant - plate (roomy)](<pocketwatch/pendant/battery/Battery pendant - plate (roomy).stl>)**<br>Plate, roomy fit. *Print:* back face down. |
+| **unprinted** | **[Battery pendant - lid (flap, roomy)](<pocketwatch/pendant/battery/Battery pendant - lid (flap, roomy).stl>)**<br>Lid, roomy fit. *Print:* back face down, pole up. |
 
 ### Kids case
 
@@ -204,15 +222,15 @@ The pendant with a big flap on the back plate that clicks BOOT. It replaced the 
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/pendant/kids-case/](<pocketwatch/pendant/kids-case>)
 
-**Change it:** [pocketwatch/pendant/kids-case/build_kids_case.py](<../pocketwatch/pendant/kids-case/build_kids_case.py>), `Flap`; the case is the pendant's (`Pendant` in `build_pendant.py`).
+**Change it:** [build_kids_case.py](<../pocketwatch/pendant/kids-case/build_kids_case.py>), `Flap`; the case is the pendant's (`Pendant` in `build_pendant.py`).
 
 **More:** [design notes](<../pocketwatch/pendant/kids-case/README.md>), [exploded](<../pocketwatch/pendant/kids-case/renders/exploded.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Kids case - case](<pocketwatch/pendant/kids-case/Kids case - case.stl>) | Case. *Print:* bezel down. |
-| **unprinted** | [Kids case - back plate (flap)](<pocketwatch/pendant/kids-case/Kids case - back plate (flap).stl>) | Back plate with the BOOT flap. *Print:* flat back face down. |
-| **unprinted** | [Kids case - back plate (flap, roomy)](<pocketwatch/pendant/kids-case/Kids case - back plate (flap, roomy).stl>) | Back plate, roomy fit. *Print:* flat back face down. |
+| status | file |
+|---|---|
+| **unprinted** | **[Kids case - case](<pocketwatch/pendant/kids-case/Kids case - case.stl>)**<br>Case. *Print:* bezel down. |
+| **unprinted** | **[Kids case - back plate (flap)](<pocketwatch/pendant/kids-case/Kids case - back plate (flap).stl>)**<br>Back plate with the BOOT flap. *Print:* flat back face down. |
+| **unprinted** | **[Kids case - back plate (flap, roomy)](<pocketwatch/pendant/kids-case/Kids case - back plate (flap, roomy).stl>)**<br>Back plate, roomy fit. *Print:* flat back face down. |
 
 ### Wearable pendants
 
@@ -220,20 +238,20 @@ Thin-bezel pendants with two cord ears at 12 o'clock, for a 150 mAh (EEMB LP4017
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/pendant/wearable/](<pocketwatch/pendant/wearable>)
 
-**Change it:** [pocketwatch/pendant/wearable/build_wearable.py](<../pocketwatch/pendant/wearable/build_wearable.py>), `Cell`, `Slim`, `Bail`.
+**Change it:** [build_wearable.py](<../pocketwatch/pendant/wearable/build_wearable.py>), `Cell`, `Slim`, `Bail`.
 
 **More:** [design notes](<../pocketwatch/pendant/wearable/README.md>), [three-quarter](<../pocketwatch/pendant/wearable/renders/150mAh/three-quarter.png>), [three-quarter](<../pocketwatch/pendant/wearable/renders/500mAh/three-quarter.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Wearable 150 mAh - case](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - case.stl>) | 150 mAh case, Ø43.2 × 19.8. *Print:* bezel down. |
-| **unprinted** | [Wearable 150 mAh - plate](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - plate.stl>) | 150 mAh plate. *Print:* back face down. |
-| **unprinted** | [Wearable 150 mAh - lid (flap)](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - lid (flap).stl>) | 150 mAh lid with the BOOT flap. *Print:* back face down, pole up; on the same bed as the case. |
-| **unprinted** | [Wearable 150 mAh - plate (roomy)](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - plate (roomy).stl>) | 150 mAh plate, roomy fit. *Print:* back face down. |
-| **unprinted** | [Wearable 150 mAh - lid (flap, roomy)](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - lid (flap, roomy).stl>) | 150 mAh lid, roomy fit. *Print:* back face down, pole up. |
-| **unprinted** | [Wearable 500 mAh - case](<pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - case.stl>) | 500 mAh case, Ø52.2 × 20.8; press the screen to click BOOT. *Print:* bezel down. |
-| **unprinted** | [Wearable 500 mAh - plate](<pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - plate.stl>) | 500 mAh plate. *Print:* back face down. |
-| **unprinted** | [Wearable 500 mAh - lid](<pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - lid.stl>) | 500 mAh lid. *Print:* flat. |
+| status | file |
+|---|---|
+| **unprinted** | **[Wearable 150 mAh - case](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - case.stl>)**<br>150 mAh case, Ø43.2 × 19.8. *Print:* bezel down. |
+| **unprinted** | **[Wearable 150 mAh - plate](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - plate.stl>)**<br>150 mAh plate. *Print:* back face down. |
+| **unprinted** | **[Wearable 150 mAh - lid (flap)](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - lid (flap).stl>)**<br>150 mAh lid with the BOOT flap. *Print:* back face down, pole up; on the same bed as the case. |
+| **unprinted** | **[Wearable 150 mAh - plate (roomy)](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - plate (roomy).stl>)**<br>150 mAh plate, roomy fit. *Print:* back face down. |
+| **unprinted** | **[Wearable 150 mAh - lid (flap, roomy)](<pocketwatch/pendant/wearable/150mAh/Wearable 150 mAh - lid (flap, roomy).stl>)**<br>150 mAh lid, roomy fit. *Print:* back face down, pole up. |
+| **unprinted** | **[Wearable 500 mAh - case](<pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - case.stl>)**<br>500 mAh case, Ø52.2 × 20.8; press the screen to click BOOT. *Print:* bezel down. |
+| **unprinted** | **[Wearable 500 mAh - plate](<pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - plate.stl>)**<br>500 mAh plate. *Print:* back face down. |
+| **unprinted** | **[Wearable 500 mAh - lid](<pocketwatch/pendant/wearable/500mAh/Wearable 500 mAh - lid.stl>)**<br>500 mAh lid. *Print:* flat. |
 
 ### Hood stand
 
@@ -241,14 +259,14 @@ The USB-only case under a hood on one pillar, printed on its front face.
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/stands/hood/](<pocketwatch/stands/hood>)
 
-**Change it:** [pocketwatch/stands/hood/build_hood.py](<../pocketwatch/stands/hood/build_hood.py>), `Hood`.
+**Change it:** [build_hood.py](<../pocketwatch/stands/hood/build_hood.py>), `Hood`.
 
 **More:** [design notes](<../pocketwatch/stands/hood/README.md>), [hero](<../pocketwatch/stands/hood/renders/hero.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Hood stand](<pocketwatch/stands/hood/Hood stand.stl>) | Stand and case in one piece. *Print:* on its front face, as exported. |
-| **unprinted** | [Hood stand - back plate (BOOT hole)](<pocketwatch/stands/hood/Hood stand - back plate (BOOT hole).stl>) | Back plate with a hole onto BOOT. *Print:* flat back down. |
+| status | file |
+|---|---|
+| **unprinted** | **[Hood stand](<pocketwatch/stands/hood/Hood stand.stl>)**<br>Stand and case in one piece. *Print:* on its front face, as exported. |
+| **unprinted** | **[Hood stand - back plate (BOOT hole)](<pocketwatch/stands/hood/Hood stand - back plate (BOOT hole).stl>)**<br>Back plate with a hole onto BOOT. *Print:* flat back down. |
 
 ### Kickstand case
 
@@ -256,16 +274,16 @@ A slim case with a hinged leg that folds flat into a puck.
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/stands/kickstand/](<pocketwatch/stands/kickstand>)
 
-**Change it:** [pocketwatch/stands/kickstand/build_kickstand.py](<../pocketwatch/stands/kickstand/build_kickstand.py>), `Kick`.
+**Change it:** [build_kickstand.py](<../pocketwatch/stands/kickstand/build_kickstand.py>), `Kick`.
 
 **More:** [design notes](<../pocketwatch/stands/kickstand/README.md>), [01-hero](<../pocketwatch/stands/kickstand/renders/01-hero.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Kickstand - case](<pocketwatch/stands/kickstand/Kickstand - case.stl>) | Case with the hinge cheeks. *Print:* bezel down. |
-| **unprinted** | [Kickstand - back plate (BOOT hole)](<pocketwatch/stands/kickstand/Kickstand - back plate (BOOT hole).stl>) | Back plate with a hole onto BOOT. *Print:* back face down. |
-| **unprinted** | [Kickstand - leg](<pocketwatch/stands/kickstand/Kickstand - leg.stl>) | The folding leg. *Print:* back face down, barrel up. |
-| **unprinted** | [Kickstand - hinge pin](<pocketwatch/stands/kickstand/Kickstand - hinge pin.stl>) | Hinge pin, Ø2.2 × 25.4. *Print:* on its flat. |
+| status | file |
+|---|---|
+| **unprinted** | **[Kickstand - case](<pocketwatch/stands/kickstand/Kickstand - case.stl>)**<br>Case with the hinge cheeks. *Print:* bezel down. |
+| **unprinted** | **[Kickstand - back plate (BOOT hole)](<pocketwatch/stands/kickstand/Kickstand - back plate (BOOT hole).stl>)**<br>Back plate with a hole onto BOOT. *Print:* back face down. |
+| **unprinted** | **[Kickstand - leg](<pocketwatch/stands/kickstand/Kickstand - leg.stl>)**<br>The folding leg. *Print:* back face down, barrel up. |
+| **unprinted** | **[Kickstand - hinge pin](<pocketwatch/stands/kickstand/Kickstand - hinge pin.stl>)**<br>Hinge pin, Ø2.2 × 25.4. *Print:* on its flat. |
 
 ### Pedestal
 
@@ -273,14 +291,14 @@ The watch as a round puck on its crown stem, on a low plinth square to the face.
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/stands/pedestal/](<pocketwatch/stands/pedestal>)
 
-**Change it:** [pocketwatch/stands/pedestal/build_pedestal.py](<../pocketwatch/stands/pedestal/build_pedestal.py>), `THETA` (lean), `SHAPES`, `FINAL`.
+**Change it:** [build_pedestal.py](<../pocketwatch/stands/pedestal/build_pedestal.py>), `THETA` (lean), `SHAPES`, `FINAL`.
 
 **More:** [design notes](<../pocketwatch/stands/pedestal/README.md>), [01-hero](<../pocketwatch/stands/pedestal/renders/01-hero.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Pedestal - body](<pocketwatch/stands/pedestal/Pedestal - body.stl>) | Stand and case in one piece. *Print:* front face down, as exported. |
-| **unprinted** | [Pedestal - back plate (BOOT hole)](<pocketwatch/stands/pedestal/Pedestal - back plate (BOOT hole).stl>) | Back plate with a hole onto BOOT. *Print:* flat. Same file as `pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl`, `pocketwatch/clips/lowprofile/Lowprofile - back plate (BOOT hole).stl`, `pocketwatch/clips/stalk/Stalk gauge - back plate (BOOT hole).stl`, `pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole).stl`, `pocketwatch/stands/scissor/Scissor stand - back plate (BOOT hole).stl`. |
+| status | file |
+|---|---|
+| **unprinted** | **[Pedestal - body](<pocketwatch/stands/pedestal/Pedestal - body.stl>)**<br>Stand and case in one piece. *Print:* front face down, as exported. |
+| **unprinted** | **[Pedestal - back plate (BOOT hole)](<pocketwatch/stands/pedestal/Pedestal - back plate (BOOT hole).stl>)**<br>Back plate with a hole onto BOOT. *Print:* flat. Same file as Pocketwatch USB-only - plate (BOOT hole), Lowprofile - back plate (BOOT hole), Stalk gauge - back plate (BOOT hole), Hoop stand - back plate (BOOT hole), Scissor stand - back plate (BOOT hole). |
 
 ### Scissor stand
 
@@ -288,16 +306,16 @@ Crossing scissor legs that fold flat behind the case.
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/stands/scissor/](<pocketwatch/stands/scissor>)
 
-**Change it:** [pocketwatch/stands/scissor/build_scissor.py](<../pocketwatch/stands/scissor/build_scissor.py>), `LEAN`, `A_FRONT`, `B_REAR`, `ARM_T` at the top.
+**Change it:** [build_scissor.py](<../pocketwatch/stands/scissor/build_scissor.py>), `LEAN`, `A_FRONT`, `B_REAR`, `ARM_T` at the top.
 
 **More:** [design notes](<../pocketwatch/stands/scissor/README.md>), [hero](<../pocketwatch/stands/scissor/renders/hero.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Scissor stand - case](<pocketwatch/stands/scissor/Scissor stand - case.stl>) | Case with the leg hinges. *Print:* bezel down. |
-| **unprinted** | [Scissor stand - back plate (BOOT hole)](<pocketwatch/stands/scissor/Scissor stand - back plate (BOOT hole).stl>) | Back plate with a hole onto BOOT. *Print:* flat back down. Same file as `pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl`, `pocketwatch/clips/lowprofile/Lowprofile - back plate (BOOT hole).stl`, `pocketwatch/clips/stalk/Stalk gauge - back plate (BOOT hole).stl`, `pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole).stl`, `pocketwatch/stands/pedestal/Pedestal - back plate (BOOT hole).stl`. |
-| **unprinted** | [Scissor stand - front legs](<pocketwatch/stands/scissor/Scissor stand - front legs.stl>) | Front legs. *Print:* flat face down, arms on edge. |
-| **unprinted** | [Scissor stand - rear legs](<pocketwatch/stands/scissor/Scissor stand - rear legs.stl>) | Rear legs. *Print:* flat face down, arms on edge. |
+| status | file |
+|---|---|
+| **unprinted** | **[Scissor stand - case](<pocketwatch/stands/scissor/Scissor stand - case.stl>)**<br>Case with the leg hinges. *Print:* bezel down. |
+| **unprinted** | **[Scissor stand - back plate (BOOT hole)](<pocketwatch/stands/scissor/Scissor stand - back plate (BOOT hole).stl>)**<br>Back plate with a hole onto BOOT. *Print:* flat back down. Same file as Pocketwatch USB-only - plate (BOOT hole), Lowprofile - back plate (BOOT hole), Stalk gauge - back plate (BOOT hole), Hoop stand - back plate (BOOT hole), Pedestal - back plate (BOOT hole). |
+| **unprinted** | **[Scissor stand - front legs](<pocketwatch/stands/scissor/Scissor stand - front legs.stl>)**<br>Front legs. *Print:* flat face down, arms on edge. |
+| **unprinted** | **[Scissor stand - rear legs](<pocketwatch/stands/scissor/Scissor stand - rear legs.stl>)**<br>Rear legs. *Print:* flat face down, arms on edge. |
 
 ### Low-profile monitor clip
 
@@ -305,17 +323,17 @@ A thin housing on a flexure clip for a monitor edge. One clip per edge thickness
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/clips/lowprofile/](<pocketwatch/clips/lowprofile>)
 
-**Change it:** [pocketwatch/clips/lowprofile/build_lowprofile.py](<../pocketwatch/clips/lowprofile/build_lowprofile.py>), `Mount`, `SIZES`.
+**Change it:** [build_lowprofile.py](<../pocketwatch/clips/lowprofile/build_lowprofile.py>), `Mount`, `SIZES`.
 
 **More:** [design notes](<../pocketwatch/clips/lowprofile/README.md>), [01-hero](<../pocketwatch/clips/lowprofile/renders/01-hero.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Lowprofile - housing](<pocketwatch/clips/lowprofile/Lowprofile - housing.stl>) | Housing. *Print:* face down. |
-| **unprinted** | [Lowprofile - back plate (BOOT hole)](<pocketwatch/clips/lowprofile/Lowprofile - back plate (BOOT hole).stl>) | Back plate with a hole onto BOOT. *Print:* flat back down. Same file as `pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl`, `pocketwatch/clips/stalk/Stalk gauge - back plate (BOOT hole).stl`, `pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole).stl`, `pocketwatch/stands/pedestal/Pedestal - back plate (BOOT hole).stl`, `pocketwatch/stands/scissor/Scissor stand - back plate (BOOT hole).stl`. |
-| **unprinted** | [Lowprofile - clip S (8-16 mm edge)](<pocketwatch/clips/lowprofile/Lowprofile - clip S (8-16 mm edge).stl>) | Clip for an 8 to 16 mm monitor edge. *Print:* top face down. |
-| **unprinted** | [Lowprofile - clip M (16-24 mm edge)](<pocketwatch/clips/lowprofile/Lowprofile - clip M (16-24 mm edge).stl>) | Clip for a 16 to 24 mm edge. *Print:* top face down. |
-| **unprinted** | [Lowprofile - clip L (24-32 mm edge)](<pocketwatch/clips/lowprofile/Lowprofile - clip L (24-32 mm edge).stl>) | Clip for a 24 to 32 mm edge. *Print:* top face down. |
+| status | file |
+|---|---|
+| **unprinted** | **[Lowprofile - housing](<pocketwatch/clips/lowprofile/Lowprofile - housing.stl>)**<br>Housing. *Print:* face down. |
+| **unprinted** | **[Lowprofile - back plate (BOOT hole)](<pocketwatch/clips/lowprofile/Lowprofile - back plate (BOOT hole).stl>)**<br>Back plate with a hole onto BOOT. *Print:* flat back down. Same file as Pocketwatch USB-only - plate (BOOT hole), Stalk gauge - back plate (BOOT hole), Hoop stand - back plate (BOOT hole), Pedestal - back plate (BOOT hole), Scissor stand - back plate (BOOT hole). |
+| **unprinted** | **[Lowprofile - clip S (8-16 mm edge)](<pocketwatch/clips/lowprofile/Lowprofile - clip S (8-16 mm edge).stl>)**<br>Clip for an 8 to 16 mm monitor edge. *Print:* top face down. |
+| **unprinted** | **[Lowprofile - clip M (16-24 mm edge)](<pocketwatch/clips/lowprofile/Lowprofile - clip M (16-24 mm edge).stl>)**<br>Clip for a 16 to 24 mm edge. *Print:* top face down. |
+| **unprinted** | **[Lowprofile - clip L (24-32 mm edge)](<pocketwatch/clips/lowprofile/Lowprofile - clip L (24-32 mm edge).stl>)**<br>Clip for a 24 to 32 mm edge. *Print:* top face down. |
 
 ### Side pod monitor clip
 
@@ -323,17 +341,17 @@ A gauge pod on a pillar that clamps to the side of a monitor with a knob.
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/clips/sidepod/](<pocketwatch/clips/sidepod>)
 
-**Change it:** [pocketwatch/clips/sidepod/build_sidepod.py](<../pocketwatch/clips/sidepod/build_sidepod.py>), `CANT`, `HOOD_D0`, `LIP` at the top.
+**Change it:** [build_sidepod.py](<../pocketwatch/clips/sidepod/build_sidepod.py>), `CANT`, `HOOD_D0`, `LIP` at the top.
 
 **More:** [design notes](<../pocketwatch/clips/sidepod/README.md>), [01-hero](<../pocketwatch/clips/sidepod/renders/01-hero.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Sidepod - pillar and pod](<pocketwatch/clips/sidepod/Sidepod - pillar and pod.stl>) | Pillar and pod in one piece. *Print:* standing up, as exported, with a brim. |
-| **unprinted** | [Sidepod - back plate (BOOT hole)](<pocketwatch/clips/sidepod/Sidepod - back plate (BOOT hole).stl>) | Back plate with a hole onto BOOT. *Print:* face down. |
-| **unprinted** | [Sidepod - knob](<pocketwatch/clips/sidepod/Sidepod - knob.stl>) | Clamp knob. *Print:* flat. |
-| **unprinted** | [Sidepod - pad](<pocketwatch/clips/sidepod/Sidepod - pad.stl>) | Clamp pad. *Print:* flat. |
-| **unprinted** | [Sidepod - trim ring (optional)](<pocketwatch/clips/sidepod/Sidepod - trim ring (optional).stl>) | Optional trim ring; print it in silver. *Print:* front down. |
+| status | file |
+|---|---|
+| **unprinted** | **[Sidepod - pillar and pod](<pocketwatch/clips/sidepod/Sidepod - pillar and pod.stl>)**<br>Pillar and pod in one piece. *Print:* standing up, as exported, with a brim. |
+| **unprinted** | **[Sidepod - back plate (BOOT hole)](<pocketwatch/clips/sidepod/Sidepod - back plate (BOOT hole).stl>)**<br>Back plate with a hole onto BOOT. *Print:* face down. |
+| **unprinted** | **[Sidepod - knob](<pocketwatch/clips/sidepod/Sidepod - knob.stl>)**<br>Clamp knob. *Print:* flat. |
+| **unprinted** | **[Sidepod - pad](<pocketwatch/clips/sidepod/Sidepod - pad.stl>)**<br>Clamp pad. *Print:* flat. |
+| **unprinted** | **[Sidepod - trim ring (optional)](<pocketwatch/clips/sidepod/Sidepod - trim ring (optional).stl>)**<br>Optional trim ring; print it in silver. *Print:* front down. |
 
 ### Stalk gauge monitor clip
 
@@ -341,20 +359,20 @@ A gauge cup on a stalk that clamps to the left or right edge of a monitor and ai
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/clips/stalk/](<pocketwatch/clips/stalk>)
 
-**Change it:** [pocketwatch/clips/stalk/build_stalk.py](<../pocketwatch/clips/stalk/build_stalk.py>), `R_C`, `CUP_WALL`, `DEPTH` at the top.
+**Change it:** [build_stalk.py](<../pocketwatch/clips/stalk/build_stalk.py>), `R_C`, `CUP_WALL`, `DEPTH` at the top.
 
 **More:** [design notes](<../pocketwatch/clips/stalk/README.md>), [01-hero](<../pocketwatch/clips/stalk/renders/01-hero.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Stalk gauge - cup (right edge of monitor)](<pocketwatch/clips/stalk/Stalk gauge - cup (right edge of monitor).stl>) | Cup for the right edge. *Print:* face down, ear standing. |
-| **unprinted** | [Stalk gauge - cup (left edge of monitor)](<pocketwatch/clips/stalk/Stalk gauge - cup (left edge of monitor).stl>) | Cup for the left edge. *Print:* face down, ear standing. |
-| **unprinted** | [Stalk gauge - back plate (BOOT hole)](<pocketwatch/clips/stalk/Stalk gauge - back plate (BOOT hole).stl>) | Back plate with a hole onto BOOT. *Print:* flat back down. Same file as `pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl`, `pocketwatch/clips/lowprofile/Lowprofile - back plate (BOOT hole).stl`, `pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole).stl`, `pocketwatch/stands/pedestal/Pedestal - back plate (BOOT hole).stl`, `pocketwatch/stands/scissor/Scissor stand - back plate (BOOT hole).stl`. |
-| **unprinted** | [Stalk gauge - trim ring and visor](<pocketwatch/clips/stalk/Stalk gauge - trim ring and visor.stl>) | Trim ring and visor. *Print:* visor up. |
-| **unprinted** | [Stalk gauge - clip (right edge of monitor)](<pocketwatch/clips/stalk/Stalk gauge - clip (right edge of monitor).stl>) | Clip for the right edge. *Print:* standing, toothed top up. |
-| **unprinted** | [Stalk gauge - clip (left edge of monitor)](<pocketwatch/clips/stalk/Stalk gauge - clip (left edge of monitor).stl>) | Clip for the left edge. *Print:* standing, toothed top up. |
-| **unprinted** | [Stalk gauge - clamp pad](<pocketwatch/clips/stalk/Stalk gauge - clamp pad.stl>) | Clamp pad. *Print:* flat. |
-| **unprinted** | [Stalk gauge - knob (print 2)](<pocketwatch/clips/stalk/Stalk gauge - knob (print 2).stl>) | Knob. Print 2. *Print:* flat. |
+| status | file |
+|---|---|
+| **unprinted** | **[Stalk gauge - cup (right edge of monitor)](<pocketwatch/clips/stalk/Stalk gauge - cup (right edge of monitor).stl>)**<br>Cup for the right edge. *Print:* face down, ear standing. |
+| **unprinted** | **[Stalk gauge - cup (left edge of monitor)](<pocketwatch/clips/stalk/Stalk gauge - cup (left edge of monitor).stl>)**<br>Cup for the left edge. *Print:* face down, ear standing. |
+| **unprinted** | **[Stalk gauge - back plate (BOOT hole)](<pocketwatch/clips/stalk/Stalk gauge - back plate (BOOT hole).stl>)**<br>Back plate with a hole onto BOOT. *Print:* flat back down. Same file as Pocketwatch USB-only - plate (BOOT hole), Lowprofile - back plate (BOOT hole), Hoop stand - back plate (BOOT hole), Pedestal - back plate (BOOT hole), Scissor stand - back plate (BOOT hole). |
+| **unprinted** | **[Stalk gauge - trim ring and visor](<pocketwatch/clips/stalk/Stalk gauge - trim ring and visor.stl>)**<br>Trim ring and visor. *Print:* visor up. |
+| **unprinted** | **[Stalk gauge - clip (right edge of monitor)](<pocketwatch/clips/stalk/Stalk gauge - clip (right edge of monitor).stl>)**<br>Clip for the right edge. *Print:* standing, toothed top up. |
+| **unprinted** | **[Stalk gauge - clip (left edge of monitor)](<pocketwatch/clips/stalk/Stalk gauge - clip (left edge of monitor).stl>)**<br>Clip for the left edge. *Print:* standing, toothed top up. |
+| **unprinted** | **[Stalk gauge - clamp pad](<pocketwatch/clips/stalk/Stalk gauge - clamp pad.stl>)**<br>Clamp pad. *Print:* flat. |
+| **unprinted** | **[Stalk gauge - knob (print 2)](<pocketwatch/clips/stalk/Stalk gauge - knob (print 2).stl>)**<br>Knob. Print 2. *Print:* flat. |
 
 ### Braun-style stand and clip
 
@@ -362,19 +380,19 @@ A styling study: grey body, orange ring, as a desk stand or a monitor clip.
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/styles/braun/](<pocketwatch/styles/braun>)
 
-**Change it:** [pocketwatch/styles/braun/build_braun.py](<../pocketwatch/styles/braun/build_braun.py>), `FACE`, `DEPTH`, `WELL_CLR` at the top.
+**Change it:** [build_braun.py](<../pocketwatch/styles/braun/build_braun.py>), `FACE`, `DEPTH`, `WELL_CLR` at the top.
 
 **More:** [design notes](<../pocketwatch/styles/braun/README.md>), [family](<../pocketwatch/styles/braun/renders/family.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [Braun stand - body](<pocketwatch/styles/braun/Braun stand - body.stl>) | Desk stand body. *Print:* face down, 30% infill. |
-| **unprinted** | [Braun clip - body](<pocketwatch/styles/braun/Braun clip - body.stl>) | Clip body. *Print:* face down. |
-| **unprinted** | [Braun clip - clamp](<pocketwatch/styles/braun/Braun clip - clamp.stl>) | Clip clamp; add an M4 × 40 bolt and nut. *Print:* flat. |
-| **unprinted** | [Braun clip - knob](<pocketwatch/styles/braun/Braun clip - knob.stl>) | Clip knob. *Print:* pocket up. |
-| **unprinted** | [Braun clip - pad](<pocketwatch/styles/braun/Braun clip - pad.stl>) | Clip pad. *Print:* hole up. |
-| **unprinted** | [Braun - orange ring](<pocketwatch/styles/braun/Braun - orange ring.stl>) | Face ring, one per body, in orange. *Print:* flat. |
-| **unprinted** | [Braun - back plate (BOOT hole)](<pocketwatch/styles/braun/Braun - back plate (BOOT hole).stl>) | Back plate, one per body. *Print:* as exported. |
+| status | file |
+|---|---|
+| **unprinted** | **[Braun stand - body](<pocketwatch/styles/braun/Braun stand - body.stl>)**<br>Desk stand body. *Print:* face down, 30% infill. |
+| **unprinted** | **[Braun clip - body](<pocketwatch/styles/braun/Braun clip - body.stl>)**<br>Clip body. *Print:* face down. |
+| **unprinted** | **[Braun clip - clamp](<pocketwatch/styles/braun/Braun clip - clamp.stl>)**<br>Clip clamp; add an M4 × 40 bolt and nut. *Print:* flat. |
+| **unprinted** | **[Braun clip - knob](<pocketwatch/styles/braun/Braun clip - knob.stl>)**<br>Clip knob. *Print:* pocket up. |
+| **unprinted** | **[Braun clip - pad](<pocketwatch/styles/braun/Braun clip - pad.stl>)**<br>Clip pad. *Print:* hole up. |
+| **unprinted** | **[Braun - orange ring](<pocketwatch/styles/braun/Braun - orange ring.stl>)**<br>Face ring, one per body, in orange. *Print:* flat. |
+| **unprinted** | **[Braun - back plate (BOOT hole)](<pocketwatch/styles/braun/Braun - back plate (BOOT hole).stl>)**<br>Back plate, one per body. *Print:* as exported. |
 
 ### TE-style stand and clip
 
@@ -382,18 +400,18 @@ A styling study after Teenage Engineering: slab body, orange accents, as a desk 
 
 **Board:** 1.28 · **Material:** PLA · **Folder:** [pocketwatch/styles/te/](<pocketwatch/styles/te>)
 
-**Change it:** [pocketwatch/styles/te/build_te.py](<../pocketwatch/styles/te/build_te.py>), `HW`, `FIT`, `COVER_T` at the top.
+**Change it:** [build_te.py](<../pocketwatch/styles/te/build_te.py>), `HW`, `FIT`, `COVER_T` at the top.
 
 **More:** [design notes](<../pocketwatch/styles/te/README.md>), [family](<../pocketwatch/styles/te/renders/family.png>)
 
-| status | file | notes |
-|---|---|---|
-| **unprinted** | [TE stand - body](<pocketwatch/styles/te/TE stand - body.stl>) | Desk stand body. *Print:* as exported. |
-| **unprinted** | [TE stand - foot (orange, print 4)](<pocketwatch/styles/te/TE stand - foot (orange, print 4).stl>) | Foot, in orange. Print 4. *Print:* as exported. |
-| **unprinted** | [TE clip - body](<pocketwatch/styles/te/TE clip - body.stl>) | Clip body. *Print:* as exported. |
-| **unprinted** | [TE clip - rear jaw](<pocketwatch/styles/te/TE clip - rear jaw.stl>) | Clip rear jaw. *Print:* as exported. |
-| **unprinted** | [TE clip - knob (orange)](<pocketwatch/styles/te/TE clip - knob (orange).stl>) | Clip knob, in orange. *Print:* as exported. |
-| **unprinted** | [TE - back plate](<pocketwatch/styles/te/TE - back plate.stl>) | Back plate. *Print:* as exported. |
-| **unprinted** | [TE - back cover](<pocketwatch/styles/te/TE - back cover.stl>) | Back cover. *Print:* as exported. |
-| **unprinted** | [TE - BOOT cap (orange)](<pocketwatch/styles/te/TE - BOOT cap (orange).stl>) | BOOT plunger cap, in orange. *Print:* as exported. |
-| **unprinted** | [TE - trim ring (orange)](<pocketwatch/styles/te/TE - trim ring (orange).stl>) | Trim ring, in orange. *Print:* as exported. |
+| status | file |
+|---|---|
+| **unprinted** | **[TE stand - body](<pocketwatch/styles/te/TE stand - body.stl>)**<br>Desk stand body. *Print:* as exported. |
+| **unprinted** | **[TE stand - foot (orange, print 4)](<pocketwatch/styles/te/TE stand - foot (orange, print 4).stl>)**<br>Foot, in orange. Print 4. *Print:* as exported. |
+| **unprinted** | **[TE clip - body](<pocketwatch/styles/te/TE clip - body.stl>)**<br>Clip body. *Print:* as exported. |
+| **unprinted** | **[TE clip - rear jaw](<pocketwatch/styles/te/TE clip - rear jaw.stl>)**<br>Clip rear jaw. *Print:* as exported. |
+| **unprinted** | **[TE clip - knob (orange)](<pocketwatch/styles/te/TE clip - knob (orange).stl>)**<br>Clip knob, in orange. *Print:* as exported. |
+| **unprinted** | **[TE - back plate](<pocketwatch/styles/te/TE - back plate.stl>)**<br>Back plate. *Print:* as exported. |
+| **unprinted** | **[TE - back cover](<pocketwatch/styles/te/TE - back cover.stl>)**<br>Back cover. *Print:* as exported. |
+| **unprinted** | **[TE - BOOT cap (orange)](<pocketwatch/styles/te/TE - BOOT cap (orange).stl>)**<br>BOOT plunger cap, in orange. *Print:* as exported. |
+| **unprinted** | **[TE - trim ring (orange)](<pocketwatch/styles/te/TE - trim ring (orange).stl>)**<br>Trim ring, in orange. *Print:* as exported. |

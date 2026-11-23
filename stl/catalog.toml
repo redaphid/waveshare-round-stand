@@ -4,7 +4,8 @@
 # family: name, dir (under stl/), about, board, material, script (repo-relative), edit (what to change
 #   in that script), readme, renders (the first is the hero image), featured, also (files from another
 #   family that this one needs). A part may override board, script, edit or material.
-# part: file (under stl/), what, status, log, fixed, print, note.
+# part: file (under stl/), what, status, log, fixed, print, note. Fit gauges add `sets` (the number the
+#   gauge settles) and `render` (their picture).
 #   status: proven | printed | needs-work | failed | unprinted. Superseded files are deleted, not kept.
 #   log: the date of the docs/PRINT-LOG.md entry that backs the status (required unless unprinted).
 #   fixed: needs-work only. true = the current file already has the requested change, unprinted since.
@@ -19,8 +20,8 @@ board = "any"
 material = "PLA or PETG"
 renders = ["renders/fit-gauge.png", "pocketwatch/renders/bore-gauge.png"]
 parts = [
-  { file = "fit-gauges/Slot fit gauge.stl", what = "Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.", sets = "1.28 rim thickness: `gap` in `build_stands.py` `BOARDS`", script = "build_fit_gauge.py", edit = "`WIDTHS`", status = "proven", log = "2026-09-18", print = "flat, as exported", note = "Owner's 1.28 seated in slot 5 (5.0 mm)." },
-  { file = "fit-gauges/Pocketwatch - bore fit gauge.stl", what = "The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore.", sets = "case bore clearance: `Case.RAD_CLR` in `pocketwatch/build_pocketwatch.py`", board = "1.28", script = "pocketwatch/build_bore_gauge.py", edit = "`CLRS`", status = "proven", log = "2026-10-13", print = "bezel down, about 10 minutes", note = "Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between." },
+  { file = "fit-gauges/Slot fit gauge.stl", render = "renders/fit-gauge.png", what = "Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.", sets = "the groove width, `gap` in `BOARDS` in `build_stands.py`", script = "build_fit_gauge.py", edit = "`WIDTHS`", status = "proven", log = "2026-09-18", print = "flat, as exported", note = "Owner's 1.28 seated in slot 5 (5.0 mm)." },
+  { file = "fit-gauges/Pocketwatch - bore fit gauge.stl", render = "pocketwatch/renders/bore-gauge.png", what = "The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore.", sets = "the case bore clearance, `Case.RAD_CLR` in `build_pocketwatch.py`", board = "1.28", script = "pocketwatch/build_bore_gauge.py", edit = "`CLRS`", status = "proven", log = "2026-10-13", print = "bezel down, about 10 minutes", note = "Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between." },
 ]
 
 [[family]]
@@ -60,14 +61,14 @@ edit = "`Badge` and `Case` in `pocketwatch/build_pocketwatch.py` (shared by ever
 readme = "pocketwatch/README.md"
 renders = ["pocketwatch/renders/front.png", "pocketwatch/renders/usb-exploded.png", "pocketwatch/renders/exploded.png", "pocketwatch/renders/usb-section-post.png"]
 parts = [
-  { file = "pocketwatch/Pocketwatch USB-only - case.stl", what = "USB-only case: bore, header grips, crown boss and a pry notch at 10 o'clock.", status = "needs-work", log = "2026-10-14", fixed = true, print = "bezel down", note = "10-13: 'Case is a great fit.' 10-14: too tight to pry the plate off, USB-C opening too small; the pry notch and a slot 2 mm bigger all round are in this file, unprinted." },
+  { file = "pocketwatch/Pocketwatch USB-only - case.stl", what = "USB-only case: bore, header grips, crown boss and a pry notch at 10 o'clock.", status = "needs-work", log = "2026-10-14", fixed = true, print = "bezel down", note = "10-13: 'Case is a great fit.' 10-14: too tight to pry the plate off, USB-C opening too small. The fix: a pry notch and a slot 2 mm bigger all round." },
   { file = "pocketwatch/Pocketwatch USB-only - plate.stl", what = "Back plate with the post that clicks BOOT when you press the screen.", status = "proven", log = "2026-10-13", print = "flat back down, guides and post up", note = "One print came out ~1 mm too large; the next print of this file fit." },
   { file = "pocketwatch/Pocketwatch USB-only - plate (roomy).stl", what = "The same plate, 0.65 mm per side clearance instead of 0.18, for a printer that prints oversize.", status = "unprinted", print = "flat back down" },
   { file = "pocketwatch/Pocketwatch USB-only - plate (button).stl", what = "Back plate with a U-slot flexure tab over BOOT: push the tab on the back to click.", status = "needs-work", log = "2026-10-13", fixed = true, print = "flat back down", note = "The finger dimple printed melted; it is removed. The rest was OK." },
   { file = "pocketwatch/Pocketwatch USB-only - plate (button, roomy).stl", what = "Button plate, roomy fit.", status = "unprinted", print = "flat back down" },
   { file = "pocketwatch/Pocketwatch USB-only - plate (BOOT hole).stl", what = "Back plate with a Ø3.4 hole straight onto BOOT: click it with a paperclip or SIM tool.", status = "unprinted", print = "flat back down" },
   { file = "pocketwatch/Pocketwatch USB-only - plate (BOOT hole, roomy).stl", what = "BOOT-hole plate, roomy fit.", status = "unprinted", print = "flat back down" },
-  { file = "pocketwatch/Pocketwatch - case.stl", what = "Battery case (v2): badge in front, battery chamber behind.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "needs-work", log = "2026-10-13", fixed = true, print = "bezel down", note = "Reprint 'looking better'; the USB-C recess was too big. The smaller flat-roofed slot is in this file, unprinted." },
+  { file = "pocketwatch/Pocketwatch - case.stl", what = "Battery case (v2): badge in front, battery chamber behind.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "needs-work", log = "2026-10-13", fixed = true, print = "bezel down", note = "Reprint 'looking better'; the USB-C recess was too big. The fix: a smaller slot with a flat roof." },
   { file = "pocketwatch/Pocketwatch - plate.stl", what = "Battery case's back plate: header guides and the BOOT post.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "proven", log = "2026-10-12", print = "flat back down, guides and post up", note = "'The back plate is great!' (from memory; the print was lost)." },
   { file = "pocketwatch/Pocketwatch - lid.stl", what = "Battery case's lid.", script = "pocketwatch/build_pocketwatch.py", edit = "`Badge` and `Case`", status = "unprinted", print = "flat" },
 ]
@@ -84,7 +85,7 @@ edit = "`Stand` (`FIT` is the mortise clearance per side)"
 readme = "pocketwatch/stands/hoop/README.md"
 renders = ["pocketwatch/stands/hoop/renders/01-hero.png", "pocketwatch/stands/hoop/renders/07-exploded.png"]
 parts = [
-  { file = "pocketwatch/stands/hoop/Hoop stand - hoop and case.stl", what = "The USB-only case fused into the hoop.", status = "needs-work", log = "2026-10-13", fixed = true, print = "bezel down", note = "Loose on the base: the fix is the base's 0.08 mortise. The 0.4 mm wider USB-C hole is in this file." },
+  { file = "pocketwatch/stands/hoop/Hoop stand - hoop and case.stl", what = "The USB-only case fused into the hoop.", status = "needs-work", log = "2026-10-13", fixed = true, print = "bezel down", note = "Loose on the base: the fix is the base's 0.08 mortise. The USB-C hole is also 0.4 mm wider." },
   { file = "pocketwatch/stands/hoop/Hoop stand - base.stl", what = "Base, mortise clearance 0.08 per side (the default since the 0.12 printed loose).", status = "unprinted", print = "flat, **100% infill**: it is the ballast" },
   { file = "pocketwatch/stands/hoop/Hoop stand - base (looser, 0.12).stl", what = "Base at 0.12 per side, for a printer that prints tight.", status = "printed", log = "2026-10-13", print = "flat, 100% infill", note = "The case was loose in it on the owner's printer." },
   { file = "pocketwatch/stands/hoop/Hoop stand - base (roomier, 0.18).stl", what = "Base at 0.18 per side, for a printer that prints very tight.", status = "unprinted", print = "flat, 100% infill" },
@@ -105,7 +106,7 @@ edit = "`Pendant` (`PORT_OUT`, `WIN_FLAT`), `Stack`, `Material`"
 readme = "pocketwatch/pendant/README.md"
 renders = ["pocketwatch/pendant/renders/hero-front.png", "pocketwatch/pendant/renders/exploded.png"]
 parts = [
-  { file = "pocketwatch/pendant/Pendant - case.stl", what = "The case, port out at 12 o'clock.", status = "needs-work", log = "2026-10-15", fixed = true, print = "bezel down", note = "'That pretty much worked', but the bar over the USB-C tab was too thin. The window's flat top (bar 2.68 to 3.58 mm) is in this file, unprinted." },
+  { file = "pocketwatch/pendant/Pendant - case.stl", what = "The case, port out at 12 o'clock.", status = "needs-work", log = "2026-10-15", fixed = true, print = "bezel down", note = "'That pretty much worked', but the bar over the USB-C tab was too thin. The fix: the window's flat top makes the bar 3.58 mm (was 2.68)." },
   { file = "pocketwatch/pendant/Pendant - back plate (button).stl", what = "Back plate with the BOOT button tab.", status = "proven", log = "2026-10-15", print = "flat back down" },
   { file = "pocketwatch/pendant/Pendant - back plate (button, roomy).stl", what = "Back plate, roomy fit.", status = "unprinted", print = "flat back down" },
 ]

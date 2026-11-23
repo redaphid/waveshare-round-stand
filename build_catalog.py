@@ -28,7 +28,7 @@ BOARDS = {"1.28", "1.46 cover glass", "1.46 bare", "any"}
 FAMILY_KEYS = {"id", "name", "dir", "about", "board", "material", "script", "edit", "readme", "renders",
                "featured", "also", "parts"}
 PART_KEYS = {"file", "what", "status", "log", "fixed", "print", "note", "sets", "board", "script", "edit",
-             "material"}
+             "material", "render"}
 
 
 def load():
@@ -63,6 +63,10 @@ def problems(families):
             rows[name] = (fam, part)
             if not (STL / name).is_file():
                 bad.append(f"{where}: no such file in stl/")
+            if fid == "fit-gauges" and not {"render", "sets"} <= part.keys():
+                bad.append(f"{where}: a fit gauge needs `render` and `sets`")
+            if part.get("render") and not (ROOT / part["render"]).exists():
+                bad.append(f"{where}: render {part['render']} does not exist")
             if not name.startswith(fam["dir"] + "/"):
                 bad.append(f"{where}: not in the family folder {fam['dir']}/")
             st = part.get("status")
@@ -117,29 +121,31 @@ def stl_link(name):
     return link(f"stl/{name}", Path(name).stem)
 
 
-def status_cell(part):
-    st = part["status"]
-    cell = f"**{st}**"
+def evidence(part):
+    """The print-log citation and, for needs-work, whether this file already has the requested change."""
+    bits = []
     if "log" in part:
-        cell += f"<br>{part['log']}"
-    if st == "needs-work":
-        cell += "<br>fix in file" if part["fixed"] else "<br>fix not made"
-    return cell
+        bits.append(f"*Log {part['log']}:* {part['note']}" if part.get("note") else f"*Log {part['log']}.*")
+    elif part.get("note"):
+        bits.append(part["note"])
+    if part["status"] == "needs-work":
+        bits.append("**The requested change is in this file, unprinted.**" if part["fixed"]
+                    else "**The requested change is not made yet.**")
+    return " ".join(bits)
 
 
 def notes(fam, part, same):
-    bits = [part["what"]]
-    if part.get("note"):
-        bits.append(part["note"])
+    bits = [part["what"], evidence(part)]
     if part.get("print"):
         bits.append(f"*Print:* {part['print']}.")
     if part.get("script") or part.get("edit"):
-        bits.append(f"*Change it:* `{part.get('script', fam['script'])}`, {part.get('edit', fam['edit'])}.")
+        script = part.get("script", fam.get("script"))
+        bits.append(f"*Change it:* {link(script, Path(script).name)}, {part.get('edit', fam.get('edit'))}.")
     if part.get("board"):
         bits.append(f"*Board:* {' + '.join(boards(part['board']))}.")
     if part["file"] in same:
-        bits.append("Same file as " + ", ".join(f"`{m}`" for m in same[part["file"]]) + ".")
-    return " ".join(bits)
+        bits.append("Same file as " + ", ".join(Path(m).stem for m in same[part["file"]]) + ".")
+    return " ".join(b for b in bits if b)
 
 
 def family_block(fam, same, hero):
@@ -152,7 +158,7 @@ def family_block(fam, same, hero):
     facts = [f"**Board:** {' + '.join(boards(fam['board']))}", f"**Material:** {fam['material']}",
              f"**Folder:** {link('stl/' + fam['dir'], fam['dir'] + '/')}"]
     out += [" · ".join(facts), ""]
-    out += [f"**Change it:** {link(fam['script'], fam['script'])}, {fam['edit']}.", ""]
+    out += [f"**Change it:** {link(fam['script'], Path(fam['script']).name)}, {fam['edit']}.", ""]
     more = [link(r, Path(r).stem) for r in fam["renders"][1 if hero else 0:]]
     if fam.get("readme"):
         more.insert(0, link(fam["readme"], "design notes"))
@@ -160,8 +166,8 @@ def family_block(fam, same, hero):
         out += ["**More:** " + ", ".join(more), ""]
     if fam.get("also"):
         out += ["**Also print:** " + ", ".join(stl_link(n) for n in fam["also"]), ""]
-    out += ["| status | file | notes |", "|---|---|---|"]
-    out += [f"| {status_cell(p)} | {stl_link(p['file'])} | {notes(fam, p, same)} |" for p in parts]
+    out += ["| status | file |", "|---|---|"]
+    out += [f"| **{p['status']}** | **{stl_link(p['file'])}**<br>{notes(fam, p, same)} |" for p in parts]
     return out + [""]
 
 
@@ -187,11 +193,15 @@ def readme(families, same):
         "",
         "**Every design is a Python script** you can change and rerun: the *Change it* line under each design names "
         "the script and the class or constants to edit. Pocketwatch designs share `Badge` and `Case` in "
-        f"{link('pocketwatch/build_pocketwatch.py', 'pocketwatch/build_pocketwatch.py')}. "
-        "Run a script from the repo root with the CAD venv, for example "
-        "`~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_telegraph.py`. "
-        f"Setup is in {link('docs/TOOLCHAIN.md', 'docs/TOOLCHAIN.md')}; print results go in "
-        f"{link('docs/PRINT-LOG.md', 'docs/PRINT-LOG.md')}, which every status below cites by date.",
+        f"{link('pocketwatch/build_pocketwatch.py', 'build_pocketwatch.py')}. "
+        "Run a script from the repo root with the CAD venv; it rewrites its STLs here and prints its checks:",
+        "",
+        "```sh",
+        "~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop_telegraph.py --no-render",
+        "```",
+        "",
+        f"Setup is in {link('docs/TOOLCHAIN.md', 'TOOLCHAIN.md')}. Print results go in "
+        f"{link('docs/PRINT-LOG.md', 'PRINT-LOG.md')}, which every status below cites by date.",
         "",
         "| status | files | means |",
         "|---|---|---|",
@@ -204,12 +214,13 @@ def readme(families, same):
         "",
     ]
     for fam in gauges:
-        out += [image(fam, r) for r in fam["renders"]]
-        out += ["", fam["about"], "", "| gauge | what it sets | result |", "|---|---|---|"]
-        out += [f"| {stl_link(p['file'])}<br>{p['what']} *Print:* {p['print']}. | {p['sets']}. *Change it:* "
-                f"{link(p['script'], p['script'])} {p['edit']}. | {status_cell(p)}<br>{p.get('note', '')} |"
-                for p in fam["parts"]]
-        out += [""]
+        out += [fam["about"], ""]
+        for p in fam["parts"]:
+            out += [f"### {stl_link(p['file'])}", "", image(fam, p["render"]), "",
+                    f"**{p['status']}.** {evidence(p)}", "",
+                    p["what"], "",
+                    f"**Sets:** {p['sets']}. **Print:** {p['print']}. "
+                    f"**Change it:** {link(p['script'], Path(p['script']).name)}, {p['edit']}.", ""]
     sections = [("2. Featured", featured, True), ("3. Other current designs", current, False),
                 ("4. Concepts: never printed", concepts, False)]
     for title, fams, hero in sections:
