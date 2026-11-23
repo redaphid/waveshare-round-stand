@@ -51,8 +51,9 @@ The USB-only case and the telegraph take **two steps, +0.20 per side:
 | 1.36 and up | every design that checks plug engagement | plug engagement under 3.5 |
 
 The hoop, telegraph, battery case, wearable and gauge pass every check to
-1.45. The hoop and telegraph hold the same crown as the USB-only case and
-have no engagement check of their own, so treat 1.35 as their ceiling too.
+1.45. The hoop, telegraph and battery case have the same crown and USB-C
+slot as the USB-only case but no engagement check of their own, so treat
+1.35 as their ceiling too.
 
 `RAD_CLR` is shared: set it for the design you print, rebuild everything,
 and keep the change on your branch, or add a roomy-bore variant (like the
