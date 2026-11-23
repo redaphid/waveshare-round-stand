@@ -142,8 +142,8 @@ def clip():
 
 def slider_set_to(s, edge_t): return s.translate([0, edge_t - EDGE_MAX, 0])
 
-SIZE = {"1.28": "small", "1.46": "large"}          # stl/ subfolder per badge
-def ring_name(g): s = SIZE[g["name"].split()[0]]; return f"{s}/Trim ring - {s}"
+SIZE = {"1.28": "small", "1.46": "large"}          # size word in the trim ring and cup test file names
+def ring_name(g): s = SIZE[g["name"].split()[0]]; return f"pod/Trim ring - {s}"
 POD_NAME = {12: "pod/Pod - right-angle cables", 26: "pod/Pod - straight cables"}.get(round(GAP), f"pod/Pod - {GAP:.0f} mm gaps")
 
 def export(name, man):

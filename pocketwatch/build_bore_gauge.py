@@ -46,7 +46,7 @@ for i, clr in enumerate(CLRS):
     rings.append(ring.translate([i*PITCH, 0, 0]))
 
 gauge = union(rings).translate([0, 0, c.LIP_T])       # bezel face down, like the case
-name = "stl/pocketwatch/Pocketwatch - bore fit gauge.stl"
+name = "stl/fit-gauges/Pocketwatch - bore fit gauge.stl"
 m = gauge.to_mesh()
 tm = trimesh.Trimesh(vertices=np.asarray(m.vert_properties)[:, :3], faces=np.asarray(m.tri_verts))
 tm.export(name)

@@ -1,30 +1,37 @@
-Superseded files, kept rather than deleted.
+Superseded scripts and renders, kept for reference.
 
-- `esp32-s3-touch-lcd-146-stand.stl` — the first 1.46 stand, before it was clear
-  the board ships in two cover-glass options. Byte-identical to what is now
-  `stl/esp32-s3-touch-lcd-1.46-coverglass_board-44.77mm_stand.stl`,
-  before the cable notch was added. Renamed away because an
-  unqualified "146-stand" is easy to print by mistake.
-- `gen_stand.py` — 1.28-only generator, superseded by `build_stands.py`, which
+**No STLs live here any more.** On 2026-11-22 every old, superseded, failed or
+duplicate model was deleted so a newcomer only finds current designs in
+`stl/`. Git history keeps them all. **The last commit that has every one of
+them is `1580ce5`**: `git show "1580ce5:<path>" > old.stl`, or
+`git checkout 1580ce5 -- archive/` to get the whole folder back.
+
+## Deleted models (2026-11-22)
+
+| was at | what it was | replaced by |
+|---|---|---|
+| `archive/esp32-s3-touch-lcd-146-stand.stl` | first 1.46 stand, before the two cover-glass options were known | `stl/large/Stand - cover glass.stl` |
+| `archive/pre-stl-dir_*.stl` (3) | the three first desk stands, before `stl/` existed | `stl/small/`, `stl/large/` |
+| `archive/old-filenames-2026-09-18/` (22) | stands, docks, pod, clips, rings and the slot gauge under their pre-09-18 names | the same parts in `stl/` with readable names |
+| `archive/pod-stl-duplicates/` (7) | the old `pod/stl/` copies that went stale | `stl/pod/` |
+| `archive/fit-test_pod-cup-1.28.stl`, `-1.46.stl` | bare pocket rings (09-18), never shipped | `stl/pod/Pod cup test - small.stl` |
+| `archive/Pocketwatch - back (v1, wrong header span).stl` | pocketwatch v1 back (10-03), guides miss the real 30.0 headers | `stl/pocketwatch/Pocketwatch - plate.stl` |
+| `archive/hoop-screw-v1/*.stl` (4) | hoop stand with an M3 screw joint; its 0.25 mortise printed loose | the snap-arm hoop in `stl/pocketwatch/stands/hoop/` |
+| `archive/pendant-v1 (14.0 x 8.3 USB-C slot)/` (4) | pendant printed 2026-10-14; plug overmolds did not fit the slot | `stl/pocketwatch/pendant/` (port sticks out) |
+| `archive/pendant-v2 (USB-C out, round window)/` | pendant case printed 2026-10-15; bar over the USB-C tab too thin | `stl/pocketwatch/pendant/Pendant - case.stl` |
+| `stl/pocketwatch/stands/hoop/Hoop stand - base (snug, 0.12).stl`, `- base (medium, 0.18).stl` | screw-joint bases no script wrote any more; byte-identical to the `hoop-screw-v1` copies | `Hoop stand - base.stl` and its `looser` / `roomier` variants |
+| `stl/pocketwatch/stands/hoop/Hoop stand - back plate (BOOT hole, roomy).stl` | a stale 10-13 copy no script wrote any more | `stl/pocketwatch/Pocketwatch USB-only - plate (BOOT hole, roomy).stl` |
+| `stl/pocketwatch/stands/hoop/Hoop stand front-BOOT - base.stl`, `- rocker.stl` | front-BOOT rocker, printed 2026-10-13 | the telegraph key, `Hoop stand telegraph - *.stl` |
+| `stl/pocketwatch/pendant/Pendant - kid button.stl` | twist-lock button; failed its print 2026-10-14 | `stl/pocketwatch/pendant/kids-case/` |
+| `stl/pocketwatch/stands/pedestal/Pedestal (alternate, wedge) - body.stl` | the losing alternate pedestal shape | `Pedestal - body.stl` |
+
+## Kept here
+
+- `gen_stand.py`: 1.28-only generator, superseded by `build_stands.py`, which
   reproduces its output exactly.
-- `preview-side.png` — 1.28-only preview, superseded first by `preview-all.png`
-  and now by `preview-stands.png`.
-- `preview-all_pre-docks.png` — combined preview of the three low stands before
-  the dock family existed. Superseded by `preview-stands.png` + `preview-docks.png`.
-- `fit-test_pod-cup-1.28.stl`, `fit-test_pod-cup-1.46.stl` — bare pocket rings
-  (09-18), never shipped. Superseded the same hour by `stl/cup-stand-1.28.stl`,
-  which is the full pod cup on a desk base; they also predate the tab/header fix.
-- `fit-test-pod-cups.png` — render of those rings.
-- `cup-stand-1.28-section.png` — section render cut through the plug slot, so it
-  showed no wall. Replaced by `renders/cup-stand-1.28-empty-front.png`.
-- `pod-stl-duplicates/` — the old `pod/stl/` folder: copies of the pod, clips,
-  rings and cup test that went stale whenever only `stl/` was rebuilt. Retired
-  09-18 when STLs moved to `stl/small|large|pod/` with readable names; the live
-  files are there.
-- `Pocketwatch - back (v1, wrong header span).stl` — pocketwatch v1 back
-  (10-03), built on a placeholder header span of 26 and a small cell. Its guides
-  miss the real 30.0 headers. Superseded by the v2 plate + lid.
-
-- `hoop-screw-v1/`: the hoop stand with an M3 x 12 screw joint (mortise 0.25 per side printed loose; 0.18 and 0.12 base variants made). Replaced 2026-10-13 by the snap-arm joint. Script, README and the four STLs kept.
-- `pendant-v1 (14.0 x 8.3 USB-C slot)/`: the pendant's case, back plates and kid button as printed 2026-10-14, with the plug entering a 14.0 x 8.3 slot through the crown boss. Plug overmolds kept not fitting. Replaced the same day by a flat at 12 o'clock that lets the USB-C receptacle stick out (`Pendant.PORT_OUT`). An old plate in the new case reaches past the flat and can block a thick overmold: reprint both.
-- `pendant-v2 (USB-C out, round window)/`: the pendant case printed 2026-10-15 with the port sticking out. "Pretty much worked", but the lip bar over the USB-C tab (2.68 wide) was too thin. Replaced by a window with a flat top at 12 o'clock (`Pendant.WIN_FLAT`, bar 3.58). The back plate did not change, so it is not here.
+- `hoop-screw-v1/`: the screw-joint hoop stand's script and README.
+- `preview-side.png`, `preview-both.png`, `preview-all_pre-docks.png`: early
+  stand previews, superseded by `preview-stands.png` and `preview-docks.png`.
+- `fit-test-pod-cups.png`: render of the deleted bare pocket rings.
+- `cup-stand-1.28-section.png`: a section cut through the plug slot that showed
+  no wall. Replaced by `renders/cup-stand-1.28-empty-front.png`.

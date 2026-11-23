@@ -72,7 +72,7 @@ for a in (90, -90):
 else: raise SystemExit("could not turn the face up")
 printable = printable.translate([0, 0, -bbox(printable)[0][2]])
 
-name = f"{bp.SIZE[key]}/Pod cup test"
+name = f"pod/Pod cup test - {bp.SIZE[key]}"
 export(name, printable)
 print(f"  pocket Ø{2*r_in:.2f} x {depth:.1f} deep (seat {g['seat_t']} + ring {bp.RING_L}); shoulder "
       f"{r_in - g['bore_r']:.2f} wide; bore Ø{2*g['bore_r']:.1f}; leans {LEAN:.0f}°; foot {ymax - ymin:.1f} mm deep; "

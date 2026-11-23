@@ -10,7 +10,7 @@ a windshield pillar isn't reproduced.
 
 ## What you print
 
-**Test the cup first:** `../stl/small/Pod cup test.stl` + `../stl/small/Trim ring - small.stl` —
+**Test the cup first:** `../stl/pod/Pod cup test - small.stl` + `../stl/pod/Trim ring - small.stl` —
 one 1.28 pod cup on a desk base, ~16 g vs ~40 g for the pod. It is the pod's
 cup verbatim (`cup()` in `build_pod.py`), so if the badge seats and the ring
 presses in there, the pod fits. Prints face-up, no supports; stand it on its
@@ -25,8 +25,8 @@ it can only go into the slot.
 | part | qty | file | notes |
 |---|---|---|---|
 | pod | 1 | `../stl/pod/Pod - right-angle cables.stl` | for right-angle USB-C cables — the default. `../stl/pod/Pod - straight cables.stl` if you must use straight plugs |
-| trim ring, 1.46 | 1 | `../stl/large/Trim ring - large.stl` | press fit, retains the gauge |
-| trim ring, 1.28 | 2 | `../stl/small/Trim ring - small.stl` | |
+| trim ring, 1.46 | 1 | `../stl/pod/Trim ring - large.stl` | press fit, retains the gauge |
+| trim ring, 1.28 | 2 | `../stl/pod/Trim ring - small.stl` | |
 | clip, fixed | **2** | `../stl/pod/Clip - fixed jaw.stl` | two clips on the full-height rail |
 | clip, slider | **2** | `../stl/pod/Clip - slider.stl` | |
 | hardware | 2 | M3 × 12 screw | lock, one per clip; self-taps into the tongue (Ø2.8 hole), or fit a heat-set insert |
