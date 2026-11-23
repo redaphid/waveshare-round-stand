@@ -26,29 +26,37 @@ STATUS = {   # order = README order; text is the legend
 PRINTED = {"proven", "printed", "needs-work", "failed"}
 BOARDS = {"1.28", "1.46 cover glass", "1.46 bare", "any"}
 FAMILY_KEYS = {"id", "name", "dir", "about", "board", "material", "script", "edit", "readme", "renders",
-               "featured", "also", "parts"}
+               "featured", "retired", "also", "parts"}
 PART_KEYS = {"file", "what", "status", "log", "fixed", "print", "note", "sets", "board", "script", "edit",
-             "material", "render"}
+             "material", "render", "tunes"}
 
 
 def load():
+    """The families, and the one-line reason the retired ones were retired."""
     with open(CATALOG, "rb") as f:
-        return tomllib.load(f)["family"]
+        doc = tomllib.load(f)
+    return doc["family"], doc.get("retired_why")
 
 
 def boards(v):
     return [v] if isinstance(v, str) else list(v)
 
 
-def problems(families):
+def problems(families, why):
     bad = []
     log_dates = set(re.findall(r"^## (\d{4}-\d{2}-\d{2})", LOG.read_text(), re.M))
     rows = {}
     ids = Counter(f["id"] for f in families)
     bad += [f"family id {i!r} used {n} times" for i, n in ids.items() if n > 1]
+    if any(f.get("retired") for f in families) and not why:
+        bad.append("retired families need the top-level `retired_why`, the owner's reason in one line")
     for fam in families:
         fid = fam["id"]
         bad += [f"{fid}: unknown family key {k!r}" for k in fam.keys() - FAMILY_KEYS]
+        if "retired" in fam and fam["retired"] is not True:
+            bad.append(f"{fid}: `retired` is either true or absent")
+        if fam.get("retired") and fam.get("featured"):
+            bad.append(f"{fid}: retired and featured at once")
         bad += [f"{fid}: missing {k!r}" for k in ("name", "dir", "about", "board", "material", "renders")
                 if k not in fam]
         for path in [fam.get("readme"), fam.get("script"), *fam.get("renders", [])]:
@@ -63,8 +71,11 @@ def problems(families):
             rows[name] = (fam, part)
             if not (STL / name).is_file():
                 bad.append(f"{where}: no such file in stl/")
-            if fid == "fit-gauges" and not {"render", "sets"} <= part.keys():
-                bad.append(f"{where}: a fit gauge needs `render` and `sets`")
+            if fid == "fit-gauges" and not {"render", "sets", "tunes"} <= part.keys():
+                bad.append(f"{where}: a fit gauge needs `render`, `sets` and `tunes`")
+            for t in part.get("tunes", []):
+                if t not in ids:
+                    bad.append(f"{where}: `tunes` names {t!r}, which is not a family id")
             if part.get("render") and not (ROOT / part["render"]).exists():
                 bad.append(f"{where}: render {part['render']} does not exist")
             if not name.startswith(fam["dir"] + "/"):
@@ -171,12 +182,24 @@ def family_block(fam, same, hero):
     return out + [""]
 
 
-def readme(families, same):
+def gauge_block(fam, p, lead=None):
+    return [f"### {stl_link(p['file'])}", "", image(fam, p["render"]), "",
+            f"**{p['status']}.** {evidence(p)}", "",
+            (f"**{lead}** " if lead else "") + p["what"], "",
+            f"**Sets:** {p['sets']}. **Print:** {p['print']}. "
+            f"**Change it:** {link(p['script'], Path(p['script']).name)}, {p['edit']}.", ""]
+
+
+def readme(families, why, same):
     counts = Counter(p["status"] for f in families for p in f["parts"])
     total = sum(counts.values())
+    by_id = {f["id"]: f for f in families}
     gauges = [f for f in families if f["id"] == "fit-gauges"]
+    retired = [f for f in families if f.get("retired")]
+    # a gauge that only tunes retired designs is printed with them, not first
+    late = [(f, p) for f in gauges for p in f["parts"] if all(by_id[t].get("retired") for t in p["tunes"])]
     featured = [f for f in families if f.get("featured")]
-    rest = [f for f in families if f not in gauges and f not in featured]
+    rest = [f for f in families if f not in gauges and f not in featured and f not in retired]
     current = [f for f in rest if any(p["status"] in PRINTED for p in f["parts"])]
     concepts = [f for f in rest if f not in current]
     out = [
@@ -193,18 +216,15 @@ def readme(families, same):
     for fam in gauges:
         out += [fam["about"], ""]
         for p in fam["parts"]:
-            out += [f"### {stl_link(p['file'])}", "", image(fam, p["render"]), "",
-                    f"**{p['status']}.** {evidence(p)}", "",
-                    p["what"], "",
-                    f"**Sets:** {p['sets']}. **Print:** {p['print']}. "
-                    f"**Change it:** {link(p['script'], Path(p['script']).name)}, {p['edit']}.", ""]
+            if (fam, p) not in late:
+                out += gauge_block(fam, p)
     out += [
         "## How to read and change this list",
         "",
         "Print every file as exported, with no supports, unless its row says otherwise.",
         "",
         "**Layout rule:** everything you print for one design is in one folder under `stl/`. "
-        "`fit-gauges/` holds the calibration prints. The first desk stands are split by badge: "
+        "`fit-gauges/` holds the calibration prints. The retired desk stands are split by badge: "
         "`small/` is the 1.28, `large/` the 1.46.",
         "",
         "**Every design is a Python script** you can change and rerun: the *Change it* line under each design names "
@@ -238,17 +258,24 @@ def readme(families, same):
                     "A print result from you is the next step for any of them.", ""]
         for fam in fams:
             out += family_block(fam, same, hero)
+    if retired:
+        out += ["## 5. Earlier designs (retired)", "",
+                f"Retired for design direction, not print result: a status here still says how the print went. {why}", ""]
+        for fam, p in late:
+            out += gauge_block(fam, p, "Only for the retired designs in this section.")
+        for fam in retired:
+            out += family_block(fam, same, False)
     return "\n".join(out).rstrip() + "\n"
 
 
 def main():
-    families = load()
-    bad, same = problems(families)
+    families, why = load()
+    bad, same = problems(families, why)
     if bad:
         print("stl/catalog.toml: " + str(len(bad)) + " problem(s)")
         print("\n".join("  " + b for b in bad))
         sys.exit(1)
-    text = readme(families, same)
+    text = readme(families, why, same)
     n = sum(len(f["parts"]) for f in families)
     if "--check" in sys.argv:
         if README.read_text() != text:

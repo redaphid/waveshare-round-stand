@@ -6,7 +6,7 @@
 
 ## 1. Print first: fit gauges
 
-Ten-minute prints that measure how your printer and your badge fit, before you commit to a case or stand. Tell the owner which ring (or slot) fit.
+Ten-minute prints that measure how your printer and your badge fit, before you commit to a case or stand. Tell the owner which ring fit.
 
 ### [Pocketwatch - bore fit gauge](<fit-gauges/Pocketwatch - bore fit gauge.stl>)
 
@@ -18,21 +18,11 @@ The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop t
 
 **Sets:** the case bore clearance, `Case.RAD_CLR` in `build_pocketwatch.py`. **Print:** bezel down, about 10 minutes. **Change it:** [build_bore_gauge.py](<../pocketwatch/build_bore_gauge.py>), `CLRS`.
 
-### [Slot fit gauge](<fit-gauges/Slot fit gauge.stl>)
-
-![Fit gauges](<../renders/fit-gauge.png>)
-
-**proven.** *Log 2026-09-18:* Owner's 1.28 seated in slot 5 (5.0 mm).
-
-**Only for the bare-badge desk stands in `small/` and `large/`;** the pocketwatch case and its stands do not use it. Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.
-
-**Sets:** the groove width, `gap` in `BOARDS` in `build_stands.py`. **Print:** flat, as exported. **Change it:** [build_fit_gauge.py](<../build_fit_gauge.py>), `WIDTHS`.
-
 ## How to read and change this list
 
 Print every file as exported, with no supports, unless its row says otherwise.
 
-**Layout rule:** everything you print for one design is in one folder under `stl/`. `fit-gauges/` holds the calibration prints. The first desk stands are split by badge: `small/` is the 1.28, `large/` the 1.46.
+**Layout rule:** everything you print for one design is in one folder under `stl/`. `fit-gauges/` holds the calibration prints. The retired desk stands are split by badge: `small/` is the 1.28, `large/` the 1.46.
 
 **Every design is a Python script** you can change and rerun: the *Change it* line under each design names the script and the class or constants to edit. Pocketwatch designs share `Badge` and `Case` in [build_pocketwatch.py](<../pocketwatch/build_pocketwatch.py>). Run a script from the repo root with the CAD venv; it rewrites its STLs here and prints its checks:
 
@@ -143,39 +133,6 @@ A USB-powered Ø43.6 case cut flat at 12 o'clock so the USB-C port sticks out an
 | **proven** | **[Pendant - back plate (button)](<pocketwatch/pendant/Pendant - back plate (button).stl>)**<br>Back plate with the BOOT button tab. *Log 2026-10-15.* *Print:* flat back down. |
 | **needs-work** | **[Pendant - case](<pocketwatch/pendant/Pendant - case.stl>)**<br>The case, port out at 12 o'clock. *Log 2026-10-15:* 'That pretty much worked', but the bar over the USB-C tab was too thin. The fix: the window's flat top makes the bar 3.58 mm (was 2.68). **The requested change is in this file, unprinted.** *Print:* bezel down. |
 | **unprinted** | **[Pendant - back plate (button, roomy)](<pocketwatch/pendant/Pendant - back plate (button, roomy).stl>)**<br>Back plate, roomy fit. *Print:* flat back down. |
-
-### Desk stands for the 1.28 (bare badge)
-
-The first designs: the bare badge leans back in a groove, no case. Sized with the slot fit gauge.
-
-**Board:** 1.28 · **Material:** PETG · **Folder:** [small/](<small>)
-
-**Change it:** [build_stands.py](<../build_stands.py>), the `"1.28"` entry in `BOARDS` (`gap`, `lean`, `depth`, `rear_lip`).
-
-**More:** [preview-stands](<../preview-stands.png>), [stand-1.28-BOOT-post-front](<../renders/stand-1.28-BOOT-post-front.png>)
-
-| status | file |
-|---|---|
-| **proven** | **[Stand - BOOT button](<small/Stand - BOOT button.stl>)**<br>Stand plus a post behind the badge: press the screen and it clicks BOOT. *Log 2026-09-20:* 'Ok, works well enough' after the rear wall was cut short for the switch housings. *Print:* flat, as exported. *Change it:* [build_stand_button.py](<../build_stand_button.py>), `POST_R`, `REST_CLR`, `SWITCH`; the groove comes from `build_stands.py`. |
-| **unprinted** | **[Stand](<small/Stand.stl>)**<br>Plain stand, 5.4 mm groove, USB-C at the top. Same groove as the BOOT stand. *Print:* flat, as exported. |
-| **unprinted** | **[Stand - RESET button](<small/Stand - RESET button.stl>)**<br>Stand with the post on RESET instead of BOOT. *Print:* flat, as exported. *Change it:* [build_stand_button.py](<../build_stand_button.py>), `POST_R`, `REST_CLR`, `SWITCH`. |
-
-### Desk stands for the 1.46
-
-The same groove stand for the 1.46 Touch. It ships in two thicknesses that are **not interchangeable**: with cover glass (12.30 mm) or bare (10.65 mm). Each file says which. The docks leave 27 mm under the rim for a straight USB-C plug in the bottom port.
-
-**Board:** 1.46 cover glass · **Material:** PETG · **Folder:** [large/](<large>)
-
-**Change it:** [build_stands.py](<../build_stands.py>), the `"1.46-glass"` and `"1.46-bare"` entries in `BOARDS`.
-
-**More:** [preview-stands](<../preview-stands.png>), [preview-docks](<../preview-docks.png>)
-
-| status | file |
-|---|---|
-| **proven** | **[Stand - cover glass](<large/Stand - cover glass.stl>)**<br>Desk stand for the cover-glass 1.46. *Log 2026-09-18:* Seats cleanly; a straight cable in the bottom port does not fit, hence the docks. *Print:* flat, as exported. |
-| **unprinted** | **[Dock for straight cable - cover glass](<large/Dock for straight cable - cover glass.stl>)**<br>Taller stand with 27 mm under the rim for a straight plug. *Print:* flat, as exported. *Change it:* [build_stands.py](<../build_stands.py>), the `"1.46-glass-dock"` entry in `BOARDS`. |
-| **unprinted** | **[Stand - no cover glass](<large/Stand - no cover glass.stl>)**<br>Desk stand for the bare 1.46. *Print:* flat, as exported. *Board:* 1.46 bare. |
-| **unprinted** | **[Dock for straight cable - no cover glass](<large/Dock for straight cable - no cover glass.stl>)**<br>Dock for the bare 1.46. *Print:* flat, as exported. *Change it:* [build_stands.py](<../build_stands.py>), the `"1.46-bare-dock"` entry in `BOARDS`. *Board:* 1.46 bare. |
 
 ## 4. Concepts: never printed
 
@@ -418,3 +375,50 @@ A styling study after Teenage Engineering: slab body, orange accents, as a desk 
 | **unprinted** | **[TE - back cover](<pocketwatch/styles/te/TE - back cover.stl>)**<br>Back cover. *Print:* as exported. |
 | **unprinted** | **[TE - BOOT cap (orange)](<pocketwatch/styles/te/TE - BOOT cap (orange).stl>)**<br>BOOT plunger cap, in orange. *Print:* as exported. |
 | **unprinted** | **[TE - trim ring (orange)](<pocketwatch/styles/te/TE - trim ring (orange).stl>)**<br>Trim ring, in orange. *Print:* as exported. |
+
+## 5. Earlier designs (retired)
+
+Retired for design direction, not print result: a status here still says how the print went. The owner, 2026-11-22: "The 'wedge' stands prominently mentioned on the readme is of minimal importance now. We are focusing on the pocketwatch and telegraph. The wedge didn't protect the device enough."
+
+### [Slot fit gauge](<fit-gauges/Slot fit gauge.stl>)
+
+![Fit gauges](<../renders/fit-gauge.png>)
+
+**proven.** *Log 2026-09-18:* Owner's 1.28 seated in slot 5 (5.0 mm).
+
+**Only for the retired designs in this section.** Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.
+
+**Sets:** the groove width, `gap` in `BOARDS` in `build_stands.py`. **Print:** flat, as exported. **Change it:** [build_fit_gauge.py](<../build_fit_gauge.py>), `WIDTHS`.
+
+### Desk stands for the 1.28 (bare badge)
+
+The first designs: the bare badge leans back in a groove, no case. Sized with the slot fit gauge.
+
+**Board:** 1.28 · **Material:** PETG · **Folder:** [small/](<small>)
+
+**Change it:** [build_stands.py](<../build_stands.py>), the `"1.28"` entry in `BOARDS` (`gap`, `lean`, `depth`, `rear_lip`).
+
+**More:** [preview-stands](<../preview-stands.png>), [stand-1.28-BOOT-post-front](<../renders/stand-1.28-BOOT-post-front.png>)
+
+| status | file |
+|---|---|
+| **proven** | **[Stand - BOOT button](<small/Stand - BOOT button.stl>)**<br>Stand plus a post behind the badge: press the screen and it clicks BOOT. *Log 2026-09-20:* 'Ok, works well enough' after the rear wall was cut short for the switch housings. *Print:* flat, as exported. *Change it:* [build_stand_button.py](<../build_stand_button.py>), `POST_R`, `REST_CLR`, `SWITCH`; the groove comes from `build_stands.py`. |
+| **unprinted** | **[Stand](<small/Stand.stl>)**<br>Plain stand, 5.4 mm groove, USB-C at the top. Same groove as the BOOT stand. *Print:* flat, as exported. |
+| **unprinted** | **[Stand - RESET button](<small/Stand - RESET button.stl>)**<br>Stand with the post on RESET instead of BOOT. *Print:* flat, as exported. *Change it:* [build_stand_button.py](<../build_stand_button.py>), `POST_R`, `REST_CLR`, `SWITCH`. |
+
+### Desk stands for the 1.46
+
+The same groove stand for the 1.46 Touch. It ships in two thicknesses that are **not interchangeable**: with cover glass (12.30 mm) or bare (10.65 mm). Each file says which. The docks leave 27 mm under the rim for a straight USB-C plug in the bottom port.
+
+**Board:** 1.46 cover glass · **Material:** PETG · **Folder:** [large/](<large>)
+
+**Change it:** [build_stands.py](<../build_stands.py>), the `"1.46-glass"` and `"1.46-bare"` entries in `BOARDS`.
+
+**More:** [preview-stands](<../preview-stands.png>), [preview-docks](<../preview-docks.png>)
+
+| status | file |
+|---|---|
+| **proven** | **[Stand - cover glass](<large/Stand - cover glass.stl>)**<br>Desk stand for the cover-glass 1.46. *Log 2026-09-18:* Seats cleanly; a straight cable in the bottom port does not fit, hence the docks. *Print:* flat, as exported. |
+| **unprinted** | **[Dock for straight cable - cover glass](<large/Dock for straight cable - cover glass.stl>)**<br>Taller stand with 27 mm under the rim for a straight plug. *Print:* flat, as exported. *Change it:* [build_stands.py](<../build_stands.py>), the `"1.46-glass-dock"` entry in `BOARDS`. |
+| **unprinted** | **[Stand - no cover glass](<large/Stand - no cover glass.stl>)**<br>Desk stand for the bare 1.46. *Print:* flat, as exported. *Board:* 1.46 bare. |
+| **unprinted** | **[Dock for straight cable - no cover glass](<large/Dock for straight cable - no cover glass.stl>)**<br>Dock for the bare 1.46. *Print:* flat, as exported. *Change it:* [build_stands.py](<../build_stands.py>), the `"1.46-bare-dock"` entry in `BOARDS`. *Board:* 1.46 bare. |

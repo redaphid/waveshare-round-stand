@@ -2,7 +2,7 @@
 
 > **Archived, screw-joint version.** Its four STLs were deleted on 2026-11-22; the last commit with them is `1580ce5`. The current hoop is in `pocketwatch/stands/hoop/`.
 
-**The case is fused into an open brass-look ring on two trunnions, on a two-tier round base, face 20° back. Crown up: the plug rises out of the crown and the cable loops back and down behind it, like a watch's bow and chain.** Ø76 footprint, 86 mm tall to the top of the plug. Rebuild: `~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop.py` from the repo root (82 checks; `--no-render` is faster).
+**The case is fused into an open brass-look ring on two trunnions, on a two-tier round base, face 20° back. Crown up: the plug rises out of the crown and the cable loops back and down behind it, like a watch's bow and chain.** Ø76 footprint, 86 mm tall to the top of the plug. Rebuild: `~/.venvs/cad/bin/python archive/hoop-screw-v1/build_hoop.screw.py` from the repo root (90 checks, all passing on 2026-11-22; `--no-render` is faster). **Run it only in a scratch checkout:** it writes into `stl/pocketwatch/stands/hoop/`, over the current snap hoop's `Hoop stand - base.stl` and `Hoop stand - hoop and case.stl`, and its renders over `pocketwatch/stands/hoop/renders/`. `pocketwatch/stands/hoop/build_hoop.py` builds the snap hoop, not this one.
 
 **Why crown up:** the display reads the right way up with no firmware flip. The case sits low, with the glass centre 43 mm above the desk. Crown down would put 22 mm of straight plug plus its bend under the case, which makes the stand about 40 mm taller and top-heavy.
 

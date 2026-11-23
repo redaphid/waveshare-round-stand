@@ -10,18 +10,24 @@
 #   log: the date of the docs/PRINT-LOG.md entry that backs the status (required unless unprinted).
 #   fixed: needs-work only. true = the current file already has the requested change, unprinted since.
 # board: "1.28", "1.46 cover glass", "1.46 bare", "any", or a list of them.
+# retired (family): true moves it to the last section, "Earlier designs (retired)". It keeps its print status:
+#   retired is about design direction, not print result. retired_why (top level) quotes the reason.
+# tunes (fit gauge): the family ids the gauge sets a number for. A gauge whose every family is retired is
+#   listed with them instead of first.
+
+retired_why = "The owner, 2026-11-22: \"The 'wedge' stands prominently mentioned on the readme is of minimal importance now. We are focusing on the pocketwatch and telegraph. The wedge didn't protect the device enough.\""
 
 [[family]]
 id = "fit-gauges"
 name = "Fit gauges"
 dir = "fit-gauges"
-about = "Ten-minute prints that measure how your printer and your badge fit, before you commit to a case or stand. Tell the owner which ring (or slot) fit."
+about = "Ten-minute prints that measure how your printer and your badge fit, before you commit to a case or stand. Tell the owner which ring fit."
 board = "any"
 material = "PLA or PETG"
 renders = ["pocketwatch/renders/bore-gauge.png", "renders/fit-gauge.png"]
 parts = [
-  { file = "fit-gauges/Pocketwatch - bore fit gauge.stl", render = "pocketwatch/renders/bore-gauge.png", what = "The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore.", sets = "the case bore clearance, `Case.RAD_CLR` in `build_pocketwatch.py`", board = "1.28", script = "pocketwatch/build_bore_gauge.py", edit = "`CLRS`", status = "proven", log = "2026-10-13", print = "bezel down, about 10 minutes", note = "Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between." },
-  { file = "fit-gauges/Slot fit gauge.stl", render = "renders/fit-gauge.png", what = "**Only for the bare-badge desk stands in `small/` and `large/`;** the pocketwatch case and its stands do not use it. Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.", sets = "the groove width, `gap` in `BOARDS` in `build_stands.py`", script = "build_fit_gauge.py", edit = "`WIDTHS`", status = "proven", log = "2026-09-18", print = "flat, as exported", note = "Owner's 1.28 seated in slot 5 (5.0 mm)." },
+  { file = "fit-gauges/Pocketwatch - bore fit gauge.stl", tunes = ["pocketwatch", "telegraph"], render = "pocketwatch/renders/bore-gauge.png", what = "The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore.", sets = "the case bore clearance, `Case.RAD_CLR` in `build_pocketwatch.py`", board = "1.28", script = "pocketwatch/build_bore_gauge.py", edit = "`CLRS`", status = "proven", log = "2026-10-13", print = "bezel down, about 10 minutes", note = "Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between." },
+  { file = "fit-gauges/Slot fit gauge.stl", tunes = ["desk-1.28", "desk-1.46"], render = "renders/fit-gauge.png", what = "Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.", sets = "the groove width, `gap` in `BOARDS` in `build_stands.py`", script = "build_fit_gauge.py", edit = "`WIDTHS`", status = "proven", log = "2026-09-18", print = "flat, as exported", note = "Owner's 1.28 seated in slot 5 (5.0 mm)." },
 ]
 
 [[family]]
@@ -113,6 +119,7 @@ parts = [
 
 [[family]]
 id = "desk-1.28"
+retired = true
 name = "Desk stands for the 1.28 (bare badge)"
 dir = "small"
 about = "The first designs: the bare badge leans back in a groove, no case. Sized with the slot fit gauge."
@@ -129,6 +136,7 @@ parts = [
 
 [[family]]
 id = "desk-1.46"
+retired = true
 name = "Desk stands for the 1.46"
 dir = "large"
 about = "The same groove stand for the 1.46 Touch. It ships in two thicknesses that are **not interchangeable**: with cover glass (12.30 mm) or bare (10.65 mm). Each file says which. The docks leave 27 mm under the rim for a straight USB-C plug in the bottom port."
