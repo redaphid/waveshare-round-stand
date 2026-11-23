@@ -21,6 +21,10 @@ tightest ring where the glass sits flat on the lip is your bore clearance.**
 | 1, 2 or 3 | 0.25, 0.55, 0.85 | set `Case.RAD_CLR` to it in `pocketwatch/build_pocketwatch.py`, then rebuild (below) |
 | 4 | 1.15 | print the case as it is: that is today's value |
 
+**Even ring 4 tight?** The USB-only case takes `RAD_CLR` up to about 1.25,
+in steps of 0.10. The telegraph and hoop fail their checks above 1.15, so
+change it only for the case (the `tune-fit` skill says how).
+
 No badge yet? Print the gauge anyway and give it to the owner with the case.
 He reads it; you reprint only if his answer is not ring 4. The
 `calibrate-my-printer` skill has the details.
