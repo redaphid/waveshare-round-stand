@@ -28,7 +28,7 @@ import numpy as np, manifold3d as m3, trimesh
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render)
 
 STL = "stl/pocketwatch/styles/te/"
@@ -174,7 +174,7 @@ def head_core(b: Badge, c: Case):
     skirt_front = zb_p - bh_p/2 - 0.4
     window = m3.Manifold.cylinder(c.LIP_T + 0.02, b.r - c.LIP_OVERLAP + c.LIP_BEVEL, b.r - c.LIP_OVERLAP, SEG)
     cuts = [prism(bore_xy, 0.0, Z_CASE + 1), prism(circle(R_REAR), FLOOR, Z_CASE + 1),
-            window.translate([0, 0, -c.LIP_T - 0.01]), groove_p, all_keep]
+            window.translate([0, 0, -c.LIP_T - 0.01]), groove_p, case_keepouts(keep)]
 
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, Miter), 0.0, FLOOR + 0.01) for h in hdrs)
@@ -532,7 +532,7 @@ def head_checks(tag, b, c, feats, body, plate, cover, cover_fixed, tongue, cap, 
     check(s > 1.0, "plate pulled back one bead height interferes (it snaps)", f"{s:.1f} mm^3")
     check(abs(bbox(cover)[1, 2] - geo["Z_BACK"]) < 1e-6, "cover flush with the slab back", f"z {geo['Z_BACK']:.2f}")
     wall = geo["boss_tip"] - b.tip_y
-    check(abs(wall - 2.95) < 0.05, "wall in front of the port is the case's (never thickened)", f"{wall:.2f}")
+    check(abs(wall - c.PORT_WALL) < 0.05, "wall in front of the port is the case's (never thickened)", f"{wall:.2f}")
     check(SHELL_L - wall >= 3.5, "plug shell engages the port >= 3.5", f"{SHELL_L - wall:.2f} of {SHELL_L}")
     holes = union(prism(hex_cs(PEG_D).translate([x, y]).offset(c.MIN_WALL, Round), -c.LIP_T, -c.LIP_T + PEG_L + 0.2)
                   for x, y in geo["pegs"])

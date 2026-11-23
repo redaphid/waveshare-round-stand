@@ -31,7 +31,7 @@ from dataclasses import dataclass
 sys.path.insert(0, "pocketwatch")
 import numpy as np, manifold3d as m3
 import build_pocketwatch_usb as U
-from build_pocketwatch import (Badge, Case, Round, SEG, snap, chamfered, circle, rect, prism, union, bbox,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, snap, chamfered, circle, rect, prism, union, bbox,
                                revolve, check, FAILS, export, render)
 
 OUT = "pocketwatch/pendant/renders/"
@@ -218,7 +218,7 @@ def case_body(b: Badge, c: Case, p: Pendant, feats, geo, z_back):
     case -= prism(circle(R_REAR), FLOOR, z_back + 1)
     case -= window
     case -= groove_p
-    case -= union(keep.values())
+    case -= case_keepouts(keep)
     pry = U.pry_cut(R_BORE, R_OUT, FLOOR, z_back, p.PRY_DEG)
     case -= pry
     geo.update(R_OUT=R_OUT, boss=boss, groove_r_p=groove_r_p, pry=pry, y_win=y_win)

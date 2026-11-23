@@ -462,7 +462,7 @@ def path_checks(R):
     k, s, b, c, F, geo, feats = R["k"], R["s"], R["b"], R["c"], R["F"], R["geo"], R["feats"]
     case, base, cable = R["case"], R["base"], R["cable"]
     print(f"\n13. Stand paths ({tag(k)})")
-    tipb = 23.95
+    tipb = H.plug_face_y(geo)
     plug_b = prism(rect(-s.PLUG_W/2, s.PLUG_W/2, tipb, tipb + s.PLUG_L), b.port_z - s.PLUG_T/2, b.port_z + s.PLUG_T/2)
     v = (F.W(plug_b) ^ (F.W(case) + base + R["lever"])).volume()
     check(v < 1e-3, "plug body 12 x 8 x 22 clear of the hoop, base and lever", f"{v:.4f} mm^3")
@@ -696,7 +696,7 @@ def stability(R):
     for nm, m in parts.items():
         masses.append((m.volume()*RHO, H.to_tm(m).center_mass))
     masses.append((s.BADGE_G, F.pt([0, 0, 2.5])))
-    masses.append((s.PLUG_G, F.pt([0, 23.95 + s.PLUG_L/2, b.port_z])))
+    masses.append((s.PLUG_G, F.pt([0, H.plug_face_y(R["geo"]) + s.PLUG_L/2, b.port_z])))
     print("      " + ", ".join(f"{nm} {g_:.1f} g" for nm, (g_, _) in zip(parts, masses)))
     cxy, cr = np.array([0, BASE_Y]), k.BASE_R - 0.6
     worst, com, Wt = H.tip_angles(s, F, masses, cxy, cr, R["cable_exit"], 90.0)

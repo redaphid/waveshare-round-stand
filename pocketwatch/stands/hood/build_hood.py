@@ -29,7 +29,7 @@ import sys, math, tempfile
 sys.path.insert(0, "pocketwatch")
 from dataclasses import dataclass
 import numpy as np, manifold3d as m3, trimesh
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render, revolve)
 from build_pocketwatch_usb import boot_hole_plate, PIN_D, SHELL_LEN, MIN_PLUG_ENGAGE, BACK_CHAMFER
 
@@ -126,7 +126,7 @@ def case_voids(b, c):
 
     window = m3.Manifold.cylinder(c.LIP_T + 0.02, b.r - c.LIP_OVERLAP + c.LIP_BEVEL, b.r - c.LIP_OVERLAP, SEG)
     voids = union([prism(bore_xy, 0.0, Z_CASE + 1), prism(circle(R_REAR), FLOOR, Z_CASE + 1),
-                   window.translate([0, 0, -c.LIP_T - 0.01]), groove_p, all_keep])
+                   window.translate([0, 0, -c.LIP_T - 0.01]), groove_p, case_keepouts(keep)])
 
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)

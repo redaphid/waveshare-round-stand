@@ -30,7 +30,7 @@ Run from the repo root with ~/.venvs/cad/bin/python. --no-render for checks only
 import sys, math, os
 sys.path.insert(0, "pocketwatch"); sys.path.insert(0, "pod")
 import numpy as np, manifold3d as m3, trimesh
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render)
 from build_pocketwatch_usb import BACK_CHAMFER, SHELL_LEN, MIN_PLUG_ENGAGE, BOOT_HOLE_D, PIN_D, boot_hole_plate
 
@@ -175,7 +175,7 @@ def build_cup(b: Badge, c: Case, side=-1):
     cup -= prism(circle(R_REAR), FLOOR, Z_CASE + 1)
     cup -= window.translate([0, 0, -c.LIP_T - 0.01])
     cup -= groove_p
-    cup -= all_keep
+    cup -= case_keepouts(keep)
     # plug body notch: the cup is bigger than the crown boss, so cut back to the boss face where the
     # 12 x 8 plug body lands. That keeps exactly the boss's 3.0 mm of wall in front of the port.
     boss_face = bbox(prism(boss, 0, 1))[1, 1]
@@ -360,7 +360,7 @@ def stalk_checks(b, c, feats, cup, cup_l, plate, plate_h, ring, clip, geo):
     print("\n5. USB-C plug path (badge frame, then mounted at every aim)")
     body, cable, shell = plug_and_cable(b, geo)
     wall = geo["boss_face"] - b.tip_y
-    check(abs(wall - 2.97) < 0.05, "wall in front of the port is the USB-only case's, not thickened", f"{wall:.2f} mm")
+    check(abs(wall - c.PORT_WALL) < 0.05, "wall in front of the port is the USB-only case's, not thickened", f"{wall:.2f} mm")
     check(SHELL_LEN - wall >= MIN_PLUG_ENGAGE, f"plug shell engages the port >= {MIN_PLUG_ENGAGE}", f"{SHELL_LEN - wall:.2f} of {SHELL_LEN}")
     for nm, m in (("plug body", body), ("cable", cable), ("plug shell", shell)):
         v = sum((m ^ p).volume() for p in (cup, ring, plate_h))

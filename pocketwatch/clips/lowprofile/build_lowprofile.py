@@ -31,7 +31,7 @@ import sys, math
 from dataclasses import dataclass
 sys.path.insert(0, "pocketwatch")
 import numpy as np, manifold3d as m3
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render)
 from build_pocketwatch_usb import run_checks as usb_fit_checks, boot_hole_plate, run_hole_checks, BACK_CHAMFER, PIN_D
 
@@ -213,7 +213,7 @@ def build_housing(b: Badge, c: Case, m: Mount):
     case -= prism(circle(R_REAR), FLOOR, Z_CASE + 1)
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p
-    case -= all_keep
+    case -= case_keepouts(keep)
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, Miter), 0.0, FLOOR + 0.01) for h in hdrs)
     guides = guides ^ prism(skirt_xy.offset(-0.3, Round), 0.0, FLOOR + 0.01)

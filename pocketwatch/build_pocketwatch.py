@@ -126,6 +126,11 @@ class Case:
     @property
     def STROKE(self): return self.REST_CLR + self.SW_TRAVEL
 
+    @property
+    def PORT_WALL(self):
+        """Case in front of the USB-C port: the crown boss is the bore past the tab tip plus a wall."""
+        return self.RAD_CLR + self.CASE_WALL
+
 
 @dataclass(frozen=True)
 class Feature:
@@ -240,6 +245,12 @@ def features(b: Badge, c: Case):
     return out, sw
 
 
+def case_keepouts(keep):
+    """The keepouts a case cuts after its bore. The disc's keepout is the bore's own outline from the same
+    z = 0 face, so cutting it again only makes coincident faces, which pinch the mesh at some RAD_CLR."""
+    return union(k for n, k in keep.items() if n != "disc + tab")
+
+
 # ---- the case, plate and lid ------------------------------------------------
 def build(b: Badge, c: Case):
     feats, sw = features(b, c)
@@ -271,7 +282,7 @@ def build(b: Badge, c: Case):
     case -= prism(circle(R_REAR), FLOOR, Z_CASE + 1)
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p + groove_l
-    case -= all_keep
+    case -= case_keepouts(keep)
     # The slot is the plug keepout already cut above: flat roof, no taper. Its span is a bridge,
     # which the overhang check in export() holds to BRIDGE_MAX.
 

@@ -27,7 +27,7 @@ import sys, math
 from dataclasses import replace
 sys.path.insert(0, "pocketwatch")
 import numpy as np, manifold3d as m3, trimesh
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render)
 from build_pocketwatch_usb import boot_hole_plate, SHELL_LEN, MIN_PLUG_ENGAGE, PIN_D
 
@@ -156,7 +156,7 @@ def build(b, c, variant):
         "well": prism(well_xy, Z_CASE, back + 1),
         "window": window.translate([0, 0, front - 0.01]),
         "snap groove": groove_p,
-        "badge keepouts": all_keep,
+        "badge keepouts": case_keepouts(keep),
         "ring groove": prism(circle(RING_R0 + RING_W + RING_CLR) - circle(RING_R0), front - 1, front + RING_H),
     }
     hole = m3.Manifold.cylinder(HOLE_DEPTH + 1, HOLE_D/2, HOLE_D/2, 24)
@@ -316,7 +316,7 @@ def body_checks(b, c, v, feats, body, plate_h, geo, ring):
 
     print(f"\n[{v}] 4. USB-C: the case's 3.0 wall in front of the port is untouched, plug and cable path clear")
     wall = geo["boss_tip"] - b.tip_y
-    check(wall <= 3.0 + 0.01, "wall in front of the port not thickened", f"{wall:.2f}")
+    check(wall <= c.PORT_WALL + 0.01, "wall in front of the port not thickened", f"{wall:.2f}")
     check(SHELL_LEN - wall >= MIN_PLUG_ENGAGE, f"shell engages the port >= {MIN_PLUG_ENGAGE}", f"{SHELL_LEN - wall:.2f} of {SHELL_LEN}")
     shell, mould, cable, _ = plug_and_cable(geo, v)
     slot = prism(rect(-SHELL_W/2, SHELL_W/2, b.tip_y, geo["boss_tip"]), 5 - SHELL_T/2, 5 + SHELL_T/2)

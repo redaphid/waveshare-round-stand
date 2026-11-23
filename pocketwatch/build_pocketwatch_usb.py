@@ -17,7 +17,7 @@ Run with ~/.venvs/cad/bin/python from the repo root.
 import sys, math
 sys.path.insert(0, "pocketwatch")
 import numpy as np, manifold3d as m3
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render)
 
 OUT = "pocketwatch/renders/usb-"
@@ -60,7 +60,7 @@ def build(b: Badge, c: Case, disc_clr=PLATE_DISC_CLR, button=False):
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p
     case -= pry_cut(R_BORE, R_OUT, FLOOR, Z_CASE, PRY_DEG)
-    case -= all_keep
+    case -= case_keepouts(keep)
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
     guides = guides ^ prism(skirt_xy.offset(-0.3, Round), 0.0, FLOOR + 0.01)

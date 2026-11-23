@@ -22,7 +22,7 @@ import sys, dataclasses, math
 from dataclasses import dataclass
 sys.path.insert(0, "pocketwatch")
 import numpy as np, manifold3d as m3, trimesh
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render)
 import build_pocketwatch_usb as U
 import render as render_mod      # pod/render.py, on the path via build_pocketwatch
@@ -125,7 +125,7 @@ def build(b: Badge, c: Case, extra=None):
     case -= prism(circle(R_REAR), FLOOR, Z_CASE + 1)
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p
-    case -= all_keep
+    case -= case_keepouts(keep)
     hdrs = [f for f in feats if f.name.startswith("header")]
     guides = union(prism(h.outline.offset(c.HDR_CLR + c.GUIDE_WALL, m3.JoinType.Miter), 0.0, FLOOR + 0.01) for h in hdrs)
     guides = guides ^ prism(skirt_xy.offset(-0.3, Round), 0.0, FLOOR + 0.01)
@@ -353,7 +353,7 @@ def tip_angles(s, F, masses, contact_xy, contact_r, pull_pt, pull_dirs_deg):
 def run_stand_checks(s, b, c, feats, case, plate_h, base, geo, F, info, screw, extra, cable, plug, keyinfo):
     Z0 = -c.LIP_T
     print("\n7. Stand: what has to stay clear")
-    tipb = 23.95
+    tipb = plug_face_y(geo)
     plug_b = prism(rect(-s.PLUG_W/2, s.PLUG_W/2, tipb, tipb + s.PLUG_L), b.port_z - s.PLUG_T/2, b.port_z + s.PLUG_T/2)
     v = (F.W(plug_b) ^ (F.W(case) + base)).volume()
     check(v < 1e-3, f"plug body {s.PLUG_W:g} x {s.PLUG_T:g} x {s.PLUG_L:g} clear of hoop and base", f"{v:.4f} mm^3")
@@ -434,7 +434,7 @@ def run_stand_checks(s, b, c, feats, case, plate_h, base, geo, F, info, screw, e
     sig = M_push/sec(w, s.HD)
     check(s.PETG_MPA/sig >= s.MIN_SF, f"{s.PUSH_N:g} N plug push, arm as a cantilever from the neck",
           f"M {M_push:.0f} N.mm, {sig:.1f} MPa, SF {s.PETG_MPA/sig:.1f}")
-    reach = (23.95 + s.PLUG_L) + ring_radii(s, geo)[1]
+    reach = (plug_face_y(geo) + s.PLUG_L) + ring_radii(s, geo)[1]
     M_pull = s.PULL_N*reach/sides
     sig2 = M_pull/sec(s.HD, w)
     check(s.PETG_MPA/sig2 >= s.MIN_SF, f"{s.PULL_N:g} N backward on the plug end, out of plane",
@@ -468,7 +468,7 @@ def stability(s, b, c, F, case, plate_h, base, geo, cable_exit):
         masses.append((g, tmm.center_mass))
         print(f"      {nm:22s} {g:5.1f} g at height {tmm.center_mass[2]:5.1f}")
     masses.append((s.BADGE_G, F.pt([0, 0, 2.5])))
-    masses.append((s.PLUG_G, F.pt([0, 23.95 + s.PLUG_L/2, b.port_z])))
+    masses.append((s.PLUG_G, F.pt([0, plug_face_y(geo) + s.PLUG_L/2, b.port_z])))
     print(f"      {'badge':22s} {s.BADGE_G:5.1f} g;  plug + cable {s.PLUG_G:.1f} g")
     worst, com, Wt = tip_angles(s, F, masses, np.array([0, geo["Yb"]]), s.BASE_R - 0.6, cable_exit, 90.0)
     print(f"      total {Wt/G:.0f} g, centre of mass X {com[0]:+.1f} Y {com[1] - geo['Yb']:+.1f} from the base centre, "
@@ -499,8 +499,14 @@ def bezier(P, n=40):
     return ((1-t)**3)*P[0] + 3*((1-t)**2)*t*P[1] + 3*(1-t)*t*t*P[2] + t**3*P[3]
 
 
+def plug_face_y(geo):
+    """Badge y where the straight plug body starts: the crown boss face plus the 0.015 the stands were laid
+    out with (23.95 at RAD_CLR 1.15), to the micron so that value stays exact."""
+    return round(geo["boss"].bounds()[3] + 0.015, 6)
+
+
 def cable_and_plug(s, b, F, geo, keyinfo):
-    tipb = 23.95
+    tipb = plug_face_y(geo)
     body = prism(rect(-s.PLUG_W/2, s.PLUG_W/2, tipb, tipb + s.PLUG_L).offset(-1.5, Round).offset(1.5, Round),
                  b.port_z - s.PLUG_T/2, b.port_z + s.PLUG_T/2)
     shell = prism(rect(-4.2, 4.2, b.tip_y - (U.SHELL_LEN - (tipb - b.tip_y)), tipb).offset(-0.6, Round).offset(0.6, Round),
