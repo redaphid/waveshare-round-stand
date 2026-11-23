@@ -12,7 +12,7 @@ number (`docs/PRINT-LOG.md`, template at its top).
 
 | symptom | constant | file | rebuild |
 |---|---|---|---|
-| badge will not drop into the case, or rattles | `Case.RAD_CLR` | `pocketwatch/build_pocketwatch.py` | `./build_all.sh --no-render` (shared) |
+| glass will not seat, badge will not drop into the case, or rattles | `Case.RAD_CLR` | `pocketwatch/build_pocketwatch.py` | `./tools/py pocketwatch/build_pocketwatch_usb.py --no-render`, then `./build_all.sh --no-render` (shared; see *Ceiling*) |
 | plate will not go in, or falls out | `PLATE_DISC_CLR` (`_ROOMY` for the roomy files) | `pocketwatch/build_pocketwatch_usb.py` | that script, then the stands that use the plate: `./build_all.sh --no-render` |
 | plate will not snap, or snaps loose (battery case) | `Case.SNAP_INT`, `Case.SNAP_CLR` | `pocketwatch/build_pocketwatch.py` | `./build_all.sh --no-render` |
 | USB-C plug will not enter | `Case.RECESS_GROW` (whole slot), `RECESS_W`, `RECESS_T` | `pocketwatch/build_pocketwatch.py` | `./build_all.sh --no-render` |
@@ -32,6 +32,27 @@ tight → +0.10 per side; loose → -0.05 per side. Say which and why. History,
 so you do not repeat it: `RAD_CLR` 0.85 did not fit, 1.15 did; `Stand.FIT`
 0.25 and 0.12 printed loose, now 0.08; plate 0.18 fit after one print came
 out ~1 mm large.
+
+### Ceiling: the case bore
+
+A tight case takes **one step, +0.10 per side: `RAD_CLR` 1.15 → 1.25**, and
+that is about the limit. Measured against every check:
+
+| `RAD_CLR` | USB-only case | the rest |
+|---|---|---|
+| 1.15 (today) | ok | all ok |
+| 1.16 | ok | telegraph fails (hoop-and-case watertight) |
+| 1.17 to 1.20 | ok | telegraph and hoop (plug body hits the hoop), wearable fail |
+| 1.25 | ok | nine scripts fail (sidepod, stalk, pendant, kids case, hoop, telegraph, kickstand, braun, te) |
+| 1.30 | fails watertight | |
+| 1.45 | fails `plug shell engages the port >= 3.5` (3.4) | |
+
+So: for the case alone, set 1.25, build `pocketwatch/build_pocketwatch_usb.py`,
+and keep the change on your branch or add a roomy-bore variant (like the
+`roomy` plates). Past 1.25, clearance cannot fix it: the plug-engagement
+geometry (the crown boss and the USB-C recess in `Case`) must change, which
+is a design change to agree with the owner. The telegraph has no headroom
+at all above 1.15 today.
 
 ## 3. Rebuild, check, render, compare
 

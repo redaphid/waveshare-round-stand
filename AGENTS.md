@@ -23,6 +23,7 @@ gauge or print that settles each.
 | question | answer |
 |---|---|
 | **What do I print first?** | **1. `stl/fit-gauges/Pocketwatch - bore fit gauge.stl`** (about 10 min, bezel down). It sets the one clearance that decides whether the case fits on *your* printer. **2. The pocketwatch case:** `stl/pocketwatch/Pocketwatch USB-only - plate.stl` (print-proven) and `- case.stl`. Details below. |
+| **The case is too tight; the glass will not seat?** | Use the **`tune-fit`** skill. The number is `Case.RAD_CLR` in `pocketwatch/build_pocketwatch.py` (1.15 per side today); step **+0.10 per side**. The **USB-only case** takes up to **about 1.25** (1.30 fails its watertight check). Past that, the plug-engagement geometry must change, not just the clearance. `RAD_CLR` is shared: the **telegraph and hoop have no headroom** and fail from 1.16, so change it on your branch for the case, or add a roomy-bore variant. Check: `./tools/py pocketwatch/build_pocketwatch_usb.py --no-render`, every line `[ok]`, then look at `pocketwatch/renders/usb-section-post.png`. Details in *Where the unknowns are*. |
 | **How do I change a model?** | Find its row in `stl/catalog.toml` (it names the script and the class or constants to edit) → edit the number → `./tools/py <script>` → every check must print `[ok]` → look at its renders → `./tools/py build_catalog.py`. Worked example below. |
 | **Where are the unknowns?** | Two kinds. **Printer clearances** (bore, plate, tenon, USB-C slot, telegraph pin) and **hardware guesses** (the switch and JST position and height, tagged `ph(...)` in `Badge`; `./tools/py pocketwatch/build_pocketwatch.py --no-render` lists them first). Table below. |
 
@@ -47,7 +48,9 @@ gauge or print that settles each.
      notch and a slot 2 mm bigger all round. Bezel down.
    - If your printer runs oversize, use `- plate (roomy).stl` (0.65 per side
      instead of 0.18; unprinted).
-   If your gauge said another ring, set `RAD_CLR` first (see *Change a model*).
+   If your gauge said a tighter ring (1 to 3), set `RAD_CLR` to it first (see
+   *Change a model*). If even ring 4 is tight, see *the case is too tight*
+   above: the gauge stops at 1.15, and the case has little room past it.
 3. **Telegraph key stand** (featured #2): the same case leaning back 40° in a
    hoop, with a brass-look key on the base that clicks BOOT. Status
    **printed** on the owner's word only (2026-11-22); fit details were never
@@ -190,7 +193,7 @@ gauge or the print named, then change the constant.
 
 | what | file | constant (today) | settled by |
 |---|---|---|---|
-| case bore around the badge, per side | `pocketwatch/build_pocketwatch.py` | `Case.RAD_CLR` (1.15) | bore fit gauge (`CLRS` in `build_bore_gauge.py`); owner: only 1.15 fit, 0.85 did not |
+| case bore around the badge, per side | `pocketwatch/build_pocketwatch.py` | `Case.RAD_CLR` (1.15) | bore fit gauge (`CLRS` in `build_bore_gauge.py`); owner: only 1.15 fit, 0.85 did not. **Ceiling, measured against every check:** the USB-only case passes to 1.25 (1.30 fails watertight; 1.45 fails `plug shell engages the port >= 3.5` at 3.4). The constant is shared: the telegraph fails at 1.16 (watertight) and 1.17 (plug body hits the hoop), the hoop and wearable from 1.17, and at 1.25 nine scripts fail. |
 | back plate in the case, per side | `pocketwatch/build_pocketwatch_usb.py` | `PLATE_DISC_CLR` (0.18), `PLATE_DISC_CLR_ROOMY` (0.65) | print the plate; one owner print came out ~1 mm large, the next fit |
 | USB-C slot | `pocketwatch/build_pocketwatch.py` | `Case.RECESS_W` 9.4, `RECESS_T` 3.6, `RECESS_GROW` 2.0 | the case print: does your cable's plug enter? (10.0 x 4.3 was too tight; grown 2 mm all round, unprinted) |
 | hoop tenon in the base mortise, per side | `pocketwatch/stands/hoop/build_hoop.py` | `Stand.FIT` (0.08) | hoop or telegraph base print (0.25 and 0.12 printed loose) |
