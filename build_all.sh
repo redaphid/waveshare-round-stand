@@ -25,21 +25,7 @@ echo "== pod (venv) =="
 echo "== catalog: every STL has a row in stl/catalog.toml; regenerate stl/README.md =="
 python3 build_catalog.py
 
-echo "== docs: relative links and images =="
-python3 - <<'PY'
-import re, os, sys
-docs = ["README.md","PRINTING.md","BOARDS.md","CLAUDE.md","stl/README.md","pod/README.md",
-        "reference/SOURCES.md","archive/NOTE.md","docs/DESIGN.md","docs/TOOLCHAIN.md","docs/PRINT-LOG.md"]
-bad = 0
-for doc in docs:
-    if not os.path.exists(doc): print("  missing doc", doc); bad += 1; continue
-    base = os.path.dirname(doc)
-    for m in re.finditer(r'!?\[[^\]]*\]\((<[^>]+>|[^)]+)\)', open(doc).read()):
-        t = m.group(1).strip("<>")
-        if t.startswith("http"): continue
-        if not os.path.exists(os.path.normpath(os.path.join(base, t.split('#')[0]))):
-            print(f"  BROKEN {doc} -> {t}"); bad += 1
-print(f"  {bad} broken"); sys.exit(1 if bad else 0)
-PY
+echo "== docs: links, images and backticked paths in every tracked *.md =="
+python3 check_docs.py
 rm -rf __pycache__ pod/__pycache__
 echo "== OK. Now LOOK at renders/, preview-*.png and pod/renders/ before you report. =="
