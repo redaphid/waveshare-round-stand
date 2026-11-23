@@ -1,7 +1,7 @@
 # Pocketwatch cases for Waveshare's round badge
 
 <!-- TOUR -->
-[![The board's front door: the pocketwatch case, the telegraph, and four doors: Print it, Change it, Prove it, Talk to us. Tap to take the tour.](docs/img/board/tour-poster.png)](https://draw.hypnodroid.com/b/pocketwatch-schematics/p/golden-path)
+[![A ten-second fly-through of the draw board: the front door, the pocketwatch case, the telegraph, and the Print it, Change it, Prove it and Talk to us doors. Tap to take the tour.](docs/img/board/tour-teaser.webp)](https://draw.hypnodroid.com/b/pocketwatch-schematics/p/golden-path)
 
 *Tap the picture for the board's camera tour.*
 
