@@ -25,7 +25,13 @@ moves the printer-dependent clearances to your printer.
 | ring 4 fits, ring 3 does not | 1.15 (today's value, no change) |
 | ring 3 fits | 0.85 (or split the difference with ring 2 if 2 nearly fits) |
 | ring 2 or ring 1 fits | that ring's value |
-| no ring fits | add rings: extend `CLRS` (e.g. `1.45`), `./tools/py pocketwatch/build_bore_gauge.py`, print again |
+| no ring fits (ring 4 is tight) | print a looser gauge that stays under the ceiling: `CLRS = [1.05, 1.15, 1.20, 1.25]`, `./tools/py pocketwatch/build_bore_gauge.py`, print again. If 1.25 is still tight, clearance alone cannot fix it: the `tune-fit` skill, *Ceiling*. |
+
+**The bore has a ceiling.** Measured against every check in the build:
+the USB-only case passes up to `RAD_CLR` 1.25 (1.30 fails its watertight
+check; 1.45 fails `plug shell engages the port >= 3.5` at 3.4). `RAD_CLR` is
+shared, and the other designs allow less: the telegraph fails at 1.16, and
+the hoop and wearable pendant from 1.17. Never offer a gauge ring above 1.25.
 
 ## 2. The other printer-dependent numbers
 
@@ -52,7 +58,10 @@ dot counts, one clearance each), add it to `stl/fit-gauges/` and a row in
 2. Change the constant. `RAD_CLR` lives in the shared `Case`, so it moves
    every pocketwatch design: `./build_all.sh --no-render`. Every check must
    pass; a `[FAIL]` means the new clearance broke a wall or a snap, and that
-   is worth telling the owner.
+   is worth telling the owner. Above 1.15 expect the telegraph, hoop and
+   wearable to fail (see the ceiling above): keep the change on your branch
+   for the case alone, or add a roomy-bore variant the way the `roomy`
+   plates were added, and say so in the PR.
 3. Render the case: `./tools/py pocketwatch/build_pocketwatch_usb.py` and look
    at `pocketwatch/renders/usb-section-post.png`: is the bore gap what you
    set?
