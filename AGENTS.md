@@ -50,7 +50,10 @@ gauge or print that settles each.
      instead of 0.18; unprinted).
    If your gauge said a tighter ring (1 to 3), set `RAD_CLR` to it first (see
    *Change a model*). If even ring 4 is tight, see *the case is too tight*
-   above: the gauge stops at 1.15, and the case has little room past it.
+   above: the gauge stops at 1.15, and the case has little room past it. To
+   find out whether 1.25 is enough before printing a case, print a looser
+   gauge: set `CLRS = [1.05, 1.15, 1.20, 1.25]` in `build_bore_gauge.py`
+   (tried: builds watertight) and read it the same way.
 3. **Telegraph key stand** (featured #2): the same case leaning back 40° in a
    hoop, with a brass-look key on the base that clicks BOOT. Status
    **printed** on the owner's word only (2026-11-22); fit details were never
