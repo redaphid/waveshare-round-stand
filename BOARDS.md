@@ -4,10 +4,16 @@ Everything here was read off the outline drawings in `reference/`. Waveshare
 states none of it in page text — the product pages say only "tiny size" and
 point at an image.
 
+**Calipers beat the drawing.** The owner's badge measures Ø35.31 across (the
+drawing says 36.5) and its header sockets span 30.0 (the drawing says about
+27). The pocketwatch designs use the measured numbers; the retired wedge
+stands keep the drawing's. Every measurement, with its source:
+[docs/MEASUREMENTS.md](docs/MEASUREMENTS.md).
+
 ## ESP32-S3-LCD-1.28 (SKU 26541)
 
-Non-touch, GC9A01 driver. This is the board from Waveshare order
-`260713-003325-E0` (12 Jul 2026, 10 pcs).
+Non-touch, GC9A01 driver. This is the board the owner has (10 bought in
+July 2026).
 
 | feature | value |
 |---|---|
@@ -17,7 +23,7 @@ Non-touch, GC9A01 driver. This is the board from Waveshare order
 | USB-C tab | **sticks out past the disc**: 18.37 mm wide at its root, reaches r ≈ 21.1 (vs R 18.25) — measured off the drawing, 13.3 px/mm, 09-18. Irrelevant to the stands (it is at the top); in the pod it goes down into the plug slot. |
 | USB-C | 12.81 mm wide, sits on the tab, **inserts sideways/upward** |
 | active display | **Ø 32.4 mm**, 240 × 240 |
-| headers | H1 + H2, 1.27 mm pitch, 20 pins each, ~27.00 mm outer span |
+| headers | H1 + H2, 1.27 mm pitch, 20 pins each, ~27.00 mm outer span on the drawing; **30.0 measured** with sockets fitted |
 | buttons | BOOT and RESET, lower left and lower right |
 | battery | MX1.25 2-pin |
 

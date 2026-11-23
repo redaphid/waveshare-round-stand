@@ -1,4 +1,9 @@
-# Printing these
+# Printing the wedge desk stands (retired)
+
+**This page covers only the retired September wedge stands and docks.** For
+the current designs (the pocketwatch case and the telegraph key) read
+[docs/FOR-PRINTERS.md](docs/FOR-PRINTERS.md). Why they were retired:
+[docs/models/wedge-stands.md](docs/models/wedge-stands.md).
 
 ## Pick the right file
 
@@ -21,20 +26,13 @@ If you're unsure which 1.46 you have, see the "telling them apart" note in
 
 ## Slicer settings
 
-Slice in the ElegooSlicer GUI with the same trio as the last successful print on
-the machine (`ECC2_0.6_strontium-small-bear-2-WORKING-5x_PRUSA Strontium_0.3`):
+The proven 1.46 print (2026-09-18) was PETG with a 0.6 mm nozzle at 0.30 mm
+layers. Masses
+quoted below assume PETG at 1.27 g/cm³. The owner's exact presets are in
+[docs/ELEGOO.md](docs/ELEGOO.md).
 
-| | preset |
-|---|---|
-| printer | `Elegoo Centauri Carbon 2 0.6 nozzle` |
-| process | `0.30mm Standard @Elegoo CC2 0.6 nozzle - Copy` |
-| filament | `PRUSA Strontium` |
-
-`PRUSA Strontium` inherits `Elegoo PETG PRO @ECC2` — **PETG, 260 °C nozzle,
-85 °C bed**, despite the name. Masses quoted below assume PETG at 1.27 g/cm³.
-
-Nothing exotic is needed: 2 walls and 15 % infill (the process default) is
-plenty. No supports. No brim needed — the base is flat and wide.
+Nothing exotic is needed: 2 walls and 15 % infill is plenty. No supports. No
+brim needed — the base is flat and wide.
 
 ## Orientation on the plate
 
@@ -193,21 +191,7 @@ python3 check_stl.py "stl/large/Stand - cover glass.stl"
 `check_stl.py` exits non-zero if the mesh came out unwatertight, so it is worth
 running before every slice.
 
-## Automating the slice — unfinished
+## Automating the slice
 
-Driving `elegoo-slicer.exe` headless from WSL was attempted and abandoned. Two
-obstacles were solved and are captured in `flatten_presets.py`:
-
-1. ElegooSlicer's user presets omit the `type` field the CLI demands, and it
-   also rejects a preset with no `from` field.
-2. The CLI does not resolve a preset's `inherits` chain when the preset is
-   handed to it as a standalone file, so parent-only settings (`layer_gcode`,
-   `use_relative_e_distances`, …) silently vanish and slicing dies on a
-   validation error. `flatten_presets.py` walks and merges the chain, scoped to
-   the Elegoo vendor — a global index is wrong, because names like
-   `fdm_machine_common` are reused across vendors and resolve to another
-   printer's preset.
-
-A third failure was not solved: with fully flattened presets the CLI exits 239
-and prints no diagnostic at all, even at `--debug 5`. Slicing in the GUI is the
-supported path for now.
+Headless slicing was tried and dropped. The post-mortem and
+`tools/elegoo/flatten_presets.py` are in [docs/ELEGOO.md](docs/ELEGOO.md).

@@ -1,148 +1,142 @@
-# Waveshare round-board desk stands
+# Pocketwatch cases for Waveshare's round badge
 
-Minimal angled stands for Waveshare's round ESP32-S3 display boards. One design,
-three sizes: a tapered wedge with a groove angled 20° back from vertical, and a
-cable notch cut straight through the middle so a USB-C lead runs *through* the
-stand rather than over it. The board drops in rim-first — nothing clips, nothing
-flexes, no fasteners.
+<!-- TOUR -->
+[![The pocketwatch-schematics draw board: measurements, the telegraph key, widgets and nine stand concepts](docs/img/board/board-overview.png)](https://draw.hypnodroid.com/b/pocketwatch-schematics)
 
-![low stands](preview-stands.png)
+Printable cases and stands for **Waveshare's 1.28" round ESP32-S3 display
+badge** (ESP32-S3-LCD-1.28). Every model is a **parametric Python script**:
+change a number, rerun it, read its checks, print the STL it writes. Two
+designs lead: the **pocketwatch case** and the **telegraph key stand**.
 
-| board | stand | groove | notch | screen top | material |
-|---|---|---|---|---|---|
-| ESP32-S3-LCD-1.28 (SKU 26541) | [`stl/small/Stand.stl`](stl/small/Stand.stl) | 5.4 × 5 mm (rear wall 3 mm) | 13 mm | 41.6 mm | 4.6 g |
-| ESP32-S3-Touch-LCD-1.46, cover glass | [`stl/large/Stand - cover glass.stl`](<stl/large/Stand - cover glass.stl>) | 13.1 × 8 mm | 14 mm | 50.6 mm | 8.9 g |
-| ESP32-S3-Touch-LCD-1.46, bare | [`stl/large/Stand - no cover glass.stl`](<stl/large/Stand - no cover glass.stl>) | 11.5 × 8 mm | 14 mm | 48.5 mm | 8.2 g |
+- **Have a printer?** Read **[docs/FOR-PRINTERS.md](docs/FOR-PRINTERS.md)**.
+  Print one 10-minute gauge, then the case.
+- **Just want files?** Every STL, with its print status:
+  **[stl/README.md](stl/README.md)**.
+- **Using Claude or another agent?** It starts at **[AGENTS.md](AGENTS.md)**.
 
-### Docks — for a straight USB-C cable in the bottom port
+**Proven** means printed and logged as working in
+[docs/PRINT-LOG.md](docs/PRINT-LOG.md). **Concept** means it passes its
+script's checks and has never been printed.
 
-The low stands leave ~5 mm under the board rim. A straight USB-C plug body is
-~20–25 mm, so with the 1.46's bottom port in use the board can't seat — it ends
-up lying across the stand. The docks lift the board so the plug hangs straight
-down through the notch and the cable turns out the back at desk level.
+## 1. Pocketwatch case
 
-![docks](preview-docks.png)
+<p>
+<img src="pocketwatch/renders/usb-exploded.png" width="49%" alt="USB-only pocketwatch case, exploded from the back: case, badge, plate">
+<img src="docs/img/board/measurements.png" width="49%" alt="The board's measured side section and front view of the pocketwatch case">
+</p>
 
-| board | dock | clear under rim | screen top | material |
-|---|---|---|---|---|
-| ESP32-S3-Touch-LCD-1.46, cover glass | `large/Dock for straight cable - cover glass.stl` | **27.0 mm** | 72.6 mm | 19.8 g |
-| ESP32-S3-Touch-LCD-1.46, bare | `large/Dock for straight cable - no cover glass.stl` | **26.9 mm** | 70.5 mm | 17.9 g |
+The badge drops into a round watch case, screen first; the USB-C plug at
+12 o'clock is the crown and the cable is the chain. The **USB-only** version
+is Ø43.6 × 12.5 mm in two parts. Its **back plate is proven** (2026-10-13);
+the case needs one reprint to confirm the fix from its 2026-10-14 print.
 
-The 1.28 USB-C-down dock (for an L-shaped cable) was deleted on 2026-11-22; the last commit with it is `1580ce5`.
+**Print:** [`Pocketwatch USB-only - plate.stl`](<stl/pocketwatch/Pocketwatch USB-only - plate.stl>)
+and [`- case.stl`](<stl/pocketwatch/Pocketwatch USB-only - case.stl>).
+**More:** [docs/models/pocketwatch-case.md](docs/models/pocketwatch-case.md).
 
-Same groove, same notch (widened to 16 mm for plug bodies), ridge raised from
-16 mm to 38 mm and the groove moved 3 mm back. Sized for a 24 mm plug body with
-3 mm spare for the cable to turn. Because the board leans back, the plug leans
-*forward* as it descends and lands about 6 mm in from the front edge; the notch
-is open at both ends, so the cable runs out the front or 32 mm back along the
-floor to exit behind. Twice the material of the low stand — the cost of holding
-the board 27 mm off the desk.
+## 2. Telegraph key stand
 
-Print flat on the base. No supports, no overhangs. Masses are PETG.
+<p>
+<img src="pocketwatch/stands/hoop/renders/telegraph-01-hero.png" width="49%" alt="Render of the telegraph key stand: the case in a brass hoop leaning back 40 degrees, a brass knob in front">
+<img src="docs/img/board/telegraph-side.png" width="49%" alt="Side section of the telegraph key: a 2:1 lever on a pin, click at 3.2 mm of knob travel">
+</p>
 
-**1.28 with a button:** `stl/small/Stand - BOOT button.stl` adds a post behind the
-badge's BOOT switch so pressing the screen clicks it (RESET twin too). Details
-in [`PRINTING.md`](PRINTING.md#the-128-button-post-stands).
+The same case leans back 40° in a brass-look hoop. Press the knob in front:
+a **2:1 lever on a pin** tips its short arm into the BOOT button. It clicks
+after 3.2 mm of knob travel, then the lever lands on a stop, so a hard press
+never reaches the switch. **Printed** on the owner's word (2026-11-22); no
+fit details are logged yet.
 
-![BOOT post](renders/stand-1.28-BOOT-post-back.png)
+**Print:** the `(40 deg)` hoop, base and lever, plus the knob and pin, in
+[stl/pocketwatch/stands/hoop/](stl/pocketwatch/stands/hoop/).
+**More:** [docs/models/telegraph-key.md](docs/models/telegraph-key.md).
 
-**Printable files live in [`stl/`](stl/).**
+## Everything else
 
-## The pod — where this is heading
+106 STLs: **7 proven, 6 printed, 6 printed and needing work, 87 never
+printed.** One row per family; each page has pictures, files and the
+numbers to edit.
 
-The stands were the warm-up. The goal is an **instrument cluster clipped to the
-side of a monitor** with the look of a 2G DSM A-pillar gauge pod: cups, trim
-rings, gauges canted toward you. That lives in [`pod/`](pod/) — its own README,
-STLs, and renders. The stands and docks above stay as they are.
+| design | status | page |
+|---|---|---|
+| **Fit gauges** | proven | [fit-gauges](docs/models/fit-gauges.md) |
+| **Pocketwatch case** | plates proven; cases need a reprint | [pocketwatch-case](docs/models/pocketwatch-case.md) |
+| **Telegraph key stand** | printed (40°); 50° concept | [telegraph-key](docs/models/telegraph-key.md) |
+| Hoop stand | printed; fixes unprinted | [hoop-stand](docs/models/hoop-stand.md) |
+| Pendant, kids case | pendant plate proven, case fix unprinted; kids case concept | [pendant](docs/models/pendant.md) |
+| Battery pendant | concept | [battery-pendant](docs/models/battery-pendant.md) |
+| Wearable pendants | concept | [wearable-pendants](docs/models/wearable-pendants.md) |
+| Monitor gauge pod | concept | [monitor-pod](docs/models/monitor-pod.md) |
+| 9 stands and clips | concept | [stand-concepts](docs/models/stand-concepts.md) |
 
-![pod](pod/renders/01-pod-gap12-front-quarter.png)
+**Earlier designs:** the September wedge desk stands are retired. They were
+print-proven, but in the owner's words they "didn't protect the device
+enough". [docs/models/wedge-stands.md](docs/models/wedge-stands.md).
 
-## Start here
+## Still undecided
 
-- **[`PRINTING.md`](PRINTING.md)** — which file to print, slicer presets, plate
-  orientation, how to seat each board, what the notch does and doesn't do.
-- **[`BOARDS.md`](BOARDS.md)** — verified dimensions and pin maps for both
-  boards, how the two sizes actually compare, and how to tell the two 1.46
-  variants apart.
-- **[`reference/`](reference/)** — Waveshare's own outline and pinout drawings,
-  with source URLs in [`SOURCES.md`](reference/SOURCES.md).
+Two kinds of number are not settled:
 
-## Three things worth knowing
+- **Printer clearances** (bore, plate, USB-C slot, telegraph pin). They
+  depend on your printer; the fit gauges settle them.
+- **Hardware guesses**: where the BOOT switch and the battery connector sit
+  on the badge, and how tall they are. Calipers settle them.
 
-1. **The 1.46 ships in two cover-glass options and they are different parts** —
-   Ø44.77 / 12.30 mm thick with glass, Ø42.58 / 10.65 mm without. The grooves
-   differ by 1.65 mm. Check yours before printing; see `BOARDS.md`.
-2. **On the low stands the notch is a cable route, not a plug socket.** It
-   leaves 4.1–5.4 mm under the board rim — fine for a bare lead or a
-   right-angle plug, not a straight plug in the bottom port. **For a straight
-   plug, print the dock.** See `PRINTING.md`.
-3. **The two boards are closer in size than they look.** The 1.46's PCB is only
-   6.1 mm wider than the 1.28's. What differs enormously is thickness — 1.6 mm
-   of bare PCB rim versus a 12.3 mm stack.
+[docs/FOR-PRINTERS.md](docs/FOR-PRINTERS.md) says which to settle first.
+[docs/MEASUREMENTS.md](docs/MEASUREMENTS.md) lists every measured number and
+every guess.
 
-## Why these aren't from Printables
+## Change a model
 
-Nothing there targets these boards. Searches surface models for the
-**ESP32-S3-Touch-LCD-1.28** (a different outline from the non-touch 1.28) or for
-the bare 1.28-inch LCD module. So these are built from Waveshare's outline
-drawings instead — neither product page states its dimensions in text, they
-exist only inside a diagram image.
+Find the design's row in [stl/catalog.toml](stl/catalog.toml): it names the
+script and the constants to edit. Edit one number, then run the script from
+the repo root:
 
-## Design
+```
+./setup.sh                                                       # once
+./tools/py pocketwatch/build_pocketwatch_usb.py --no-render     # checks only
+```
 
-A straight groove holding a round board is the plate-stand trick: the disc
-contacts the groove on two lines and cannot rock. It buys three things over a
-cradle or a tripod — no supports needed, no thin snap features to fatigue, and
-because the board is round you can rotate it to put the connectors where you
-want them.
+Every check prints `[ok]` or `[FAIL]`. Look at the renders before you
+print. The `change-a-model` skill walks through it, with a worked example.
 
-The solid is three slabs stacked across the width: full wedge, base slab, full
-wedge. The two outer slabs carry the groove; the middle one is just the floor,
-which is what makes the notch. Because the slabs share their lower boundary
-exactly, the exposed face at each internal boundary is one simple polygon, so
-the mesh comes out watertight without needing a general polygon boolean.
-`check_stl.py` proves that rather than assuming it.
+## The draw board
 
-## Files
+The board is a zoomable, to-scale schematic of the case and the telegraph:
+measurements, open guesses, fits and print results, with proven work
+separate from concept art. Anyone can view it. Connect it to your Claude:
 
-| file | what it is |
+```
+claude mcp add --transport http pocketwatch-board https://draw.hypnodroid.com/view/pocketwatch-schematics/mcp
+```
+
+Then ask Claude to open the board's tour. To draw on the board, ask Aaron to
+add you. The draw mod for Claude Code is
+[redaphid/draw-mod](https://github.com/redaphid/draw-mod), a private repo:
+ask Aaron for access. More: [docs/BOARD.md](docs/BOARD.md).
+
+## Printer trouble
+
+> Since June 2026 most prints on the owner's Centauri Carbon 2 (CC2) with the
+> CANVAS multi-filament unit have failed. The first layer does not stick,
+> curls onto the nozzle, or the job stops with a filament error at the
+> toolhead (1243, 1252, 1265).
+
+What has been tried and what to check next:
+[docs/PRINTER-TROUBLE.md](docs/PRINTER-TROUBLE.md). Help is welcome.
+
+## More
+
+| doc | what |
 |---|---|
-| `build_stands.py` | generates all five STLs from one parameter table; prints a geometry report and asserts the board fits the base, the centre of mass stays centred, the notch floor clears the groove floor, a cable actually fits under the rim, and — for docks — that a straight plug does |
-| `build_stand_button.py [BOOT\|RESET]` | the 1.28 stand with a switch post; manifold3d, in the `~/.venvs/cad` venv |
-| `build_all.sh` | everything below, plus a docs link-check; run before any commit |
-| `check_stl.py <f.stl>` | verifies watertightness, outward normals, no degenerate facets; exits non-zero on a problem |
-| `preview.py` → `preview-stands.png`, `preview-docks.png` | side sections and front elevations per family, board drawn in place |
-| `stand.scad` | same model, parametric, for tweaking in OpenSCAD; set `variant` at the top |
-| `flatten_presets.py` | resolves an ElegooSlicer preset's `inherits` chain into one flat preset — see the automation note in `PRINTING.md` |
-| `pod/` | the gauge pod + adjustable monitor clip — see [`pod/README.md`](pod/README.md) |
-| `archive/` | superseded files, kept rather than deleted; see `archive/NOTE.md` |
-
-## For whoever works on this next
-
-- **[`CLAUDE.md`](CLAUDE.md)** — the agent brief: what's verified, conventions, how to work here
-- **[`docs/DESIGN.md`](docs/DESIGN.md)** — every design decision and what it replaced
-- **[`docs/TOOLCHAIN.md`](docs/TOOLCHAIN.md)** — the two pipelines, venv setup, renderer limits, the slicer-CLI post-mortem
-- **[`docs/PRINT-LOG.md`](docs/PRINT-LOG.md)** — what has actually been printed
-- **`.claude/skills/`** — `rebuild-and-ship`, `add-board`, `measure-drawing`, `after-a-print`, `pod-iterate`
-- **`./build_all.sh`** — rebuild, validate, render, link-check, in one go
-
-## Regenerating
-
-```
-./build_all.sh
-```
-
-Or piecemeal:
-
-```
-python3 build_stands.py
-for f in stl/*/*.stl; do python3 check_stl.py "$f"; done
-python3 preview.py
-```
-
-Pure standard library for the STL generator and validator; matplotlib only for
-the previews.
+| [docs/STATUS.md](docs/STATUS.md) | state of every family, branch and loose end |
+| [docs/MEASUREMENTS.md](docs/MEASUREMENTS.md) | every measured dimension, who measured it, which constant uses it |
+| [docs/PRINT-LOG.md](docs/PRINT-LOG.md) | every print and what happened |
+| [docs/DESIGN.md](docs/DESIGN.md) | design decisions, dated |
+| [docs/TOOLCHAIN.md](docs/TOOLCHAIN.md) | the CAD libraries and the renderer |
+| [BOARDS.md](BOARDS.md) | board outlines and pin maps |
+| [.claude/skills/](.claude/skills/) | step-by-step procedures for agents |
 
 ## Licence
 
-MIT — see [`LICENSE`](LICENSE).
+MIT. See [`LICENSE`](LICENSE).
