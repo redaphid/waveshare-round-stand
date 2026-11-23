@@ -31,8 +31,10 @@ ask Aaron for access.
 | frame | what | open |
 |---|---|---|
 | `g-front` | **Start here**: the front door | [open](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=g-front) |
-| `golden-path` | the camera tour, a present path through the frames below | press Present on the board |
-| `g-map` | proven vs concept art | [open](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=g-map) |
+| `golden-path` | the camera tour, a present path through the guide | [play](https://draw.hypnodroid.com/b/pocketwatch-schematics/p/golden-path) |
+| `g-print`, `g-change`, `g-prove`, `g-talk` | the four doors: Print it, Change it, Prove it, Talk to us | [print](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=g-print), [change](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=g-change), [prove](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=g-prove), [talk](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=g-talk) |
+| `g-talk-1` | Connect your Claude | [open](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=g-talk-1) |
+| `g-map` | proven vs concept art: 1 proven, 3 partly, 14 concept | [open](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=g-map) |
 | Measurements | the battery pocketwatch cut through its centre, every measured number | [open](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=USQNRCETo-sCUMNKHuD6p) |
 | `fBat` | the batteries | [open](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=fBat) |
 | `fW` | the wearable pendants, side sections | [open](https://draw.hypnodroid.com/b/pocketwatch-schematics?frame=fW) |

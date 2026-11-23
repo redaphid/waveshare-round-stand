@@ -55,9 +55,11 @@ Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch.py` from the rep
 | **case** | `stl/pocketwatch/Pocketwatch USB-only - case.stl` | bezel face down, as exported | none |
 | **plate** | `stl/pocketwatch/Pocketwatch USB-only - plate.stl` | flat back down, guides and post up, as exported | none |
 
-Assembly: badge in from the back, screen first, tab in the pocket at 12 o'clock; plate snaps in flush with the back. The case wraps the tab in a small crown boss, and the USB-C slot through it is **10.0 × 4.3, flat roof, no taper**: the plug's metal shell, plus a little room for cables whose plastic starts close to the shell (9.6 pinched some). 3.0 mm of boss in front of the port, so about 3.7 of the 6.65 mm shell engages. Shares `Badge` and `Case` with the battery build, so `RAD_CLR` 1.15 and the slot size apply here too.
+Assembly: badge in from the back, screen first, tab in the pocket at 12 o'clock; plate snaps in flush with the back. The case wraps the tab in a small crown boss, and the USB-C slot through it is **14.0 × 8.3**, with 45° roof corners: the 10.0 × 4.3 slot printed on 2026-10-14 was too small, so `Case.RECESS_GROW` (2.0) now cuts it 2 mm bigger all round. A pry notch at 10 o'clock (seen from the front) lets the plate come back out. Shares `Badge` and `Case` with the battery build, so `RAD_CLR` 1.15 and the slot size apply here too.
 
-Rebuild: `~/.venvs/cad/bin/python pocketwatch/build_pocketwatch_usb.py` from the repo root. Add `--no-render` for a fast check run. Not yet printed.
+**Print status** (`docs/PRINT-LOG.md`): the plate is **proven** (2026-10-13). The case printed on 2026-10-13 ("Case is a great fit"), then on 2026-10-14 was too tight to pry off with too small a USB-C opening; the current file has both fixes and has not been printed since.
+
+Rebuild: `./tools/py pocketwatch/build_pocketwatch_usb.py` from the repo root. Add `--no-render` for a fast check run.
 
 ### Press BOOT from the back (no pressure on the glass)
 

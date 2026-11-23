@@ -14,11 +14,13 @@ disagree. `docs/BOARD.md` has screenshots of each part.
 ## Connect
 
 ```
-claude mcp add --transport http pocketwatch-board https://draw.hypnodroid.com/b/pocketwatch-schematics/mcp
+claude mcp add --transport http pocketwatch-board https://draw.hypnodroid.com/view/pocketwatch-schematics/mcp
 ```
-Sign in when asked. Anyone can read it. Writing needs the owner to grant
-edit access; without it, do the steps up to *Patch* and send the owner the
-change as a short list (frame id, old value, new value).
+That address is read-only and needs no sign-in. Writing needs the owner to
+add you; editors connect to `/b/pocketwatch-schematics/mcp` instead, which
+answers 401 without a signed-in, allowed account. Without edit access, do
+the steps up to *Patch* and send the owner the change as a short list
+(frame id, old value, new value).
 
 ## Rules
 
@@ -56,11 +58,14 @@ owner asked for this style over traced renders). After a geometry change:
 ```
 ./tools/py pocketwatch/stands/hoop/board_schematics.py /tmp/ops.json     # ms-side, ms-front, ms-rock
 ./tools/py pocketwatch/board/<name>.py /tmp/ops-<name>.json              # a concept: braun, hood, kickstand, ...
+./tools/py pocketwatch/stands/hoop/board_schematics_telegraph.py /tmp/tg-ops   # tg-overview, tg-side, tg-front, tg-lever
 ```
-Each writes one `put` op whose drafts keep the same ids, so `draw` with it
-overwrites those shapes in place. The telegraph frames have no generator in
-the repo: patch their labels from the summary lines the telegraph script
-prints (`nub arm`, `knob arm`, `click at`).
+Each of the first two writes one `put` op whose drafts keep the same ids, so
+`draw` with it overwrites those shapes in place. The telegraph generator
+refuses to write if any model check fails. It writes `frames.json`, one ops
+file per frame (`{"protocol":"draw","ops":[...]}`, deleting ids an earlier
+run drew that this one no longer does) and `fits.json`. Post each ops file
+to that frame's edit link, which only editors hold.
 
 ## Board skills and widgets
 

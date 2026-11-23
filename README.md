@@ -1,7 +1,9 @@
 # Pocketwatch cases for Waveshare's round badge
 
 <!-- TOUR -->
-[![The pocketwatch-schematics draw board: measurements, the telegraph key, widgets and nine stand concepts](docs/img/board/board-overview.png)](https://draw.hypnodroid.com/b/pocketwatch-schematics)
+[![The board's front door: the pocketwatch case, the telegraph, and four doors: Print it, Change it, Prove it, Talk to us. Tap to take the tour.](docs/img/board/tour-poster.png)](https://draw.hypnodroid.com/b/pocketwatch-schematics/p/golden-path)
+
+*Tap the picture for the board's camera tour.*
 
 Printable cases and stands for **Waveshare's 1.28" round ESP32-S3 display
 badge** (ESP32-S3-LCD-1.28). Every model is a **parametric Python script**:
