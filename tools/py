@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Run Python with the CAD stack. Use it from the repo root: tools/py pocketwatch/build_pocketwatch_usb.py
+# Picks, in order: $PYTHON, the repo's .venv (made by ./setup.sh), ~/.venvs/cad, python3.
+# tools/py --which prints the interpreter instead of running it.
+root=$(cd "$(dirname "$0")/.." && pwd)
+py=
+if [ -n "${PYTHON:-}" ]; then
+  py=$(command -v "$PYTHON") || { echo "PYTHON=$PYTHON not found" >&2; exit 1; }
+else
+  for c in "$root/.venv/bin/python" "$root/.venv/Scripts/python.exe" "$HOME/.venvs/cad/bin/python"; do
+    [ -x "$c" ] && { py=$c; break; }
+  done
+  py=${py:-$(command -v python3 || command -v python)}
+fi
+[ "${1:-}" = --which ] && { echo "$py"; exit 0; }
+exec "$py" "$@"

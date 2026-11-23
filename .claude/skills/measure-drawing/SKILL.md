@@ -5,8 +5,9 @@ description: Measure an undimensioned feature (switch, connector, hole) off a ve
 
 # Measure a feature off a drawing
 
-Worked for the 1.28's BOOT/RESET switches (±0.5 mm). System `python3` has
-numpy, scipy, PIL, matplotlib.
+Worked for the 1.28's BOOT/RESET switches (±0.5 mm). The repo's `.venv` has
+numpy, PIL and matplotlib; add scipy once with `./tools/py -m pip install scipy`
+and run your measuring script with `tools/py`.
 
 1. **Calibrate.** Threshold the PCB colour (blue: `b>90 & b>r+40 & b>g+15`),
    take the centroid as the disc centre and the 99.5th-percentile radius as
@@ -14,7 +15,7 @@ numpy, scipy, PIL, matplotlib.
 2. **Find the feature.** Threshold for its colour (white caps: all channels
    > 195), restrict to a radius band and a half of the disc where it must be,
    `scipy.ndimage.label`, keep blobs by area and by size in mm. **Print every
-   candidate** with its mm position, size, radius and angle from bottom — pick
+   candidate** with its mm position, size, radius and angle from bottom. Pick
    by eye from that list, don't trust a size filter alone (it picked one blob
    for both switches the first time).
 3. **Convert.** Back-view drawing → front-view coordinates negate x. State

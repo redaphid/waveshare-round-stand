@@ -460,7 +460,7 @@ def stability(r, s, b, F, case, plate_b, base_fb, geo, rock, m_r, cable_exit, F_
         masses.append((g_, H.to_tm(m).center_mass))
         print(f"      {nm:22s} {g_:5.1f} g")
     masses.append((s.BADGE_G, F.pt([0, 0, 2.5])))
-    masses.append((s.PLUG_G, F.pt([0, 23.95 + s.PLUG_L/2, b.port_z])))
+    masses.append((s.PLUG_G, F.pt([0, H.plug_face_y(geo) + s.PLUG_L/2, b.port_z])))
     cxy, cr = np.array([0, geo["Yb"]]), s.BASE_R - 0.6
     worst, com, Wt = H.tip_angles(s, F, masses, cxy, cr, cable_exit, 90.0)
     check(worst[0] >= s.MIN_TIP, f"tip angle >= {s.MIN_TIP:g} with the 1 N cable pull", f"worst {worst[0]:.1f} deg toward {worst[1]:.0f} deg")

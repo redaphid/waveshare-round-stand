@@ -265,7 +265,8 @@ def thinnest_beside_slits(face, f, py, W, x_from):
     thinnest = W + 0.3
     for y_e, sgn in slit_sides(f, py):
         for x in np.arange(x_from, f.F_ROOT - 0.3, 0.1):
-            if (face ^ rect(x - 0.01, x + 0.01, *sorted((y_e + sgn*0.01, y_e + sgn*0.06)))).area() > 1e-4:
+            edge = rect(x - 0.01, x + 0.01, *sorted((y_e + sgn*0.01, y_e + sgn*0.06)))
+            if (face ^ edge).area() > 0.99*edge.area():     # across the whole sample: one over a square cut reads part of a strip
                 thinnest = min(thinnest, (face ^ rect(x - 0.01, x + 0.01, *sorted((y_e, y_e + sgn*(W + 0.3))))).area()/0.02)
     return thinnest
 

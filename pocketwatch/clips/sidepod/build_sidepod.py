@@ -326,7 +326,7 @@ def run_checks(b, c, feats, body, plate, ring, geo):
     thin = (grown - geo["cone"] - body_b).volume()
     check(thin < 0.5, f"hood wall >= {c.MIN_WALL} all round the cone", f"{thin:.2f} mm^3 short")
     wall = geo["BOSS_TIP"] - b.tip_y
-    check(abs(wall - 2.95) < 0.1, "crown wall in front of the port = the printed USB-only case's", f"{wall:.2f} mm")
+    check(abs(wall - c.PORT_WALL) < 0.1, "crown wall in front of the port = the printed USB-only case's", f"{wall:.2f} mm")
     check(SHELL_LEN - wall >= MIN_PLUG_ENGAGE, f"plug shell engages the port >= {MIN_PLUG_ENGAGE}",
           f"{SHELL_LEN - wall:.2f} of {SHELL_LEN}")
     pry = box(geo["R_REAR"] - 0.4, geo["R_REAR"] + 1.5, -2.4, 2.4, geo["Z_CASE"] - 1.4, geo["Z_CASE"])

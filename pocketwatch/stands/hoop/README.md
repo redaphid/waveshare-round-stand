@@ -40,7 +40,7 @@ No supports on any part, and no hardware. The default mortise is 0.08 per side (
 **Scores:** aesthetics **4**/5 · printability **4**/5 · robustness **4**/5
 
 ## Print result (2026-10-13), then the snap
-Printed with the screw joint: the case wobbled in the mortise at 0.25 mm per side. The snap version replaces the screw: two 1.5 mm arms on the tenon, a 0.45 mm barb each, 8.3 mm of flex length (1.1% strain, push-in about 2 N before friction, pull-out about 29 N, above a 20 N plug pull). The mortise is 0.12 per side. The screw version is in `archive/hoop-screw-v1/`. Not printed yet.
+Printed with the screw joint: the case wobbled in the mortise at 0.25 mm per side. The snap version replaces the screw: two 1.5 mm arms on the tenon, a 0.45 mm barb each, 8.3 mm of flex length (1.1% strain, push-in about 2 N before friction, pull-out about 29 N, above a 20 N plug pull). The mortise is 0.12 per side. The screw version's script and notes are in `archive/hoop-screw-v1/`; its STLs were deleted and are last in commit `1580ce5`. Not printed yet.
 
 ## Front-BOOT (replaced)
 A rocker key on the base, replaced by the telegraph key below. Its STLs, renders and notes were deleted on 2026-11-22 and are last in commit `1580ce5`. `build_hoop_frontboot.py` stays only as the library the telegraph and the board schematics import; it still runs its checks.

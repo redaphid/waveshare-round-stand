@@ -24,7 +24,7 @@ import sys, math, os
 from dataclasses import dataclass
 sys.path.insert(0, "pocketwatch")
 import numpy as np, manifold3d as m3, trimesh
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render)
 
 Miter = m3.JoinType.Miter
@@ -225,7 +225,7 @@ def build(b: Badge, c: Case, k: Kick):
     case -= prism(well_xy, FLOOR, Z_BACK + 1)
     case -= window.translate([0, 0, -c.LIP_T - 0.01])
     case -= groove_p
-    case -= all_keep
+    case -= case_keepouts(keep)
     case -= cavity
     # pin holes straight through both cheeks
     case -= cyl_x(-30, 30, k.Y_H, k.Z_H, k.PIN_D/2)
@@ -446,7 +446,7 @@ def run_checks(b, c, k, feats, case, plate, leg, bump, pin, geo):
     probe = m3.Manifold.cylinder(c.LIP_T + 2, (b.active_d + 1)/2, (b.active_d + 1)/2, SEG).translate([0, 0, -c.LIP_T - 1])
     check(ov(probe, case) < 1e-4, "window clears the active display + 1", f"window {2*(b.r - c.LIP_OVERLAP):.2f}")
     wall = bbox(case)[1, 1] - b.tip_y
-    check(abs(wall - 2.95) < 0.1 and k.SHELL_LEN - wall >= k.MIN_PLUG_ENGAGE,
+    check(abs(wall - c.PORT_WALL) < 0.1 and k.SHELL_LEN - wall >= k.MIN_PLUG_ENGAGE,
           "crown wall in front of the port unchanged; plug shell engages", f"{wall:.2f} wall, {k.SHELL_LEN - wall:.1f} engaged")
     check(ov(case, plate) < 1e-3, "case and plate do not overlap", f"{ov(case, plate):.4f} mm^3")
     s = ov(case, plate.translate([0, 0, geo["bh_p"]]))

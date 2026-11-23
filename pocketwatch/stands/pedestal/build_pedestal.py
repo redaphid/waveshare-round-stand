@@ -252,7 +252,7 @@ def run_pedestal_checks(shape, b, c, feats, case, plate, plate_h, sw, geo, gs, b
     check(diff < 0.5, "case region == proven case - slot opening - pry notch (to 5 um)", f"{diff:.3f} mm^3 differ")
     check((env - gs["solid"]).volume() < 1e-3, "case envelope fully embedded in the body", "")
     wall = geo["y_boss"] - b.tip_y
-    check(abs(wall - 2.95) < 0.1, "wall in front of the port unchanged (never thickened)", f"{wall:.2f} mm")
+    check(abs(wall - c.PORT_WALL) < 0.1, "wall in front of the port unchanged (never thickened)", f"{wall:.2f} mm")
     groove_top = geo["FLOOR"] - c.SNAP_LIP
     check(geo["FLOOR"] - 0.6 - groove_top >= 0.5, "pry notch stops above the snap groove",
           f"{geo['FLOOR'] - 0.6 - groove_top:.2f} mm of lip left over the groove at the notch")

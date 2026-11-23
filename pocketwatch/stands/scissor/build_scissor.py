@@ -23,7 +23,7 @@ Run from the repo root: ~/.venvs/cad/bin/python pocketwatch/stands/scissor/build
 import sys, math
 sys.path.insert(0, "pocketwatch"); sys.path.insert(0, "pod")
 import numpy as np, manifold3d as m3, trimesh
-from build_pocketwatch import (Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
+from build_pocketwatch import (case_keepouts, Badge, Case, Round, SEG, features, snap, circle, rect, prism, union, chamfered,
                                bbox, check, FAILS, export, render)
 from build_pocketwatch_usb import boot_hole_plate, PIN_D, BACK_CHAMFER, SHELL_LEN, MIN_PLUG_ENGAGE
 
@@ -208,7 +208,7 @@ def build_case(b: Badge, c: Case):
     window = m3.Manifold.cylinder(c.LIP_T + 0.02, b.r - c.LIP_OVERLAP + c.LIP_BEVEL, b.r - c.LIP_OVERLAP, SEG)
     shell = chamfered([circle(R_OUT), boss] + lugs, -c.LIP_T, Z_CASE, c.CHAMFER, BACK_CHAMFER)
     cavity = prism(bore_xy, 0.0, Z_CASE + 1) + prism(circle(R_REAR), FLOOR, Z_CASE + 1) + \
-        window.translate([0, 0, -c.LIP_T - 0.01]) + groove_p + all_keep
+        window.translate([0, 0, -c.LIP_T - 0.01]) + groove_p + case_keepouts(keep)
 
     # plate: exactly as the USB-only build
     hdrs = [f for f in feats if f.name.startswith("header")]

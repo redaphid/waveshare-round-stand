@@ -10,18 +10,24 @@
 #   log: the date of the docs/PRINT-LOG.md entry that backs the status (required unless unprinted).
 #   fixed: needs-work only. true = the current file already has the requested change, unprinted since.
 # board: "1.28", "1.46 cover glass", "1.46 bare", "any", or a list of them.
+# retired (family): true moves it to the last section, "Earlier designs (retired)". It keeps its print status:
+#   retired is about design direction, not print result. retired_why (top level) quotes the reason.
+# tunes (fit gauge): the family ids the gauge sets a number for. A gauge whose every family is retired is
+#   listed with them instead of first.
+
+retired_why = "The owner, 2026-11-22: \"The 'wedge' stands prominently mentioned on the readme is of minimal importance now. We are focusing on the pocketwatch and telegraph. The wedge didn't protect the device enough.\""
 
 [[family]]
 id = "fit-gauges"
 name = "Fit gauges"
 dir = "fit-gauges"
-about = "Ten-minute prints that measure how your printer and your badge fit, before you commit to a case or stand. Print both first and tell the owner which slot and which ring fit."
+about = "Ten-minute prints that measure how your printer and your badge fit, before you commit to a case or stand. Tell the owner which ring fit."
 board = "any"
 material = "PLA or PETG"
-renders = ["renders/fit-gauge.png", "pocketwatch/renders/bore-gauge.png"]
+renders = ["pocketwatch/renders/bore-gauge.png", "renders/fit-gauge.png"]
 parts = [
-  { file = "fit-gauges/Slot fit gauge.stl", render = "renders/fit-gauge.png", what = "Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.", sets = "the groove width, `gap` in `BOARDS` in `build_stands.py`", script = "build_fit_gauge.py", edit = "`WIDTHS`", status = "proven", log = "2026-09-18", print = "flat, as exported", note = "Owner's 1.28 seated in slot 5 (5.0 mm)." },
-  { file = "fit-gauges/Pocketwatch - bore fit gauge.stl", render = "pocketwatch/renders/bore-gauge.png", what = "The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore.", sets = "the case bore clearance, `Case.RAD_CLR` in `build_pocketwatch.py`", board = "1.28", script = "pocketwatch/build_bore_gauge.py", edit = "`CLRS`", status = "proven", log = "2026-10-13", print = "bezel down, about 10 minutes", note = "Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between." },
+  { file = "fit-gauges/Pocketwatch - bore fit gauge.stl", tunes = ["pocketwatch", "telegraph"], render = "pocketwatch/renders/bore-gauge.png", what = "The front of the pocketwatch case only, as four rings. Ring N has N dots. Drop the badge in from the back, screen first: the tightest ring where the glass sits flat on the lip sets the case bore.", sets = "the case bore clearance, `Case.RAD_CLR` in `build_pocketwatch.py`", board = "1.28", script = "pocketwatch/build_bore_gauge.py", edit = "`CLRS`", status = "proven", log = "2026-10-13", print = "bezel down, about 10 minutes", note = "Only ring 4 (`RAD_CLR` 1.15) fit the owner's print; 0.85 did not, so the true minimum is between." },
+  { file = "fit-gauges/Slot fit gauge.stl", tunes = ["desk-1.28", "desk-1.46"], render = "renders/fit-gauge.png", what = "Eight slots, 3.0 to 6.5 mm. Slot N has N dots under it; slot 1 is at the chamfered end. Push the badge's rim into each: the narrowest slot it enters sets the desk stands' groove.", sets = "the groove width, `gap` in `BOARDS` in `build_stands.py`", script = "build_fit_gauge.py", edit = "`WIDTHS`", status = "proven", log = "2026-09-18", print = "flat, as exported", note = "Owner's 1.28 seated in slot 5 (5.0 mm)." },
 ]
 
 [[family]]
@@ -63,11 +69,11 @@ readme = "pocketwatch/stands/hoop/README.md"
 renders = ["pocketwatch/stands/hoop/renders/telegraph-01-hero.png", "pocketwatch/stands/hoop/renders/telegraph-section-pressed.png", "pocketwatch/stands/hoop/renders/telegraph-exploded.png", "pocketwatch/stands/hoop/renders/telegraph-angles.png", "pocketwatch/stands/hoop/renders/telegraph-print-layout.png"]
 also = ["pocketwatch/stands/hoop/Hoop stand - back plate (button).stl"]
 parts = [
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (40 deg).stl", what = "The case fused into the hoop, tenon cut for the 40 degree lean (the default).", status = "printed", log = "2026-11-22", print = "bezel down", note = "Inferred to be the printed angle: 40 degrees is the default, and the owner did not say." },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (40 deg).stl", what = "Base with the pin posts, the anvil and the back stop.", status = "printed", log = "2026-11-22", print = "flat, **100% infill**: it is the ballast" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (40 deg).stl", what = "The key lever, 2.1 g. Every arm and the hairpin spring bend along the layers.", status = "printed", log = "2026-11-22", print = "on its side, as exported" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - knob.stl", what = "Snaps onto the lever's split peg. Both angles use it.", status = "printed", log = "2026-11-22", print = "upright" },
-  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - pin.stl", what = "Ø3 pivot pin, a head on one end and a split, barbed end on the other. Both angles use it.", status = "printed", log = "2026-11-22", print = "on its flat" },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (40 deg).stl", what = "The case fused into the hoop, tenon cut for the 40 degree lean (the default).", status = "printed", log = "2026-11-22", print = "bezel down", note = "Status inferred: the owner's only word is \"at least somewhat verified\" (2026-11-22); no fit details, and the lean printed is not recorded. 40 degrees is assumed: it is the default." },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (40 deg).stl", what = "Base with the pin posts, the anvil and the back stop.", status = "printed", log = "2026-11-22", print = "flat, **100% infill**: it is the ballast", note = "Status inferred: the owner's only word is \"at least somewhat verified\" (2026-11-22); no fit details, and the lean printed is not recorded. 40 degrees is assumed: it is the default." },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (40 deg).stl", what = "The key lever, 2.1 g. Every arm and the hairpin spring bend along the layers.", status = "printed", log = "2026-11-22", print = "on its side, as exported", note = "Status inferred: the owner's only word is \"at least somewhat verified\" (2026-11-22); no fit details, and the lean printed is not recorded. 40 degrees is assumed: it is the default." },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - knob.stl", what = "Snaps onto the lever's split peg. Both angles use it.", status = "printed", log = "2026-11-22", print = "upright", note = "Status inferred: the owner's only word is \"at least somewhat verified\" (2026-11-22); no fit details, and the lean printed is not recorded." },
+  { file = "pocketwatch/stands/hoop/Hoop stand telegraph - pin.stl", what = "Ø3 pivot pin, a head on one end and a split, barbed end on the other. Both angles use it.", status = "printed", log = "2026-11-22", print = "on its flat", note = "Status inferred: the owner's only word is \"at least somewhat verified\" (2026-11-22); no fit details, and the lean printed is not recorded." },
   { file = "pocketwatch/stands/hoop/Hoop stand telegraph - hoop and case (50 deg).stl", what = "Hoop and case for a 50 degree lean: lower (66 mm), and the plug sits 12 mm past the base rim.", status = "unprinted", print = "bezel down" },
   { file = "pocketwatch/stands/hoop/Hoop stand telegraph - base (50 deg).stl", what = "Base for the 50 degree lean.", status = "unprinted", print = "flat, 100% infill" },
   { file = "pocketwatch/stands/hoop/Hoop stand telegraph - lever (50 deg).stl", what = "Lever for the 50 degree lean.", status = "unprinted", print = "on its side, as exported" },
@@ -113,6 +119,7 @@ parts = [
 
 [[family]]
 id = "desk-1.28"
+retired = true
 name = "Desk stands for the 1.28 (bare badge)"
 dir = "small"
 about = "The first designs: the bare badge leans back in a groove, no case. Sized with the slot fit gauge."
@@ -129,6 +136,7 @@ parts = [
 
 [[family]]
 id = "desk-1.46"
+retired = true
 name = "Desk stands for the 1.46"
 dir = "large"
 about = "The same groove stand for the 1.46 Touch. It ships in two thicknesses that are **not interchangeable**: with cover glass (12.30 mm) or bare (10.65 mm). Each file says which. The docks leave 27 mm under the rim for a straight USB-C plug in the bottom port."

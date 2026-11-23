@@ -36,7 +36,7 @@ Template:
   He chose to grow the bar **down, over the screen's black edge**: new
   `Pendant.WIN_FLAT` **0.9** cuts the screen window flat at 12 o'clock, so the
   bar is **3.58** at its narrowest (was 2.68). Case only; the plate is unchanged.
-  Old case: `archive/pendant-v2 (USB-C out, round window)/`.
+  Old case: deleted, last in commit `1580ce5` as `archive/pendant-v2 (USB-C out, round window)/`.
 - photo: none
 
 ## 2026-10-14 (night) — Pendant kid button (`Pendant - kid button.stl`)
@@ -59,8 +59,8 @@ Template:
   **0.5**: case, back plate and kid button all stop at a flat at
   y = `tip_y − RAD_CLR − PORT_OUT`, so the receptacle stands **1.65** past the
   case nominally and **≥ 0.5** with the board pushed down by the plug. Any
-  overmold seats on the receptacle. Old STLs:
-  `archive/pendant-v1 (14.0 x 8.3 USB-C slot)/`.
+  overmold seats on the receptacle. Old STLs: deleted,
+  last in commit `1580ce5` as `archive/pendant-v1 (14.0 x 8.3 USB-C slot)/`.
 - photo: none
 
 ## 2026-10-14 — USB-only family case + button plate
@@ -158,7 +158,7 @@ Template:
   tested range; 0.85 failed, so the true minimum is somewhere in 0.85-1.15.
 - photo: none
 
-## 2026-10-12 — pocketwatch v2, plate + case (`pocketwatch/Pocketwatch - plate.stl`, `- case.stl`)
+## 2026-10-12 — pocketwatch v2, plate + case (`stl/pocketwatch/Pocketwatch - plate.stl`, `- case.stl`)
 - material / presets: not stated (default presets assumed)
 - result, in his words, from memory (the print is lost): "the back plate is
   great!" On the case: "a deep 'lip' of plastic before the screen. Like half an

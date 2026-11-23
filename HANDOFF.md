@@ -33,7 +33,7 @@
 Coworkers with printers and the same 1.28 board should be able to make their own cases (other batteries) and stands. Full spec is the brief that started `coworker-kit`:
 
 1. `requirements.txt` + `setup.sh` (repo-local `.venv`; fall back to `~/.venvs/cad`).
-2. Pocketwatch CLI: `--battery TxWxL` or a code like `402030`, `--set NAME=VALUE`, `--name NAME` → `stl/pocketwatch/NAME/`. **Started in 051ad54, unreviewed.** Test across 7.4x22.28x42.65, 401730, 402030, 503035, and a huge one.
+2. Pocketwatch CLI: `--battery TxWxL` or a code like `402030`, `--set NAME=VALUE`, `--name NAME` → `stl/pocketwatch/<NAME>/`. **Started in 051ad54, unreviewed.** Test across 7.4x22.28x42.65, 401730, 402030, 503035, and a huge one.
 3. `build_all.sh` builds the pocketwatch and link-checks the new docs.
 4. `START-HERE.md` for coworkers. README pointer. A "your own battery" section in the pocketwatch README. In `CLAUDE.md`, move owner-only facts under an "Owner's workflow" heading.
 5. Skills: `make-pocketwatch`, `make-stand`, `tune-fit`. Mark `rebuild-and-ship` and `after-a-print` owner-only.

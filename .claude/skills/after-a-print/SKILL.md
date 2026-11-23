@@ -1,25 +1,31 @@
 ---
 name: after-a-print
-description: Handle the result of a real print of a waveshare-round-stand part — log it, read the photo, decide which single parameter to change, rebuild, ship. Use whenever Aaron reports or photographs a printed part.
+description: Handle the result of a real print of a waveshare-round-stand part - get the photo, log it in docs/PRINT-LOG.md, classify the problem, decide the single parameter to change, rebuild and hand off. Use whenever the owner or a contributor reports, describes or photographs a printed part.
 ---
 
 # After a print
 
-1. **Ask for / look at the photo** if there isn't one. A photo of the part in
-   use told more in two seconds than any clearance table. Look for: does the
-   board seat? where does the cable go? what's touching what it shouldn't?
-2. **Log it first** in `docs/PRINT-LOG.md` (template at the top): part, file,
-   presets, result in his words, photo reference. Before touching a number.
+1. **Get a photo** if there is none. A photo of the part in use tells more
+   in two seconds than any clearance table: does the badge seat? Where does
+   the cable go? What touches what it should not?
+2. **Log it first** in `docs/PRINT-LOG.md` (template at its top, newest
+   first): part, file, printer and nozzle, material, result **in the
+   printer's own words**, photo. Before touching a number. The heading's
+   date is what `log =` in `stl/catalog.toml` points at.
 3. **Classify:**
-   - *fit* (loose/tight): one number — `fit` in `build_stands.py`,
-     `RING_PRESS` / `FIT` in `pod/build_pod.py`, `REST_CLR` for the post.
-     Loose → −0.3; tight → +0.2. Say which and why.
-   - *physically can't work* (like the straight plug): that is a **spec for the
-     next part**, not a note. Design the variant that removes it; keep the
-     old one.
-   - *cosmetic*: ask if he cares before spending a build on it.
-4. Change **one parameter**, `rebuild-and-ship`, and tell him which number
-   moved and what he should see differently.
-5. Presets, for the log: printer `Elegoo Centauri Carbon 2 0.6 nozzle`,
-   process `0.30mm Standard @Elegoo CC2 0.6 nozzle - Copy`, filament
-   `PRUSA Strontium` (PETG 260/85), textured plate — unless he says otherwise.
+   - **fit** (tight, loose, will not snap): one constant. The `tune-fit`
+     skill maps the symptom to it.
+   - **physically cannot work** (a plug that cannot reach its port): that is
+     a spec for the next design, not a note. Design the variant that removes
+     it.
+   - **cosmetic:** ask whether it matters before spending a build on it.
+4. **Update the catalog status** of the printed part in `stl/catalog.toml`
+   (`proven`, `printed`, `needs-work`, `failed`) with `log` set to the entry's
+   date, then `./tools/py build_catalog.py`.
+5. Change **one** parameter (`change-a-model` steps 2 to 5), and say which
+   number moved and what the next print should show differently.
+6. If the board shows this part, record the result there (`update-the-board`,
+   board skill `log-a-print`).
+
+The owner's presets for his own prints are in `docs/ELEGOO.md`. A
+contributor logs his own printer and settings.

@@ -1,15 +1,18 @@
 ---
 name: pod-iterate
-description: Iterate the gauge pod / monitor clip in waveshare-round-stand — change a parameter in pod/build_pod.py, rebuild with the CAD venv, render, check the specific things that have gone wrong before. Use for any pod, clip, or trim-ring change.
+description: Iterate the monitor gauge pod, its clip or trim rings in waveshare-round-stand (a concept, never printed) - change a parameter in pod/build_pod.py, rebuild, render, check the specific things that have gone wrong before. Use for any pod, clip, or trim-ring change.
 ---
 
 # Iterate the pod
 
+The pod is a **concept**: nothing in `stl/pod/` has a print-log entry. From
+the repo root:
 ```
-~/.venvs/cad/bin/python pod/build_pod.py        # gap12 — the default, right-angle cables
-~/.venvs/cad/bin/python pod/build_pod.py 26     # straight-plug variant
+./tools/py pod/build_pod.py        # gap12, the default, right-angle cables
+./tools/py pod/build_pod.py 26     # straight-plug variant
 ```
-Both run every time (`build_all.sh` does). Venv missing → `docs/TOOLCHAIN.md`.
+Both run every time (`build_all.sh` does). `tools/py` missing the CAD stack:
+run `./setup.sh`.
 
 ## Frame (don't re-derive)
 You sit at −Y looking +Y. Screen = XZ plane at y=0. Pod on the monitor's
@@ -18,7 +21,7 @@ Spine on the monitor side (x from `BB_X0`), cups cantilevered outboard. Rail on
 the spine's −X face → clip socket on the clip's +X face. Wiring channel down
 the spine's **back**.
 
-## Things that have gone wrong — check each render for them
+## Things that have gone wrong: check each render for them
 - **Gauges invisible** → renderer regression; all parts must be one
   `Poly3DCollection` (`pod/render.py`).
 - **Pod faces away from the user** → rail/channel on the wrong faces.
@@ -40,4 +43,4 @@ rail, pass-throughs), `03b-clip-section` (tongue in channel, lock slot,
 socket, wall thicknesses), `04-assembly-gap12-edge-20mm` (two clips, pod
 against the monitor, cups 6 mm proud), `05-trim-ring-detail`.
 
-Then `rebuild-and-ship`.
+Then `change-a-model` step 5 (catalog, log) and a PR.
