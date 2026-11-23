@@ -539,70 +539,37 @@ def run_battery_checks(c, feats, case, plate, kid, geo, st):
         check(v < 1e-3, f"battery clear of the {nm}", f"{v:.3f} mm^3")
 
 
-def renders(b, c, p, feats, case, plate, kid, geo, st):
+def renders(b, c, p, feats, case, plate, geo, st):
     D = lambda m: m.rotate([90, 0, 0]).refine_to_length(1.0)        # badge +y up, glass toward the viewer at azim 90
-    shell, back_c, kid_c, dark, white, green, violet, red = ((0.30, 0.62, 0.78), (0.20, 0.45, 0.62), (0.98, 0.72, 0.20),
-        (0.10, 0.10, 0.11), (0.95, 0.95, 0.90), (0.25, 0.70, 0.35), (0.62, 0.30, 0.80), (0.85, 0.25, 0.20))
+    shell, back_c, dark, white, green, violet = ((0.30, 0.62, 0.78), (0.20, 0.45, 0.62),
+        (0.10, 0.10, 0.11), (0.95, 0.95, 0.90), (0.25, 0.70, 0.35), (0.62, 0.30, 0.80))
     fs = {f.name: f.solid() for f in feats if not f.name.startswith("plug")}
     colour = lambda n: dark if n == "disc + tab" else green if n.startswith(c.BUTTON) else white
     post = plate ^ geo["post_cyl"]
     plate_np = plate - geo["post_cyl"]
     plug = prism(rect(-6.0, 6.0, b.tip_y, b.tip_y + 22), b.port_z - 4, b.port_z + 4)
-    asm = [(case, shell), (plate_np, back_c), (post, violet), (kid, kid_c), (fs["disc + tab"], dark), (plug, (0.35, 0.35, 0.38))]
+    asm = [(case, shell), (plate_np, back_c), (post, violet), (fs["disc + tab"], dark), (plug, (0.35, 0.35, 0.38))]
     render([(D(m), col) for m, col in asm], OUT + "hero-front.png", elev=18, azim=62,
-           title=f"Pendant, Ø{2*geo['R_OUT']:.1f} x {bbox(case)[1, 2] - bbox(case)[0, 2]:.1f} (+{p.K_GAP + p.K_T:.1f} kid button), plug at 12 o'clock")
+           title=f"Pendant, Ø{2*geo['R_OUT']:.1f} x {bbox(case)[1, 2] - bbox(case)[0, 2]:.1f}, plug at 12 o'clock")
     render([(D(m), col) for m, col in asm], OUT + "hero-back.png", elev=18, azim=-118,
-           title="From the back: the kid button (orange); the U-cut near 5 o'clock is the latch (coin under its tip)")
-    top = [(case, shell), (plate_np, back_c), (post, violet), (kid, kid_c)] + \
-          [(s, (0.72, 0.74, 0.78) if n == "USB-C receptacle" else colour(n)) for n, s in fs.items()]
+           title="From the back: the back plate and its BOOT tab (post violet)")
+    top = [(case, shell), (plate_np, back_c), (post, violet)] +           [(s, (0.72, 0.74, 0.78) if n == "USB-C receptacle" else colour(n)) for n, s in fs.items()]
     crop = prism(rect(-14, 14, geo["y_flat"] - 6, 40), -10, 30)      # the top only, or the protrusion is too small to read
     render([(D(m ^ crop), col) for m, col in top], OUT + "port-top.png", elev=25, azim=50,
            title=f"12 o'clock: USB-C stands {b.tip_y - geo['y_flat']:.2f} past the flat, "
                  f"{p.PORT_OUT} with the board pushed down: any overmold seats")
-    open_ = kid.rotate([0, 0, -math.degrees(geo["tl"]["turn"])]).translate([0, 0, 5])
-    render([(D(case), shell), (D(open_), kid_c)], OUT + "twist-lock.png", elev=-8, azim=-150,
-           title=f"Twist-lock, opened: teeth over their entry channels; drop in, turn {math.degrees(geo['tl']['turn']):.0f} deg to lock")
     E = 24.0
-    ex = [(case, shell), (plate_np.translate([0, 0, 2*E]), back_c), (post.translate([0, 0, 2*E]), violet),
-          (kid.translate([0, 0, 3.2*E]), kid_c)] + [(s.translate([0, 0, E]), colour(n)) for n, s in fs.items()]
+    ex = [(case, shell), (plate_np.translate([0, 0, 2*E]), back_c), (post.translate([0, 0, 2*E]), violet)] +          [(s.translate([0, 0, E]), colour(n)) for n, s in fs.items()]
     render([(D(m), col) for m, col in ex], OUT + "exploded.png", elev=14, azim=-32,
-           title="Exploded from the back: case, badge, back plate (long BOOT tab), kid button")
-    render([(D(kid - geo["nub"] - geo["wings"]), kid_c), (D(geo["nub"]), green), (D(geo["wings"]), red)],
-           OUT + "kid-underside.png", elev=28, azim=70,
-           title="Kid button underside: nub (green) and stop wings (red) over the tab, ring pads, 4 lock teeth + the latch key")
+           title="Exploded from the back: case, badge, back plate (long BOOT tab)")
     render([(D(plate_np), back_c), (D(post), violet)], OUT + "plate-back.png", elev=-30, azim=-90,
            title=f"Back plate from the back: the {p.TAB_L:g} mm BOOT tab inside its U-slot")
 
-    # section through the tab, nub and post (plane y = BOOT y), looking along +y: x right, back (z) up
-    y0 = geo["py"]
-    box = m3.Manifold.cube([24, 40, 13]).translate([-14, y0, 3.5])
-    tab_s = plate ^ prism(geo["tab"], -5, st.z_plate + 5)
-    root = geo["px"] + p.TAB_L
-    phi = -math.degrees(c.STROKE/p.TAB_L)                          # post end toward the badge
-    act = next(f for f in feats if f.name == f"{c.BUTTON} actuator").solid()
-    def section(pressed, path, title):
-        tab_m = tab_s.translate([-root, 0, -st.z_plate]).rotate([0, phi, 0]).translate([root, 0, st.z_plate]) if pressed else tab_s
-        r = (lambda m: rock(m, geo, st, geo["th_w"])) if pressed else (lambda m: m)
-        a = act.trim_by_plane([0, 0, -1], -(b.pcb_back_z + b.sw_cap_h - c.SW_TRAVEL)) if pressed else act
-        parts = [(case, shell), (plate - tab_s, back_c), (tab_m, violet), (r(kid - geo["nub"] - geo["wings"]), kid_c),
-                 (r(geo["nub"]), green), (r(geo["wings"]), red), (a, green)] + \
-                [(s, colour(n)) for n, s in fs.items() if not n.endswith("actuator")]
-        cut = []
-        for m, col in parts:
-            m = (m.trim_by_plane([0, 1, 0], y0) ^ box).refine_to_length(0.6)
-            if not m.is_empty(): cut.append((m, col))
-        render(cut, path, elev=0, azim=-90, title=title, figsize=(10, 10), zoom=1.15)
-    section(False, OUT + "section-boot-rest.png",
-            f"Section through BOOT (y {y0:+.1f}), at rest: nub (green) {p.NUB_G} over the tab, wings (red) {geo['H'] + p.NUB_G:.2f} over the plate")
-    section(True, OUT + "section-boot-pressed.png",
-            f"Pressed to the stop: wings on the plate, nub {geo['H']:.2f} into the tab, post on BOOT (tab drawn rigid)")
-
     # print layout: each part as exported, side by side on the bed
-    lay = [(case.translate([0, 0, c.LIP_T]), shell, -55),
-           (plate.rotate([0, 180, 0]).translate([0, 0, st.z_plate]), back_c, 0),
-           (kid.rotate([0, 180, 0]).translate([0, 0, geo["kz1"]]), kid_c, 55)]
+    lay = [(case.translate([0, 0, c.LIP_T]), shell, -28),
+           (plate.rotate([0, 180, 0]).translate([0, 0, st.z_plate]), back_c, 28)]
     render([(m.translate([dx, 0, 0]).refine_to_length(1.5), col) for m, col, dx in lay], OUT + "print-layout.png",
-           elev=32, azim=-70, title="Print as exported, no supports: case bezel down, back plate and kid button face down",
+           elev=32, azim=-70, title="Print as exported, no supports: case bezel down, back plate face down",
            figsize=(12, 9), zoom=1.9)
 
 
@@ -634,7 +601,7 @@ def main():
         export(plate_r, STL + "Pendant - back plate (button, roomy).stl", flip(st.z_plate))
         # the kid button is built for its checks but not exported: it failed its print (PRINT-LOG 2026-10-14)
         if "--no-render" not in sys.argv:
-            renders(b, c, p, feats, case, plate, kid, geo, st)
+            renders(b, c, p, feats, case, plate, geo, st)
     if FAILS:
         sys.exit("FAILED: " + "; ".join(FAILS))
     print("all checks passed")

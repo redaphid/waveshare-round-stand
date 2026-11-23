@@ -24,6 +24,18 @@ them is `1580ce5`**: `git show "1580ce5:<path>" > old.stl`, or
 | `stl/pocketwatch/stands/hoop/Hoop stand front-BOOT - base.stl`, `- rocker.stl` | front-BOOT rocker, printed 2026-10-13 | the telegraph key, `Hoop stand telegraph - *.stl` |
 | `stl/pocketwatch/pendant/Pendant - kid button.stl` | twist-lock button; failed its print 2026-10-14 | `stl/pocketwatch/pendant/kids-case/` |
 | `stl/pocketwatch/stands/pedestal/Pedestal (alternate, wedge) - body.stl` | the losing alternate pedestal shape | `Pedestal - body.stl` |
+| `stl/small/Dock for right-angle cable - USB-C down.stl` | 1.28 dock for an L-shaped cable, badge turned over; missed on print, and the L-shaped cable was dropped | nothing: the pocketwatch stands |
+
+## Deleted scripts and renders (2026-11-22)
+
+All of these are byte-identical in `1580ce5`.
+
+| was at | what it was |
+|---|---|
+| `build_stand_usbdown.py`, `renders/stand-1.28-usbdown-side.png`, `-back.png` | the USB-C-down dock's solid-overlap checks and renders; its `"1.28-usbdown"` entry left `build_stands.py` too |
+| `pocketwatch/pendant/renders/twist-lock.png`, `kid-underside.png`, `section-boot-rest.png`, `section-boot-pressed.png` | renders of the failed kid button; `build_pendant.py` no longer draws it |
+| `pocketwatch/stands/hoop/renders/frontboot-*.png` (6) | renders of the replaced front-BOOT rocker; `build_hoop_frontboot.py` no longer renders |
+| `renders/01*`, `02-pod*`, `03*`, `04-assembly-*`, `05-trim*` (14 pod renders) | a second copy of `pod/renders/`; `pod/build_pod.py` now writes to `pod/renders/`, the copy `pod/README.md` links |
 
 ## Kept here
 
