@@ -19,8 +19,8 @@ the paths below.
   merge; he slices from it. **`stand.3mf` and every untracked `.3mf` there
   are his**: never overwrite or move them. List what is there that the repo
   does not have before any bulk copy.
-- **Printer:** Elegoo Centauri Carbon 2, 0.6 nozzle, on his LAN at
-  `10.0.4.1`, reachable through the `soul` MCP `centauri__*` tools. It is
+- **Printer:** Elegoo Centauri Carbon 2, 0.6 nozzle, on his LAN,
+  reachable through the `soul` MCP `centauri__*` tools. It is
   often off. Its problems: `docs/PRINTER-TROUBLE.md`.
 - **Material:** he prints the pocketwatch family in **PLA** (since
   2026-10-14). Older notes naming the PETG preset `PRUSA Strontium` are stale.
