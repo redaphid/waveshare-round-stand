@@ -25,7 +25,7 @@ moves the printer-dependent clearances to your printer.
 | ring 4 fits, ring 3 does not | 1.15 (today's value, no change) |
 | ring 3 fits | 0.85 (or split the difference with ring 2 if 2 nearly fits) |
 | ring 2 or ring 1 fits | that ring's value |
-| no ring fits | add rings: extend `CLRS` (e.g. `1.45`), `tools/py pocketwatch/build_bore_gauge.py`, print again |
+| no ring fits | add rings: extend `CLRS` (e.g. `1.45`), `./tools/py pocketwatch/build_bore_gauge.py`, print again |
 
 ## 2. The other printer-dependent numbers
 
@@ -53,10 +53,10 @@ dot counts, one clearance each), add it to `stl/fit-gauges/` and a row in
    every pocketwatch design: `./build_all.sh --no-render`. Every check must
    pass; a `[FAIL]` means the new clearance broke a wall or a snap, and that
    is worth telling the owner.
-3. Render the case: `tools/py pocketwatch/build_pocketwatch_usb.py` and look
+3. Render the case: `./tools/py pocketwatch/build_pocketwatch_usb.py` and look
    at `pocketwatch/renders/usb-section-post.png`: is the bore gap what you
    set?
-4. `tools/py build_catalog.py`, then commit on a branch with his own
+4. `./tools/py build_catalog.py`, then commit on a branch with his own
    identity and open a PR that says: printer, gauge result, new value.
 
 **A printer-specific value is not a correction of the owner's.** If his

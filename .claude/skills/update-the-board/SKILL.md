@@ -54,8 +54,8 @@ path `golden-path`.
 Flat, dimensioned sections cut from the same solids the build checks (the
 owner asked for this style over traced renders). After a geometry change:
 ```
-tools/py pocketwatch/stands/hoop/board_schematics.py /tmp/ops.json     # ms-side, ms-front, ms-rock
-tools/py pocketwatch/board/<name>.py /tmp/ops-<name>.json              # a concept: braun, hood, kickstand, ...
+./tools/py pocketwatch/stands/hoop/board_schematics.py /tmp/ops.json     # ms-side, ms-front, ms-rock
+./tools/py pocketwatch/board/<name>.py /tmp/ops-<name>.json              # a concept: braun, hood, kickstand, ...
 ```
 Each writes one `put` op whose drafts keep the same ids, so `draw` with it
 overwrites those shapes in place. The telegraph frames have no generator in

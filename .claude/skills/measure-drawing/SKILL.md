@@ -6,7 +6,7 @@ description: Measure an undimensioned feature (switch, connector, hole) off a ve
 # Measure a feature off a drawing
 
 Worked for the 1.28's BOOT/RESET switches (±0.5 mm). The repo's `.venv` has
-numpy, PIL and matplotlib; add scipy once with `tools/py -m pip install scipy`
+numpy, PIL and matplotlib; add scipy once with `./tools/py -m pip install scipy`
 and run your measuring script with `tools/py`.
 
 1. **Calibrate.** Threshold the PCB colour (blue: `b>90 & b>r+40 & b>g+15`),

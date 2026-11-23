@@ -1,6 +1,6 @@
 # Pendant (1.28 badge)
 
-**Ø43.6 × 12.5 mm, cut flat at 12 o'clock so the USB-C port sticks out 1.65 mm and any cable's plug seats. USB-powered.** Designed for **PLA**. Two prints, no supports. The version with the port sticking out **printed 2026-10-15 and "pretty much worked"**. Its bar over the USB-C tab was too thin, so the screen window now has a **flat top at 12 o'clock** that widens the bar from 2.68 to **3.58**. **Reprint only the case:** the back plate is unchanged. Old case: `archive/pendant-v2 (USB-C out, round window)/`.
+**Ø43.6 × 12.5 mm, cut flat at 12 o'clock so the USB-C port sticks out 1.65 mm and any cable's plug seats. USB-powered.** Designed for **PLA**. Two prints, no supports. The version with the port sticking out **printed 2026-10-15 and "pretty much worked"**. Its bar over the USB-C tab was too thin, so the screen window now has a **flat top at 12 o'clock** that widens the bar from 2.68 to **3.58**. **Reprint only the case:** the back plate is unchanged. The old round-window case was deleted; it is last in commit `1580ce5`, as `archive/pendant-v2 (USB-C out, round window)/`.
 
 ![12 o'clock](renders/port-top.png)
 

@@ -60,7 +60,7 @@ cover glass? The drawing shows the part as sold.
   through; check standoffs and buttons), `screen`, `stack`. A trim ring is
   generated automatically.
 - Add a row to `BOARDS.md` (dimensions + pin map) and a row per new STL in
-  `stl/catalog.toml` (with `board` set); `tools/py build_catalog.py`
+  `stl/catalog.toml` (with `board` set); `./tools/py build_catalog.py`
   regenerates `stl/README.md`.
 
 ## 5. Ship

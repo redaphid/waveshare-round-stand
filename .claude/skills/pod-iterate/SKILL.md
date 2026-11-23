@@ -8,8 +8,8 @@ description: Iterate the monitor gauge pod, its clip or trim rings in waveshare-
 The pod is a **concept**: nothing in `stl/pod/` has a print-log entry. From
 the repo root:
 ```
-tools/py pod/build_pod.py        # gap12, the default, right-angle cables
-tools/py pod/build_pod.py 26     # straight-plug variant
+./tools/py pod/build_pod.py        # gap12, the default, right-angle cables
+./tools/py pod/build_pod.py 26     # straight-plug variant
 ```
 Both run every time (`build_all.sh` does). `tools/py` missing the CAD stack:
 run `./setup.sh`.

@@ -20,7 +20,7 @@ printing better than the owner; explain this repo, not printing.
    `build_all.sh` must end with `== OK.` and `0 broken`. If a check fails on
    a fresh clone, that is a repo bug: report the `[FAIL]` line, do not patch
    around it.
-3. **Check the catalog is in step:** `tools/py build_catalog.py --check`.
+3. **Check the catalog is in step:** `./tools/py build_catalog.py --check`.
 4. **Show the two featured models,** pocketwatch case first:
    - open `pocketwatch/renders/front.png` and
      `pocketwatch/renders/usb-exploded.png`;

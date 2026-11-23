@@ -2,11 +2,11 @@
 
 > **Archived, screw-joint version.** Its four STLs were deleted on 2026-11-22; the last commit with them is `1580ce5`. The current hoop is in `pocketwatch/stands/hoop/`.
 
-**The case is fused into an open brass-look ring on two trunnions, on a two-tier round base, face 20° back. Crown up: the plug rises out of the crown and the cable loops back and down behind it, like a watch's bow and chain.** Ø76 footprint, 86 mm tall to the top of the plug. Rebuild: `~/.venvs/cad/bin/python pocketwatch/stands/hoop/build_hoop.py` from the repo root (82 checks; `--no-render` is faster).
+**The case is fused into an open brass-look ring on two trunnions, on a two-tier round base, face 20° back. Crown up: the plug rises out of the crown and the cable loops back and down behind it, like a watch's bow and chain.** Ø76 footprint, 86 mm tall to the top of the plug. Rebuild: `~/.venvs/cad/bin/python archive/hoop-screw-v1/build_hoop.screw.py` from the repo root (90 checks, all passing on 2026-11-22; `--no-render` is faster). **Run it only in a scratch checkout:** it writes into `stl/pocketwatch/stands/hoop/`, over the current snap hoop's `Hoop stand - base.stl` and `Hoop stand - hoop and case.stl`, and its renders over `pocketwatch/stands/hoop/renders/`. `pocketwatch/stands/hoop/build_hoop.py` builds the snap hoop, not this one.
 
 **Why crown up:** the display reads the right way up with no firmware flip. The case sits low, with the glass centre 43 mm above the desk. Crown down would put 22 mm of straight plug plus its bend under the case, which makes the stand about 40 mm taller and top-heavy.
 
-| print | file (`stl/pocketwatch/stands/hoop/`) | orientation | notes |
+| print | file (deleted: last in commit `1580ce5` under `archive/hoop-screw-v1/`; the same names in `stl/` are the snap version) | orientation | notes |
 |---|---|---|---|
 | **hoop + case** | `Hoop stand - hoop and case.stl` | bezel down, as exported | one piece; same case as the USB-only build |
 | **base** | `Hoop stand - base.stl` | flat, as exported | **100% infill**: it's the ballast |
@@ -38,8 +38,8 @@ No supports on any part. You also need **one M3 × 12** screw, the same one as t
 - The strength figures are cantilever estimates, not FEA. The BOOT position is still the ±1 mm guess from the case.
 - The 20° mortise prints as stair-steps. I picked 0.25 mm of clearance per side for that, and it isn't tested yet.
 
-**Alternate silhouette:** a crescent cantilever arm (`renders/06-alternate-crescent.png`). It's prettier from one side, but one arm carries all the load (SF 2.2 against 3.9), and a BOOT press twists a single arm (I didn't compute how much). Not built.
+**Alternate silhouette:** a crescent cantilever arm (`pocketwatch/stands/hoop/renders/06-alternate-crescent.png`). It's prettier from one side, but one arm carries all the load (SF 2.2 against 3.9), and a BOOT press twists a single arm (I didn't compute how much). Not built.
 **Scores:** aesthetics **4**/5 · printability **4**/5 · robustness **4**/5
 
 ## Print result (2026-10-13) and fit variants
-Printed. The case wobbled in the mortise at the original **0.25 mm per side** clearance. Two tighter bases, same shape: `Hoop stand - base (medium, 0.18).stl` and `Hoop stand - base (snug, 0.12).stl`. Try snug first; the script checks the tenon still slides straight in at both. The hoop and case file is unchanged. The M3 from underneath still does the holding.
+Printed. The case wobbled in the mortise at the original **0.25 mm per side** clearance. Two tighter bases, same shape: `Hoop stand - base (medium, 0.18).stl` and `Hoop stand - base (snug, 0.12).stl` (both deleted, last in commit `1580ce5`). Try snug first; the script checks the tenon still slides straight in at both. The hoop and case file is unchanged. The M3 from underneath still does the holding.

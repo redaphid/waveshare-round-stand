@@ -13,7 +13,7 @@ guesses are the `ph(value, what)` fields of `Badge` in
 ## 1. Get the list
 
 ```
-tools/py pocketwatch/build_pocketwatch.py --no-render | head -12
+./tools/py pocketwatch/build_pocketwatch.py --no-render | head -12
 ```
 It prints `PLACEHOLDERS still in use` and one line per guess. Undo the files
 it rewrote if you only wanted the list: `git checkout -- stl pocketwatch`.

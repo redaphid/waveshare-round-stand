@@ -23,8 +23,8 @@ gauge or print that settles each.
 | question | answer |
 |---|---|
 | **What do I print first?** | **1. `stl/fit-gauges/Pocketwatch - bore fit gauge.stl`** (about 10 min, bezel down). It sets the one clearance that decides whether the case fits on *your* printer. **2. The pocketwatch case:** `stl/pocketwatch/Pocketwatch USB-only - plate.stl` (print-proven) and `- case.stl`. Details below. |
-| **How do I change a model?** | Find its row in `stl/catalog.toml` (it names the script and the class or constants to edit) → edit the number → `tools/py <script>` → every check must print `[ok]` → look at its renders → `tools/py build_catalog.py`. Worked example below. |
-| **Where are the unknowns?** | Two kinds. **Printer clearances** (bore, plate, tenon, USB-C slot, telegraph pin) and **hardware guesses** (the switch and JST position and height, tagged `ph(...)` in `Badge`; `tools/py pocketwatch/build_pocketwatch.py --no-render` lists them first). Table below. |
+| **How do I change a model?** | Find its row in `stl/catalog.toml` (it names the script and the class or constants to edit) → edit the number → `./tools/py <script>` → every check must print `[ok]` → look at its renders → `./tools/py build_catalog.py`. Worked example below. |
+| **Where are the unknowns?** | Two kinds. **Printer clearances** (bore, plate, tenon, USB-C slot, telegraph pin) and **hardware guesses** (the switch and JST position and height, tagged `ph(...)` in `Badge`; `./tools/py pocketwatch/build_pocketwatch.py --no-render` lists them first). Table below. |
 
 ### What to print first, and why
 
@@ -71,7 +71,7 @@ Needs **Python 3.11+** and bash (Linux, macOS, or Windows in Git Bash or WSL).
 - `setup.sh` is safe to rerun. It rebuilds `.venv` only if it is missing or
   too old, and reinstalls only when `requirements.txt` changed.
 - **Run every script from the repo root** (they import by relative path).
-- `tools/py <script>` runs a script with the right interpreter: `$PYTHON`,
+- `./tools/py <script>` runs a script with the right interpreter: `$PYTHON`,
   else `.venv/`, else `~/.venvs/cad` (the owner's), else `python3`.
 - No Python 3.11? macOS: `brew install python`. Windows: python.org installer,
   then run `./setup.sh` from Git Bash. Linux: your distro's `python3`, or `uv`.
@@ -132,13 +132,13 @@ print-log entry or the owner's own words.
 2. Edit one number. Most designs read `Badge` and `Case` from
    `pocketwatch/build_pocketwatch.py`, so a change there moves every
    pocketwatch design: rebuild them all with `./build_all.sh --no-render`.
-3. Rebuild that family only: `tools/py <script> --no-render` for the checks,
-   then `tools/py <script>` for the renders. A failed check prints `[FAIL]`
+3. Rebuild that family only: `./tools/py <script> --no-render` for the checks,
+   then `./tools/py <script>` for the renders. A failed check prints `[FAIL]`
    and the script exits non-zero. **A failure is a finding: fix the geometry,
    never the check.**
 4. **Look at the renders** (paths in the catalog row) before you say anything.
    Compare with `git diff --stat` and the previous PNG (`git show HEAD:<png>`).
-5. `tools/py build_catalog.py` (the README stays in step; `--check` fails if it
+5. `./tools/py build_catalog.py` (the README stays in step; `--check` fails if it
    is stale). New or renamed STL? Add or edit its row in `stl/catalog.toml`
    first.
 6. If the change answers a print, the `docs/PRINT-LOG.md` entry comes first.
@@ -168,7 +168,7 @@ print-log entry or the owner's own words.
   # in lever_geometry(), the line that starts `K_Y = min(`, add `- k.KNOB_FWD` at its end:
       K_Y = min(front(k.FINGER_R, z_kb + k.KNOB_H + 0.5) - k.FINGER_CLR, front(k.KNOB_RS + k.CLR, z_kb) - 0.3) - k.KNOB_FWD
   ```
-- **Check:** `tools/py pocketwatch/stands/hoop/build_hoop_telegraph.py
+- **Check:** `./tools/py pocketwatch/stands/hoop/build_hoop_telegraph.py
   --no-render`. Tried: knob arm 23.1 → 24.6, nub arm 12.1 → 12.8 (pin to
   knob about 2.2 mm longer), ratio still 2.00, click still at 3.17 mm of knob
   travel, every check `[ok]` at 40° and 50°. Then run it without
@@ -179,7 +179,7 @@ print-log entry or the owner's own words.
   no longer the printed ones: in `stl/catalog.toml`, family `telegraph`, set
   `status = "unprinted"` (and drop `log`) on the rows whose `file` ends in
   `- base (40 deg).stl`, `- lever (40 deg).stl`, `- knob.stl` and
-  `- pin.stl` (the 50° rows already are). Then `tools/py build_catalog.py`
+  `- pin.stl` (the 50° rows already are). Then `./tools/py build_catalog.py`
   and a dated entry in `docs/DESIGN.md`.
 
 ## Where the unknowns are
@@ -197,7 +197,7 @@ gauge or the print named, then change the constant.
 | snap bead of the battery plate | `pocketwatch/build_pocketwatch.py` | `Case.SNAP_INT` 0.30, `SNAP_CLR` 0.15 | battery case print |
 
 **Hardware guesses.** Fields of `Badge` in `pocketwatch/build_pocketwatch.py`
-declared with `ph(value, what)`. `tools/py pocketwatch/build_pocketwatch.py
+declared with `ph(value, what)`. `./tools/py pocketwatch/build_pocketwatch.py
 --no-render` prints them under `PLACEHOLDERS still in use`.
 Measure them on a real badge with calipers (the `settle-dimensions` skill
 says how) and replace `ph(x, ...)` with the plain number.

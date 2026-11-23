@@ -21,7 +21,7 @@ description: Handle the result of a real print of a waveshare-round-stand part -
    - **cosmetic:** ask whether it matters before spending a build on it.
 4. **Update the catalog status** of the printed part in `stl/catalog.toml`
    (`proven`, `printed`, `needs-work`, `failed`) with `log` set to the entry's
-   date, then `tools/py build_catalog.py`.
+   date, then `./tools/py build_catalog.py`.
 5. Change **one** parameter (`change-a-model` steps 2 to 5), and say which
    number moved and what the next print should show differently.
 6. If the board shows this part, record the result there (`update-the-board`,
