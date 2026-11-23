@@ -86,7 +86,9 @@ wider groove *helps*. Replaced: pad at `T/2 + CAP_H + REST_CLR` from the centre
 Now **0.8 mm** of travel, ≥0.7 for any rim 4.5–4.9 thick, and
 `build_stand_button.py` asserts ≥ 2× switch travel.
 
-**USB-C down, for the right-angle cable** (09-20). He bought an L-shaped USB-C
+**USB-C down, for the right-angle cable** (09-20). *Deleted 2026-11-22: the
+L-shaped cable was dropped. The dock, `build_stand_usbdown.py` and its renders
+are last in commit `1580ce5`; the history below stays.* He bought an L-shaped USB-C
 lead and wanted the port facing down. Turning the badge over moves three things
 at once, so this is a new part rather than a parameter:
 

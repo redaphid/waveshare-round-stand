@@ -44,7 +44,7 @@ Coworkers with printers and the same 1.28 board should be able to make their own
 ## Open loose ends
 
 - No print result yet for pocketwatch v2. Log it in `docs/PRINT-LOG.md` when it comes.
-- The USB-C-down dock (`stl/small/Dock for right-angle cable - USB-C down.stl`) missed on print. Its model used drawing numbers that the calipers later corrected. It's superseded by the pocketwatch direction, so it hasn't been fixed.
+- The USB-C-down dock missed on print and was deleted on 2026-11-22 ("We don't need to worry about the l-shaped cable anymore"). The last commit with its STL and `build_stand_usbdown.py` is `1580ce5`.
 
 - **Board partly stale (2026-10-14 evening):** `lblrec` now says 14.0 x 8.3 and STATUS is current. Still not drawn: the pry notch at 10 o'clock (commit 0796ba6).
 - **Pendant queue (Aaron, 2026-10-15):** (1) USB-C sticks out: **printed, "pretty much worked"**; the bezel-lip bar over the tab at 12 o'clock is too thin. He wanted it "longer on the horizontal axis, not thicker" and picked down over the screen's edge: **window flat top at 12 o'clock, bar 2.68 → 3.58** (`Pendant.WIN_FLAT`), pendant and kids case. Case only; unprinted. (2) **battery pendant built** (`pocketwatch/pendant/battery/`, Ø52.3 x 23.4, unprinted; he has 4 of the cells). (3) **kids case** built (flap back plate, unprinted).
